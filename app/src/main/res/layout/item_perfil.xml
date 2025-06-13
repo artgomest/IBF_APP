@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/SelectableCard"> <LinearLayout style="@style/cardContent">
+    <TextView
+        android:id="@+id/item_perfil_rede"
+        style="@style/cardTitle"
+        android:text="Nome da Rede" />
+    <TextView
+        android:id="@+id/item_perfil_papel"
+        style="@style/cardDescription"
+        android:text="Seu papel"
+        android:textAllCaps="true"/>
+</LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

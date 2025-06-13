@@ -1,0 +1,56 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/form_title"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp"/>
+
+        <TextView android:text="@string/form_nome" style="@style/formLabel"/>
+        <EditText android:id="@+id/formNome" style="@style/formEditText"/>
+
+        <TextView android:text="@string/form_rede" style="@style/formLabel"/>
+        <EditText android:id="@+id/formRede" style="@style/formEditText"/>
+
+        <TextView android:text="@string/form_data" style="@style/formLabel"/>
+        <TextView
+            android:id="@+id/formData"
+            style="@style/formEditText"
+            android:hint="Clique para selecionar a data" />
+
+        <TextView android:text="@string/form_descricao_culto" style="@style/formLabel"/>
+        <EditText android:id="@+id/formDescricao" style="@style/formEditText" android:lines="4" android:gravity="top"/>
+
+        <TextView android:text="@string/form_total_pessoas" style="@style/formLabel"/>
+        <EditText android:id="@+id/formPessoas" style="@style/formEditText" android:inputType="number"/>
+
+        <TextView android:text="@string/form_total_visitantes" style="@style/formLabel"/>
+        <EditText android:id="@+id/formVisitantes" style="@style/formEditText" android:inputType="number"/>
+
+        <TextView android:text="@string/form_valor_oferta" style="@style/formLabel"/>
+        <EditText android:id="@+id/formOferta" style="@style/formEditText" android:inputType="numberDecimal"/>
+
+        <TextView android:text="@string/form_comentarios" style="@style/formLabel"/>
+        <EditText android:id="@+id/formComentarios" style="@style/formEditText" android:lines="3" android:gravity="top"/>
+
+        <Button
+            android:id="@+id/buttonEnviar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/form_button_enviar"
+            android:layout_marginTop="24dp"/>
+
+    </LinearLayout>
+</ScrollView>

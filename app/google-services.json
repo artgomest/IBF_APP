@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "858803281672",
+    "project_id": "ibfapp-c4078",
+    "storage_bucket": "ibfapp-c4078.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:858803281672:android:f2e8907c8ccb628832d6bd",
+        "android_client_info": {
+          "package_name": "com.ibf.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "858803281672-r6m1mb3ge7omon0mljdv90o5ug7td2fh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZFBMMbVK1CkORViFIGRLgTj7G2UhZlAo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "858803281672-r6m1mb3ge7omon0mljdv90o5ug7td2fh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

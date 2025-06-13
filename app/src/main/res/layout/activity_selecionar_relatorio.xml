@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/dark_background"
+    android:padding="16dp"
+    tools:context=".SelecionarRelatorioActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/selecionar_relatorio_title"
+        android:textColor="@color/dark_text_primary"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_relatorio_rede"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/dark_card_background"
+        app:cardCornerRadius="12dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:focusable="true">
+
+        <LinearLayout style="@style/cardContent">
+            <TextView style="@style/cardTitle" android:text="@string/selecionar_relatorio_rede"/>
+            <TextView style="@style/cardDescription" android:text="@string/selecionar_relatorio_rede_desc"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_relatorio_financeiro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/dark_card_background"
+        app:cardCornerRadius="12dp"
+        android:clickable="true"
+        android:focusable="true">
+
+        <LinearLayout style="@style/cardContent">
+            <TextView style="@style/cardTitle" android:text="@string/selecionar_relatorio_financeiro"/>
+            <TextView style="@style/cardDescription" android:text="@string/selecionar_relatorio_financeiro_desc"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>
