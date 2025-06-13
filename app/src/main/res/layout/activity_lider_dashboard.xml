@@ -11,134 +11,136 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?attr/actionBarSize">
+        android:layout_marginBottom="?attr/actionBarSize"> <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/text_greeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:textColor="@color/dark_text_primary"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            tools:text="Olá, Nome do Líder" />
+
+        <androidx.gridlayout.widget.GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/text_greeting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                android:textColor="@color/dark_text_primary"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                tools:text="Olá, Nome do Líder" />
-
-            <androidx.gridlayout.widget.GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:columnCount="2"
-                app:rowCount="2"
-                app:useDefaultMargins="true">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_relatorios"
-                    style="@style/DashboardCard"
-                    android:layout_width="0dp" app:layout_columnWeight="1"
-                    app:layout_gravity="fill">
-
-                    <LinearLayout
-                        style="@style/DashboardCardContent"
-                        android:layout_width="match_parent">
-
-                        <ImageView
-                            style="@style/DashboardCardIcon"
-                            android:src="@drawable/ic_reports"
-                            android:contentDescription="@string/lider_menu_relatorios" /> <TextView
-                        style="@style/DashboardCardTitle"
-                        android:text="@string/lider_menu_relatorios" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_graficos"
-                    style="@style/DashboardCard"
-                    android:layout_width="0dp" app:layout_columnWeight="1"
-                    app:layout_gravity="fill">
-
-                    <LinearLayout style="@style/DashboardCardContent">
-
-                        <ImageView
-                            style="@style/DashboardCardIcon"
-                            android:src="@drawable/ic_graficos"
-                            android:contentDescription="@string/lider_menu_graficos" /> <TextView
-                        style="@style/DashboardCardTitle"
-                        android:text="@string/lider_menu_graficos" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_membros"
-                    style="@style/DashboardCard"
-                    android:layout_width="0dp" app:layout_columnWeight="1"
-                    app:layout_gravity="fill">
-
-                    <LinearLayout style="@style/DashboardCardContent">
-
-                        <ImageView
-                            style="@style/DashboardCardIcon"
-                            android:src="@drawable/ic_membros"
-                            android:contentDescription="@string/lider_menu_membros" /> <TextView
-                        style="@style/DashboardCardTitle"
-                        android:text="@string/lider_menu_membros" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_config"
-                    style="@style/DashboardCard"
-                    android:layout_width="0dp" app:layout_columnWeight="1"
-                    app:layout_gravity="fill">
-
-                    <LinearLayout style="@style/DashboardCardContent">
-
-                        <ImageView
-                            style="@style/DashboardCardIcon"
-                            android:src="@drawable/ic_config"
-                            android:contentDescription="@string/lider_menu_config" /> <TextView
-                        style="@style/DashboardCardTitle"
-                        android:text="@string/lider_menu_config" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-            </androidx.gridlayout.widget.GridLayout>
+            app:columnCount="2"
+            app:rowCount="2"
+            app:useDefaultMargins="true">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_mudar_perfil"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:id="@+id/card_relatorios"
                 style="@style/DashboardCard"
-                android:layout_marginTop="16dp">
+                android:layout_width="0dp" app:layout_columnWeight="1"
+                app:layout_gravity="fill">
 
                 <LinearLayout
                     style="@style/DashboardCardContent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="263dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/lider_menu_trocar_perfil"
-                        android:textColor="@color/dark_text_primary"
-                        android:textSize="18sp" />
+                    android:layout_width="match_parent">
 
                     <ImageView
-                        android:layout_width="47dp"
-                        android:layout_height="50dp"
-                        android:layout_marginStart="16dp"
-                        android:contentDescription="@string/lider_menu_trocar_perfil"
-                        android:src="@drawable/ic_config" />
+                        style="@style/DashboardCardIcon"
+                        android:src="@drawable/ic_reports"
+                        android:contentDescription="@string/lider_menu_relatorios" />
+                    <TextView
+                        style="@style/DashboardCardTitle"
+                        android:text="@string/lider_menu_relatorios" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-        </LinearLayout>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_graficos"
+                style="@style/DashboardCard"
+                android:layout_width="0dp" app:layout_columnWeight="1"
+                app:layout_gravity="fill">
+
+                <LinearLayout style="@style/DashboardCardContent">
+
+                    <ImageView
+                        style="@style/DashboardCardIcon"
+                        android:src="@drawable/ic_graficos"
+                        android:contentDescription="@string/lider_menu_graficos" />
+                    <TextView
+                        style="@style/DashboardCardTitle"
+                        android:text="@string/lider_menu_graficos" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_membros"
+                style="@style/DashboardCard"
+                android:layout_width="0dp" app:layout_columnWeight="1"
+                app:layout_gravity="fill">
+
+                <LinearLayout style="@style/DashboardCardContent">
+
+                    <ImageView
+                        style="@style/DashboardCardIcon"
+                        android:src="@drawable/ic_membros"
+                        android:contentDescription="@string/lider_menu_membros" />
+                    <TextView
+                        style="@style/DashboardCardTitle"
+                        android:text="@string/lider_menu_membros" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_config"
+                style="@style/DashboardCard"
+                android:layout_width="0dp" app:layout_columnWeight="1"
+                app:layout_gravity="fill">
+
+                <LinearLayout style="@style/DashboardCardContent">
+
+                    <ImageView
+                        style="@style/DashboardCardIcon"
+                        android:src="@drawable/ic_config"
+                        android:contentDescription="@string/lider_menu_config" />
+                    <TextView
+                        style="@style/DashboardCardTitle"
+                        android:text="@string/lider_menu_config" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.gridlayout.widget.GridLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_mudar_perfil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DashboardCard"
+            android:layout_marginTop="16dp">
+
+            <LinearLayout
+                style="@style/DashboardCardContent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/lider_menu_trocar_perfil"
+                    android:textColor="@color/dark_text_primary"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:contentDescription="@string/lider_menu_trocar_perfil"
+                    android:src="@drawable/ic_change_account" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
     </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -147,8 +149,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/dark_card_background"
-        app:itemTextColor="@color/dark_text_primary"
-        app:itemIconTint="@color/dark_text_primary"
+        app:itemIconTint="@color/dark_text_secondary"
+        app:itemTextColor="@color/dark_text_secondary"
         app:menu="@menu/bottom_nav_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
