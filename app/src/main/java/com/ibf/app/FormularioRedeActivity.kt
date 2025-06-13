@@ -42,24 +42,36 @@ class FormularioRedeActivity : AppCompatActivity() {
         relatorioId = intent.getStringExtra("RELATORIO_ID")
 
         if (relatorioId != null) {
-            // MODO EDIÇÃO
+            // MODO EDIÇÃO: Carrega um relatório existente para editar
             buttonEnviar.text = getString(R.string.form_button_atualizar)
             carregarDadosDoRelatorio(relatorioId!!)
         } else {
-            // MODO CRIAÇÃO
+            // MODO CRIAÇÃO: Cria um relatório novo ou preenche um pendente
+            buttonEnviar.text = getString(R.string.form_button_enviar)
             carregarDadosDoUsuario()
 
-            // --- CORREÇÃO APLICADA AQUI ---
-            // Preenche a rede e a data se vieram da tela anterior
-            if (redePreenchida != null) {
-                formRede.setText(redePreenchida)
-                formRede.isEnabled = false // Bloqueia a edição para garantir o dado correto
-            }
+            // Verifica se é um relatório PENDENTE ou totalmente NOVO
             if (dataPendente != null) {
+                // Se for PENDENTE, preenche e bloqueia AMBOS os campos
+                formRede.setText(redePreenchida)
                 formData.text = dataPendente
+
+                formRede.isEnabled = false
+                formData.isEnabled = false
+            } else {
+                // Se for NOVO, preenche com os dados padrão e mantém editável
+                formRede.setText(redePreenchida)
+                formRede.isEnabled = true // ALTERADO: Permite edição
+
+                val calendario = Calendar.getInstance()
+                val formato = "dd/MM/yyyy"
+                val sdf = SimpleDateFormat(formato, Locale.getDefault())
+                formData.text = sdf.format(calendario.time)
+                formData.isEnabled = true // Permite edição
             }
         }
 
+        // Configura o seletor de data. Ele só funcionará se o campo formData estiver habilitado.
         configurarSeletorDeData()
 
         buttonEnviar.setOnClickListener {

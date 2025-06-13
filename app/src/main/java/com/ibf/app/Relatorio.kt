@@ -10,8 +10,8 @@ data class Relatorio(
     val autorNome: String = "",
     val data: Timestamp = Timestamp.now(),
     val totalPessoas: Int = 0,
-    val numeroVisitantes: Int = 0,
-    val totalOfertas: Double = 0.0 // Usando Double para valores monetários
+    val totalVisitantes: Int = 0,
+    val valorOferta: Double = 0.0
 ) {
     constructor() : this("", "", "", "")
 }

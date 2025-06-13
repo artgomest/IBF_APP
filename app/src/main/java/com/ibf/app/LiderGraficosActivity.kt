@@ -1,6 +1,7 @@
 package com.ibf.app
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -20,6 +21,18 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+fun String.toDate(format: String = "yyyy-MM-dd"): Date? {
+    return try {
+        // SimpleDateFormat não é thread-safe, então crie uma nova instância a cada vez.
+        // Embora para esta aplicação, o impacto seja mínimo, é uma boa prática.
+        SimpleDateFormat(format, Locale.getDefault()).parse(this)
+    } catch (e: Exception) {
+        // Loga o erro para depuração, mas não quebra a aplicação.
+        Log.e("DateConverter", "Erro ao converter data '$this' com formato '$format': ${e.message}")
+        null
+    }
+}
+
 class LiderGraficosActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
@@ -30,7 +43,7 @@ class LiderGraficosActivity : AppCompatActivity() {
     private lateinit var chartOfertas: BarChart
     private lateinit var textMedia: TextView
     private lateinit var textVisitantes: TextView
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout // ADICIONADO
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,71 +57,59 @@ class LiderGraficosActivity : AppCompatActivity() {
             return
         }
 
-        // --- Conecta as variáveis aos IDs do layout ---
         chartPessoas = findViewById(R.id.chart_pessoas_por_culto)
         chartOfertas = findViewById(R.id.chart_ofertas_por_culto)
         textMedia = findViewById(R.id.text_media_valor)
         textVisitantes = findViewById(R.id.text_visitantes_valor)
-        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout) // ADICIONADO
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
 
-        // Configura o botão de voltar
         findViewById<ImageView>(R.id.button_back).setOnClickListener {
             finish()
         }
 
-        // --- Configura o "Puxar para Atualizar" ---
         swipeRefreshLayout.setOnRefreshListener {
-            // Quando o usuário puxar, simplesmente carregamos os dados de novo
             carregarDadosParaGraficos()
         }
 
-        // Carrega os dados pela primeira vez
         carregarDadosParaGraficos()
     }
 
     private fun carregarDadosParaGraficos() {
-        // MOSTRA a animação de "carregando"
         swipeRefreshLayout.isRefreshing = true
-
-        val redeId = redeSelecionada
-        if (redeId == null) {
-            Toast.makeText(this, "Erro: Rede não encontrada", Toast.LENGTH_SHORT).show()
-            swipeRefreshLayout.isRefreshing = false // ESCONDE a animação em caso de erro
-            return
-        }
+        val redeId = redeSelecionada ?: return
 
         db.collection("relatorios")
-            .whereEqualTo("redeId", redeId)
-            .orderBy("data", Query.Direction.DESCENDING)
+            .whereEqualTo("idRede", redeId)
+            .orderBy("dataReuniao", Query.Direction.DESCENDING) // Usando o campo 'data' para o qual criamos o índice
             .limit(8)
             .get()
             .addOnSuccessListener { documents ->
                 if (documents.isEmpty) {
                     Toast.makeText(this, "Nenhum relatório encontrado para esta rede.", Toast.LENGTH_SHORT).show()
-                    // Limpa dados antigos se não houver novos
                     chartPessoas.clear()
                     chartOfertas.clear()
                     textVisitantes.text = "0"
                     textMedia.text = "0"
                 } else {
+                    // Mapeia os documentos para a nossa data class Relatorio
                     val relatorios = documents.map { it.toObject(Relatorio::class.java) }.sortedBy { it.data.toDate() }
 
-                    val totalVisitantes = relatorios.sumOf { it.numeroVisitantes }
+                    // --- CORREÇÃO APLICADA AQUI ---
+                    val totalDeVisitantes = relatorios.sumOf { it.totalVisitantes } // Usando a variável correta
                     val mediaPessoas = if (relatorios.isNotEmpty()) relatorios.sumOf { it.totalPessoas } / relatorios.size else 0
 
-                    textVisitantes.text = totalVisitantes.toString()
+                    textVisitantes.text = totalDeVisitantes.toString()
                     textMedia.text = mediaPessoas.toString()
 
                     configurarGraficoPessoas(relatorios)
                     configurarGraficoOfertas(relatorios)
                 }
 
-                // ESCONDE a animação após o sucesso
                 swipeRefreshLayout.isRefreshing = false
             }
             .addOnFailureListener { exception ->
+                Log.e("GraficosDebug", "Falha ao carregar dados: ", exception)
                 Toast.makeText(this, "Falha ao carregar dados: ${exception.message}", Toast.LENGTH_LONG).show()
-                // ESCONDE a animação após a falha
                 swipeRefreshLayout.isRefreshing = false
             }
     }
@@ -117,27 +118,24 @@ class LiderGraficosActivity : AppCompatActivity() {
         val entries = relatorios.mapIndexed { index, relatorio ->
             BarEntry(index.toFloat(), relatorio.totalPessoas.toFloat())
         }
-
         val dataSet = BarDataSet(entries, "Pessoas por Culto")
         dataSet.color = ContextCompat.getColor(this, R.color.design_default_color_primary)
         dataSet.valueTextColor = ContextCompat.getColor(this, R.color.dark_text_primary)
         dataSet.valueTextSize = 12f
-
         chartPessoas.data = BarData(dataSet)
-        estilizarGraficoDeBarras(chartPessoas, relatorios.map { it.data.toDate() })
+        estilizarGraficoDeBarras(chartPessoas, relatorios.map { it.dataReuniao.toDate() })
         chartPessoas.invalidate()
     }
 
     private fun configurarGraficoOfertas(relatorios: List<Relatorio>) {
+        // Usando a variável correta 'valorOferta'
         val entries = relatorios.mapIndexed { index, relatorio ->
-            BarEntry(index.toFloat(), relatorio.totalOfertas.toFloat())
+            BarEntry(index.toFloat(), relatorio.valorOferta.toFloat())
         }
-
         val dataSet = BarDataSet(entries, "Ofertas por Culto")
         dataSet.color = ContextCompat.getColor(this, R.color.design_default_color_secondary)
         dataSet.valueTextColor = ContextCompat.getColor(this, R.color.dark_text_primary)
         dataSet.valueTextSize = 12f
-
         chartOfertas.data = BarData(dataSet)
         estilizarGraficoDeBarras(chartOfertas, relatorios.map { it.data.toDate() })
         chartOfertas.invalidate()
@@ -148,7 +146,6 @@ class LiderGraficosActivity : AppCompatActivity() {
         chart.legend.isEnabled = false
         chart.setDrawGridBackground(false)
         chart.setDrawBarShadow(false)
-
         val formatter = object : ValueFormatter() {
             override fun getAxisLabel(value: Float, axis: AxisBase?): String {
                 val format = SimpleDateFormat("dd/MM", Locale.getDefault())
@@ -159,20 +156,17 @@ class LiderGraficosActivity : AppCompatActivity() {
                 }
             }
         }
-
         val xAxis = chart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.granularity = 1f
         xAxis.textColor = ContextCompat.getColor(this, R.color.dark_text_secondary)
         xAxis.setDrawGridLines(false)
         xAxis.valueFormatter = formatter
-
         val leftAxis = chart.axisLeft
         leftAxis.textColor = ContextCompat.getColor(this, R.color.dark_text_secondary)
         leftAxis.setDrawGridLines(true)
         leftAxis.gridColor = ContextCompat.getColor(this, R.color.dark_divider)
         leftAxis.axisMinimum = 0f
-
         chart.axisRight.isEnabled = false
     }
 }
