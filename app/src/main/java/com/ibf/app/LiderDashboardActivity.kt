@@ -41,8 +41,43 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         // Configura a navegação, igual ao secretário
         setupNavigation()
 
-        // Lembre-se de adicionar os OnClickListeners para seus cards aqui...
-        // Ex: findViewById<MaterialCardView>(R.id.card_graficos).setOnClickListener { ... }
+        // Card de Relatórios
+        findViewById<com.google.android.material.card.MaterialCardView>(R.id.card_relatorios).setOnClickListener {
+            // Abre a tela que lista o status dos relatórios da rede
+            val intent = Intent(this, LiderStatusRelatoriosActivity::class.java)
+            intent.putExtra("REDE_SELECIONADA", redeSelecionada)
+            startActivity(intent)
+        }
+
+        // Card de Gráficos
+        findViewById<com.google.android.material.card.MaterialCardView>(R.id.card_graficos).setOnClickListener {
+            val intent = Intent(this, LiderGraficosActivity::class.java)
+            intent.putExtra("REDE_SELECIONADA", redeSelecionada) // Passa a rede ativa para a tela de gráficos
+            startActivity(intent)
+        }
+
+        // Card de Membros
+        findViewById<com.google.android.material.card.MaterialCardView>(R.id.card_membros).setOnClickListener {
+            // TODO: Criar a Activity 'MembrosActivity' para listar/gerenciar os membros da rede.
+            Toast.makeText(this, "Função de Membros a ser implementada", Toast.LENGTH_SHORT).show()
+            // val intent = Intent(this, MembrosActivity::class.java)
+            // intent.putExtra("REDE_SELECIONADA", redeSelecionada)
+            // startActivity(intent)
+        }
+
+        // Card de Configurações
+        findViewById<com.google.android.material.card.MaterialCardView>(R.id.card_config).setOnClickListener {
+            // TODO: Criar a Activity 'ConfiguracoesActivity' para as configurações da rede ou do líder.
+            Toast.makeText(this, "Função de Configurações a ser implementada", Toast.LENGTH_SHORT).show()
+            // val intent = Intent(this, ConfiguracoesActivity::class.java)
+            // startActivity(intent)
+        }
+
+        val cardMudarPerfil = findViewById<com.google.android.material.card.MaterialCardView>(R.id.card_mudar_perfil)
+        cardMudarPerfil.setOnClickListener {
+            // Chama a função que já temos para abrir a bandeja de seleção de perfil
+            abrirSeletorDePerfil()
+        }
     }
 
     // Função replicada do Secretário para configurar o menu inferior

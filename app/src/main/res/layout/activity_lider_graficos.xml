@@ -12,7 +12,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
-
         <ImageView
             android:id="@+id/button_back"
             android:layout_width="48dp"
@@ -34,122 +33,119 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <ScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:ignore="MissingClass">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <com.google.android.material.card.MaterialCardView
-                style="@style/GraficoCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
-
-                <LinearLayout style="@style/GraficoContent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        style="@style/GraficoTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/pessoas_por_culto" />
-
-                    <com.github.mikephil.charting.charts.BarChart
-                        android:id="@+id/chart_pessoas_por_culto"
-                        style="@style/GraficoChart"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="143dp"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
-
-                <com.google.android.material.card.MaterialCardView
-                    style="@style/GraficoCard"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1">
-
-                    <LinearLayout style="@style/GraficoContent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            style="@style/GraficoTitle.Small"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/media_por_culto" />
-
-                        <TextView
-                            android:id="@+id/text_media_valor"
-                            style="@style/GraficoValor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="35" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    style="@style/GraficoCard"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1">
-
-                    <LinearLayout style="@style/GraficoContent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            style="@style/GraficoTitle.Small"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/visitantes" />
-
-                        <TextView
-                            android:id="@+id/text_visitantes_valor"
-                            style="@style/GraficoValor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="8" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-
-            <com.google.android.material.card.MaterialCardView
-                style="@style/GraficoCard"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp">
+                android:orientation="vertical"
+                android:padding="16dp">
 
-                <LinearLayout style="@style/GraficoContent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        style="@style/GraficoTitle"
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/GraficoCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp">
+                    <LinearLayout style="@style/GraficoContent"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/ofertas_por_culto" />
+                        android:layout_height="wrap_content">
+                        <TextView
+                            style="@style/GraficoTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pessoas_por_culto" />
 
-                    <com.github.mikephil.charting.charts.BarChart
-                        android:id="@+id/chart_ofertas_por_culto"
-                        style="@style/GraficoChart"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp" />
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/chart_pessoas_por_culto"
+                            style="@style/GraficoChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+                    <com.google.android.material.card.MaterialCardView
+                        style="@style/GraficoCard"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1">
+                        <LinearLayout style="@style/GraficoContent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+                            <TextView
+                                style="@style/GraficoTitle.Small"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/media_por_culto" />
+                            <TextView
+                                android:id="@+id/text_media_valor"
+                                style="@style/GraficoValor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="35" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                    <com.google.android.material.card.MaterialCardView
+                        style="@style/GraficoCard"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1">
+                        <LinearLayout style="@style/GraficoContent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                style="@style/GraficoTitle.Small"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/visitantes" />
+                            <TextView
+                                android:id="@+id/text_visitantes_valor"
+                                style="@style/GraficoValor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="8" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
 
-        </LinearLayout>
-    </ScrollView>
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/GraficoCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+                    <LinearLayout style="@style/GraficoContent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            style="@style/GraficoTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ofertas_por_culto" />
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/chart_ofertas_por_culto"
+                            style="@style/GraficoChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+        </ScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </LinearLayout>

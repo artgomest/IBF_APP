@@ -42,7 +42,8 @@
 
                 <LinearLayout
                     style="@style/DashboardCardContent"
-                    android:layout_width="match_parent">
+                    android:layout_width="match_parent"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageView
                         style="@style/DashboardCardIcon"
@@ -60,7 +61,8 @@
                 android:layout_width="0dp" app:layout_columnWeight="1"
                 app:layout_gravity="fill">
 
-                <LinearLayout style="@style/DashboardCardContent">
+                <LinearLayout style="@style/DashboardCardContent"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageView
                         style="@style/DashboardCardIcon"
@@ -78,7 +80,8 @@
                 android:layout_width="0dp" app:layout_columnWeight="1"
                 app:layout_gravity="fill">
 
-                <LinearLayout style="@style/DashboardCardContent">
+                <LinearLayout style="@style/DashboardCardContent"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageView
                         style="@style/DashboardCardIcon"
@@ -96,7 +99,8 @@
                 android:layout_width="0dp" app:layout_columnWeight="1"
                 app:layout_gravity="fill">
 
-                <LinearLayout style="@style/DashboardCardContent">
+                <LinearLayout style="@style/DashboardCardContent"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageView
                         style="@style/DashboardCardIcon"
@@ -104,7 +108,8 @@
                         android:contentDescription="@string/lider_menu_config" />
                     <TextView
                         style="@style/DashboardCardTitle"
-                        android:text="@string/lider_menu_config" />
+                        android:text="@string/lider_menu_config"
+                        android:textAlignment="center"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -121,7 +126,8 @@
                 style="@style/DashboardCardContent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
 
                 <TextView
                     android:layout_width="0dp"
@@ -151,6 +157,7 @@
         android:background="@color/dark_card_background"
         app:itemIconTint="@color/dark_text_secondary"
         app:itemTextColor="@color/dark_text_secondary"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu"
+        tools:ignore="VisualLintBottomNav" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
