@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Usuários da Rede"
+            android:text="@string/usuarios_da_rede"
             android:textColor="@color/dark_text_primary"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -36,7 +36,7 @@
         android:id="@+id/text_rede_usuarios_lista"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rede: [Nome da Rede]"
+        android:text="@string/rede_usuarios_lista_label"
         android:textSize="16sp"
         android:textColor="@color/dark_text_secondary"
         android:layout_marginStart="16dp"
@@ -58,7 +58,7 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add_user"
-        android:contentDescription="Adicionar Novo Usuário"
+        android:contentDescription="@string/adicionar_novo_usuario_content_description"
         app:tint="@color/white"
         app:backgroundTint="@color/design_default_color_primary" />
 

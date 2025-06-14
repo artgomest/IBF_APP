@@ -35,7 +35,9 @@ class UsuarioRedeAdapter(
     override fun onBindViewHolder(holder: UsuarioViewHolder, position: Int) {
         val usuario = listaUsuarios[position]
         holder.nome.text = usuario.nome
-        holder.papel.text = "Papel: ${usuario.papel.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }}" // Capitaliza a primeira letra
+        // --- CORREÇÃO AQUI para usar string resource com placeholder ---
+        val papelFormatado = usuario.papel.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() } // Capitaliza a primeira letra
+        holder.papel.text = holder.itemView.context.getString(R.string.papel_usuario_label_format, papelFormatado)
 
         holder.itemView.setOnClickListener {
             listener.onItemClick(usuario)

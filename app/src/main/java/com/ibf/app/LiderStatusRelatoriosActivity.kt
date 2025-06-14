@@ -1,7 +1,7 @@
 package com.ibf.app
 
 import android.annotation.SuppressLint
-import android.content.Context // Importação necessária para SharedPreferences
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
@@ -28,7 +28,7 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
     private val listaDeStatus = mutableListOf<StatusRelatorio>()
 
     // Variável para saber de qual rede carregar os relatórios
-    private var redeSelecionada: String? = null // Rede que a Activity está exibindo
+    private var redeSelecionada: String? = null
     private lateinit var textPageTitle: TextView // Referência ao TextView do título
 
     @SuppressLint("SetTextI18n")
@@ -50,52 +50,53 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
         textPageTitle = findViewById(R.id.text_page_title)
 
         // --- Lógica de Carregamento da Rede na Criação ---
-        val redeInPrefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-            .getString("REDE_SELECIONADA", null)
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val redeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
-        // Define a rede para esta Activity
         redeSelecionada = redeInPrefs ?: intent.getStringExtra("REDE_SELECIONADA")
 
         // Se, por algum motivo, a rede não for passada, fecha a tela por segurança
         if (redeSelecionada == null) {
-            Toast.makeText(this, "Erro: Rede não especificada.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.erro_rede_nao_especificada), Toast.LENGTH_LONG).show()
             finish()
             return
         }
 
         // Atualiza o título da página para incluir o nome da rede
-        textPageTitle.text = "Relatórios - ${redeSelecionada}"
+        textPageTitle.text = getString(R.string.relatorios_rede_label, redeSelecionada)
 
         // Chama as funções para configurar a lista e carregar os dados
         setupRecyclerView()
-        carregarStatusDosRelatorios() // Carrega dados na criação
+        carregarStatusDosRelatorios()
     }
 
     override fun onResume() {
         super.onResume()
         // --- Lógica para verificar se a rede mudou e recarregar dados ---
-        val currentRedeInPrefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-            .getString("REDE_SELECIONADA", null)
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val currentRedeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
         // Se a rede nas preferências mudou em relação à que a Activity está exibindo
         if (currentRedeInPrefs != null && currentRedeInPrefs != redeSelecionada) {
             redeSelecionada = currentRedeInPrefs // Atualiza a rede da Activity
-            textPageTitle.text = "Relatórios - ${redeSelecionada}" // Atualiza o título
+            textPageTitle.text = getString(R.string.relatorios_rede_label, redeSelecionada) // Atualiza o título
             carregarStatusDosRelatorios() // Recarrega os dados
-            Toast.makeText(this, "Relatórios atualizados para a rede: $redeSelecionada", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.relatorios_atualizados_rede, redeSelecionada), Toast.LENGTH_SHORT).show()
+        } else {
+            // Se a rede não mudou, ainda recarrega para pegar atualizações de outros usuários
+            carregarStatusDosRelatorios()
         }
     }
 
-    // Função para configurar a RecyclerView (exatamente a mesma que tínhamos)
+    // Função para configurar a RecyclerView
     private fun setupRecyclerView() {
-        recyclerView = findViewById(R.id.recyclerViewRelatorios) // ID do nosso novo layout
+        recyclerView = findViewById(R.id.recyclerViewRelatorios)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        // Passamos 'this' como listener para que o onItemClick funcione
         relatorioAdapter = RelatorioAdapter(listaDeStatus, this)
         recyclerView.adapter = relatorioAdapter
     }
 
-    // A nossa função principal para carregar os dados (exatamente a mesma que tínhamos)
+    // Função principal para carregar os dados
     @SuppressLint("NotifyDataSetChanged")
     private fun carregarStatusDosRelatorios() {
         val redeAtiva = redeSelecionada ?: run {
@@ -107,7 +108,7 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
         firestore.collection("redes").whereEqualTo("nome", redeAtiva).get().addOnSuccessListener { redesDocs ->
             if (redesDocs.isEmpty) {
                 Log.e("FirestoreError", "Nenhuma rede encontrada com o nome: $redeAtiva")
-                listaDeStatus.clear() // Limpa a lista se não encontrar rede
+                listaDeStatus.clear()
                 relatorioAdapter.notifyDataSetChanged()
                 return@addOnSuccessListener
             }
@@ -117,7 +118,7 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
             }
 
             firestore.collection("relatorios")
-                .whereEqualTo("idRede", redeAtiva)
+                .whereEqualTo("idRede", redeAtiva) // Busca todos os relatórios da rede ativa
                 .get().addOnSuccessListener { relatoriosDocs ->
                     val relatoriosEnviados = relatoriosDocs.mapNotNull { doc -> doc.toObject(Relatorio::class.java).apply { id = doc.id } }
                     val statusFinal = mutableListOf<StatusRelatorio>()
@@ -127,7 +128,9 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
                         val dataEsperadaCal = Calendar.getInstance()
                         dataEsperadaCal.add(Calendar.WEEK_OF_YEAR, -i)
                         dataEsperadaCal.set(Calendar.DAY_OF_WEEK, diaDaSemana)
-                        if (dataEsperadaCal.time.after(Date())) continue
+
+                        if (dataEsperadaCal.time.after(Date())) continue // Não verifica datas futuras
+
                         val dataEsperadaStr = sdf.format(dataEsperadaCal.time)
 
                         val relatorioEncontrado = relatoriosEnviados.find { it.dataReuniao == dataEsperadaStr }
@@ -152,12 +155,20 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
 
     // O que acontece quando um item da lista é clicado
     override fun onItemClick(status: StatusRelatorio) {
+        // TODO: Implementar ação de clique no relatório (ex: ver detalhes, talvez editar se tiver permissão)
         when (status){
             is StatusRelatorio.Enviado -> {
-                Toast.makeText(this, "Visualizando detalhes do relatório de ${status.relatorio.dataReuniao}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.visualizando_detalhes_relatorio, status.relatorio.dataReuniao), Toast.LENGTH_SHORT).show()
+                // Aqui você pode abrir FormularioRedeActivity em modo de visualização ou edição para Líderes/Pastores.
+                // Exemplo:
+                // val intent = Intent(this, FormularioRedeActivity::class.java)
+                // intent.putExtra("RELATORIO_ID", status.relatorio.id)
+                // intent.putExtra("REDE_SELECIONADA", redeSelecionada)
+                // intent.putExtra("DATA_PENDENTE", status.relatorio.dataReuniao)
+                // startActivity(intent)
             }
             is StatusRelatorio.Faltante -> {
-                Toast.makeText(this, "Relatório pendente para a data ${status.dataEsperada}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.relatorio_pendente_data, status.dataEsperada), Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -1,13 +1,14 @@
 package com.ibf.app
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -17,8 +18,9 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private var redeSelecionada: String? = null // Rede que a Activity está exibindo
-    private var papelUsuarioLogado: String? = "lider" // <--- Assumindo 'lider' como padrão para este dashboard
+    private var papelUsuarioLogado: String? = null // Papel do usuário que abriu esta tela
     private lateinit var textRedeAtual: TextView
+    private lateinit var textGreeting: TextView // Para o texto de boas-vindas
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,79 +30,80 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         firestore = FirebaseFirestore.getInstance()
 
         textRedeAtual = findViewById(R.id.text_rede_dashboard)
+        textGreeting = findViewById(R.id.text_greeting)
 
-        // --- Lógica de Carregamento da Rede na Criação (mantida do código anterior) ---
-        val redeInPrefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-            .getString("REDE_SELECIONADA", null)
+        // --- Lógica de Carregamento da Rede na Criação ---
+        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        val redeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
         redeSelecionada = redeInPrefs ?: intent.getStringExtra("REDE_SELECIONADA")
 
         if (redeSelecionada == null) {
-            Toast.makeText(this, "Erro: Rede não especificada. Fazendo logout.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.erro_rede_nao_especificada_logout), Toast.LENGTH_LONG).show()
             fazerLogout()
             return
         }
 
-        textRedeAtual.text = "Rede: ${redeSelecionada}"
+        // --- CORREÇÃO DE WARNING (String literal) ---
+        textRedeAtual.text = getString(R.string.rede_dashboard_label, redeSelecionada)
 
-        val greetingText = findViewById<TextView>(R.id.text_greeting)
-        firestore.collection("usuarios").document(auth.currentUser!!.uid).get()
-            .addOnSuccessListener { document ->
-                val nome = document.getString("nome") ?: "Líder"
-                greetingText.text = "Olá, $nome"
+        // Configura o texto de boas-vindas e busca o papel do usuário logado
+        auth.currentUser?.uid?.let { uid ->
+            firestore.collection("usuarios").document(uid).get()
+                .addOnSuccessListener { document ->
+                    val nome = document.getString("nome") ?: getString(R.string.usuario_padrao)
+                    // --- CORREÇÃO DE WARNING (String literal) ---
+                    textGreeting.text = getString(R.string.ola_nome, nome)
 
-                // AQUI: Buscar o papel real do usuário logado para a rede selecionada
-                @Suppress("UNCHECKED_CAST")
-                val funcoes = document.get("funcoes") as? HashMap<String, String>
-                // Encontra o papel "lider" para a rede selecionada
-                papelUsuarioLogado = funcoes?.get(redeSelecionada) // Obtém o papel específico para a rede
-                if (papelUsuarioLogado == null) {
-                    // Caso o papel não seja encontrado para a rede, trate o erro
-                    Log.e("LiderDashboard", "Papel do usuário não encontrado para a rede $redeSelecionada")
-                    // Opcional: Toast.makeText(this, "Erro: Seu papel para esta rede não foi definido.", Toast.LENGTH_LONG).show()
+                    @Suppress("UNCHECKED_CAST")
+                    val funcoes = document.get("funcoes") as? HashMap<String, String>
+                    papelUsuarioLogado = funcoes?.get(redeSelecionada)
+                    if (papelUsuarioLogado == null) {
+                        Log.e("LiderDashboard", "Papel do usuário não encontrado para a rede $redeSelecionada")
+                        Toast.makeText(this, getString(R.string.erro_papel_nao_definido), Toast.LENGTH_LONG).show()
+                    }
                 }
-            }
-            .addOnFailureListener { e ->
-                Log.e("LiderDashboard", "Erro ao buscar dados do usuário: ${e.message}")
-                Toast.makeText(this, "Erro ao carregar dados do usuário.", Toast.LENGTH_LONG).show()
-            }
+                .addOnFailureListener { e ->
+                    Log.e("LiderDashboard", "Erro ao buscar dados do usuário: ${e.message}")
+                    Toast.makeText(this, getString(R.string.erro_carregar_dados_usuario), Toast.LENGTH_LONG).show()
+                }
+        }
 
         setupNavigation()
 
         // Card de Relatórios
-        findViewById<com.google.android.material.card.MaterialCardView>(R.id.card_relatorios).setOnClickListener {
+        findViewById<MaterialCardView>(R.id.card_relatorios).setOnClickListener {
             val intent = Intent(this, LiderStatusRelatoriosActivity::class.java)
             intent.putExtra("REDE_SELECIONADA", redeSelecionada)
             startActivity(intent)
         }
 
         // Card de Gráficos
-        findViewById<com.google.android.material.card.MaterialCardView>(R.id.card_graficos).setOnClickListener {
+        findViewById<MaterialCardView>(R.id.card_graficos).setOnClickListener {
             val intent = Intent(this, LiderGraficosActivity::class.java)
             intent.putExtra("REDE_SELECIONADA", redeSelecionada)
             startActivity(intent)
         }
 
         // Card de Membros
-        findViewById<com.google.android.material.card.MaterialCardView>(R.id.card_membros).setOnClickListener {
-            Toast.makeText(this, "Função de Membros a ser implementada", Toast.LENGTH_SHORT).show()
+        findViewById<MaterialCardView>(R.id.card_membros).setOnClickListener {
+            Toast.makeText(this, getString(R.string.funcao_membros_implementar), Toast.LENGTH_SHORT).show()
         }
 
         // Card de Configurações
-        findViewById<com.google.android.material.card.MaterialCardView>(R.id.card_config).setOnClickListener {
-            // Verifica se a rede e o papel estão disponíveis antes de iniciar a Activity
-            if (redeSelecionada != null && papelUsuarioLogado != null) { // <--- VERIFICAÇÃO AQUI
+        findViewById<MaterialCardView>(R.id.card_config).setOnClickListener {
+            if (redeSelecionada != null && papelUsuarioLogado != null) {
                 val intent = Intent(this, ConfiguracoesRedeActivity::class.java)
-                intent.putExtra("REDE_SELECIONADA", redeSelecionada) // <--- PASSANDO A REDE
-                intent.putExtra("PAPEL_USUARIO_LOGADO", papelUsuarioLogado) // <--- PASSANDO O PAPEL
+                intent.putExtra("REDE_SELECIONADA", redeSelecionada)
+                intent.putExtra("PAPEL_USUARIO_LOGADO", papelUsuarioLogado)
                 startActivity(intent)
             } else {
-                Toast.makeText(this, "Informações da rede ou papel ausentes. Tente novamente.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.info_rede_papel_ausentes), Toast.LENGTH_SHORT).show()
                 Log.e("LiderDashboard", "Tentativa de abrir Configurações com rede=$redeSelecionada ou papel=$papelUsuarioLogado nulo.")
             }
         }
 
-        val cardMudarPerfil = findViewById<com.google.android.material.card.MaterialCardView>(R.id.card_mudar_perfil)
+        val cardMudarPerfil = findViewById<MaterialCardView>(R.id.card_mudar_perfil)
         cardMudarPerfil.setOnClickListener {
             abrirSeletorDePerfil()
         }
@@ -108,14 +111,13 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
 
     override fun onResume() {
         super.onResume()
-        // --- Lógica para verificar se a rede mudou e recarregar dados ---
-        val currentRedeInPrefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-            .getString("REDE_SELECIONADA", null)
+        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        val currentRedeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
         if (currentRedeInPrefs != null && currentRedeInPrefs != redeSelecionada) {
             redeSelecionada = currentRedeInPrefs
-            textRedeAtual.text = "Rede: ${redeSelecionada}"
-            // Re-busca o papel para a nova rede selecionada, se necessário
+            // --- CORREÇÃO DE WARNING (String literal) ---
+            textRedeAtual.text = getString(R.string.rede_dashboard_label, redeSelecionada)
             auth.currentUser?.uid?.let { uid ->
                 firestore.collection("usuarios").document(uid).get()
                     .addOnSuccessListener { document ->
@@ -125,10 +127,7 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
                         Log.d("LiderDashboard", "Papel atualizado para $papelUsuarioLogado na rede $redeSelecionada")
                     }
             }
-            Toast.makeText(this, "Dados do dashboard atualizados para a rede: $redeSelecionada", Toast.LENGTH_SHORT).show()
-            // Se houver qualquer dado visual no dashboard que dependa da rede (além do texto),
-            // chame uma função para recarregar esses dados aqui.
-            // Por exemplo: carregarMetricasDoDashboardParaRede(redeSelecionada!!)
+            Toast.makeText(this, getString(R.string.dados_atualizados_rede, redeSelecionada), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -159,7 +158,7 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         val user = auth.currentUser ?: return
         firestore.collection("usuarios").document(user.uid).get().addOnSuccessListener { document ->
             if (document != null && document.exists()) {
-                val nomeUsuario = document.getString("nome") ?: "Usuário"
+                val nomeUsuario = document.getString("nome") ?: getString(R.string.usuario_padrao)
                 @Suppress("UNCHECKED_CAST")
                 val funcoes = document.get("funcoes") as? HashMap<String, String>
                 if (!funcoes.isNullOrEmpty()) {
@@ -181,23 +180,15 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         if (intent != null) {
             if (this::class.java.simpleName == intent.component?.shortClassName?.removePrefix(".")) {
                 if (rede != redeSelecionada) {
-                    redeSelecionada = rede
-                    // Atualiza o papelUsuarioLogado também se a rede mudou
-                    auth.currentUser?.uid?.let { uid ->
-                        firestore.collection("usuarios").document(uid).get()
-                            .addOnSuccessListener { document ->
-                                @Suppress("UNCHECKED_CAST")
-                                val funcoes = document.get("funcoes") as? HashMap<String, String>
-                                papelUsuarioLogado = funcoes?.get(redeSelecionada)
-                            }
-                    }
-                    val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-                    with (sharedPref.edit()) {
+                    val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
+                    // --- CORREÇÃO DE WARNING (KTX extension) ---
+                    sharedPref.edit {
                         putString("REDE_SELECIONADA", rede)
-                        apply()
                     }
-                    textRedeAtual.text = "Rede: ${redeSelecionada}"
-                    Toast.makeText(this, "Exibindo dados da $rede", Toast.LENGTH_SHORT).show()
+                    this.redeSelecionada = rede
+                    // --- CORREÇÃO DE WARNING (String literal) ---
+                    textRedeAtual.text = getString(R.string.rede_dashboard_label, redeSelecionada)
+                    Toast.makeText(this, getString(R.string.exibindo_dados_rede, rede), Toast.LENGTH_SHORT).show()
                 }
                 return
             }
@@ -218,10 +209,10 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
     }
 
     override fun onPerfilSelecionado(rede: String, papel: String) {
-        navegarParaTelaCorreta(rede, papel)
+        TODO("Not yet implemented")
     }
 
     override fun onLogoutSelecionado() {
-        fazerLogout()
+        TODO("Not yet implemented")
     }
 }

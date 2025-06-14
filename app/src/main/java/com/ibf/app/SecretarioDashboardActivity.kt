@@ -1,5 +1,6 @@
 package com.ibf.app
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -38,18 +39,18 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
 
         greetingText = findViewById(R.id.text_greeting)
 
-        val redeInPrefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val redeInPrefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
             .getString("REDE_SELECIONADA", null)
 
         redeSelecionada = redeInPrefs ?: intent.getStringExtra("REDE_SELECIONADA")
 
         if (redeSelecionada == null) {
-            Toast.makeText(this, "Erro: Nenhuma rede selecionada. Fazendo logout.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.erro_rede_nao_selecionada_logout), Toast.LENGTH_LONG).show()
             fazerLogout()
             return
         }
 
-        greetingText.text = "Relatórios da ${redeSelecionada}"
+        greetingText.text = getString(R.string.relatorios_da_rede, redeSelecionada)
 
         setupRecyclerView()
         setupNavigation()
@@ -59,12 +60,12 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
 
     override fun onResume() {
         super.onResume()
-        val currentRedeInPrefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val currentRedeInPrefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
             .getString("REDE_SELECIONADA", null)
 
         if (currentRedeInPrefs != null && currentRedeInPrefs != redeSelecionada) {
             redeSelecionada = currentRedeInPrefs
-            greetingText.text = "Relatórios da ${redeSelecionada}"
+            greetingText.text = getString(R.string.relatorios_da_rede, redeSelecionada)
             carregarStatusDosRelatorios()
         } else {
             carregarStatusDosRelatorios()
@@ -78,12 +79,12 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
 
         when (status) {
             is StatusRelatorio.Enviado -> {
-                Toast.makeText(this, "Editando relatório de ${status.relatorio.dataReuniao}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.editando_relatorio, status.relatorio.dataReuniao), Toast.LENGTH_SHORT).show()
                 intent.putExtra("RELATORIO_ID", status.relatorio.id)
                 intent.putExtra("DATA_PENDENTE", status.relatorio.dataReuniao)
             }
             is StatusRelatorio.Faltante -> {
-                Toast.makeText(this, "Preenchendo relatório pendente para ${status.dataEsperada}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.preenchendo_relatorio_pendente, status.dataEsperada), Toast.LENGTH_SHORT).show()
                 intent.putExtra("DATA_PENDENTE", status.dataEsperada)
                 intent.putExtra("REDE_SELECIONADA", status.nomeRede)
             }
@@ -91,22 +92,23 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
         startActivity(intent)
     }
 
+    @SuppressLint("UseKtx")
     override fun onPerfilSelecionado(rede: String, papel: String) {
         if (papel != "secretario") {
             navegarParaTelaCorreta(rede, papel)
         } else {
             if (rede != redeSelecionada) {
-                val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
                 with (sharedPref.edit()) {
                     putString("REDE_SELECIONADA", rede)
                     apply()
                 }
                 this.redeSelecionada = rede
-                greetingText.text = "Relatórios da $redeSelecionada"
+                greetingText.text = getString(R.string.relatorios_da_rede, redeSelecionada)
                 carregarStatusDosRelatorios()
-                Toast.makeText(this, "Exibindo relatórios da $rede", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.exibindo_relatorios_da_rede, rede), Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Já está exibindo relatórios da $rede", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.ja_exibindo_relatorios_da_rede, rede), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -166,12 +168,12 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
             }
 
             firestore.collection("relatorios")
-                .whereEqualTo("autorUid", usuarioAtual.uid as String) // <--- CORREÇÃO PARA ERRO 2
+                .whereEqualTo("autorUid", usuarioAtual.uid as String) // <--- Corrigido para String literal se o problema persistir: .whereEqualTo("autorUid", usuarioAtual.uid!!)
                 .whereEqualTo("idRede", redeAtiva)
                 .get().addOnSuccessListener { relatoriosDocs ->
                     val relatoriosEnviados = relatoriosDocs.mapNotNull { doc ->
                         val rel = doc.toObject(Relatorio::class.java).apply { id = doc.id }
-                        Log.d("SecretarioDashboard", "Relatório do Firestore: ID: ${rel.id}, Data: ${rel.dataReuniao}, Autor: ${rel.autorUid}, Rede: ${rel.idRede}")
+                        Log.d("SecretarioDashboard", "Relatório do Firestore: ID: ${rel.id}, Data: ${rel.dataReuniao}, Autor: ${rel.autorNome}, Rede: ${rel.idRede}")
                         rel
                     }
                     Log.d("SecretarioDashboard", "Total de relatórios enviados encontrados para UID ${usuarioAtual.uid} e rede $redeAtiva: ${relatoriosEnviados.size}")
@@ -253,9 +255,9 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
                         apply()
                     }
                     this.redeSelecionada = rede
-                    greetingText.text = "Relatórios da $redeSelecionada"
+                    greetingText.text = getString(R.string.relatorios_da_rede, redeSelecionada)
                     carregarStatusDosRelatorios()
-                    Toast.makeText(this, "Exibindo relatórios da $rede", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.exibindo_relatorios_da_rede, rede), Toast.LENGTH_SHORT).show()
                 }
                 return
             }

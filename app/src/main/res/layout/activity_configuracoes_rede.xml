@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Configurações da Rede"
+            android:text="@string/configuracoes_da_rede"
             android:textColor="@color/dark_text_primary"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -42,7 +42,7 @@
             android:id="@+id/text_rede_atual_config"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rede Selecionada: [Nome da Rede]"
+            android:text="@string/rede_selecionada_label"
             android:textSize="16sp"
             android:textColor="@color/dark_text_secondary"
             android:layout_marginBottom="24dp"/>
@@ -63,18 +63,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:padding="16dp">
+                android:padding="16dp"
+                tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/ic_profile"
-                    android:contentDescription="Ícone de Usuários"
+                    android:src="@drawable/ic_user_group"
+                    android:contentDescription="@string/icone_usuarios_content_description"
                     app:tint="@color/dark_text_primary"
                     android:layout_marginEnd="16dp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="USUÁRIOS"
+                    android:text="@string/usuarios"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@color/dark_text_primary"/>
@@ -101,14 +102,14 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/ic_config"
-                    android:contentDescription="Ícone de Rede"
+                    android:src="@drawable/ic_settings_gear"
+                    android:contentDescription="@string/icone_rede_content_description"
                     app:tint="@color/dark_text_primary"
                     android:layout_marginEnd="16dp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="REDE"
+                    android:text="@string/rede_config"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@color/dark_text_primary"/>
