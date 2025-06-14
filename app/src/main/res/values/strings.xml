@@ -174,4 +174,16 @@
     <string name="arrow_forward_content_description">acessar perfil</string>
     <string name="nome_do_usuario_label">Nome do usuário</string>
     <string name="papel_usuario_label_exemplo">Papel do usuário</string>
+
+    <string name="relatorios_da_rede">Relatórios da %s</string>
+    <string name="editando_relatorio">Editando relatório de %s</string>
+    <string name="preenchendo_relatorio_pendente">Preenchendo relatório pendente para %s</string>
+    <string name="exibindo_relatorios_da_rede">Exibindo relatórios da %s</string>
+    <string name="ja_exibindo_relatorios_da_rede">Já está exibindo relatórios da %s</string>
+    <string name="ola_nome_bottom_sheet">Olá %s</string>
+
+
+
+
+
 </resources>

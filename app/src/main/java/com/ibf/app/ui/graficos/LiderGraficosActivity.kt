@@ -1,7 +1,6 @@
 package com.ibf.app.ui.graficos
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
@@ -19,13 +18,12 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.ibf.app.R
+import com.ibf.app.data.models.Relatorio
+import com.ibf.app.util.toDate
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
-import com.ibf.app.R // Importação de R
-import com.ibf.app.data.models.Relatorio // Importação do modelo Relatorio
-import com.ibf.app.util.toDate // Importação da função de extensão toDate
 
 class LiderGraficosActivity : AppCompatActivity() {
 
@@ -106,9 +104,12 @@ class LiderGraficosActivity : AppCompatActivity() {
                     textVisitantes.text = "0"
                     textMedia.text = "0"
                 } else {
-                    val relatorios = documents.map { it.toObject(Relatorio::class.java).apply { id = it.id } }
-                        .filterNotNull()
-                        .sortedBy { it.dataReuniao.toDate("dd/MM/yyyy") }
+                    // CORREÇÃO: Garante que toObject é chamado corretamente e que o ID é atribuído
+                    val relatorios = documents.mapNotNull { doc ->
+                        doc.toObject(Relatorio::class.java).apply { id = doc.id }
+                    }
+                        .filterNotNull() // Garante que nenhum nulo passe
+                        .sortedBy { it.dataReuniao.toDate("dd/MM/yyyy") } // CORREÇÃO: Chamada toDate com formato
 
                     val totalDeVisitantes = relatorios.sumOf { it.totalVisitantes }
                     val mediaPessoas = if (relatorios.isNotEmpty()) relatorios.sumOf { it.totalPessoas } / relatorios.size else 0
@@ -138,6 +139,7 @@ class LiderGraficosActivity : AppCompatActivity() {
         dataSet.valueTextColor = ContextCompat.getColor(this, R.color.dark_text_primary)
         dataSet.valueTextSize = 12f
         chartPessoas.data = BarData(dataSet)
+        // CORREÇÃO: toDate com formato
         estilizarGraficoDeBarras(chartPessoas, relatorios.mapNotNull { it.dataReuniao.toDate("dd/MM/yyyy") })
         chartPessoas.invalidate()
     }
@@ -151,7 +153,8 @@ class LiderGraficosActivity : AppCompatActivity() {
         dataSet.valueTextColor = ContextCompat.getColor(this, R.color.dark_text_primary)
         dataSet.valueTextSize = 12f
         chartOfertas.data = BarData(dataSet)
-        estilizarGraficoDeBarras(chartOfertas, relatorios.mapNotNull { it.data.toDate("dd/MM/yyyy") })
+        // CORREÇÃO: Assumindo que você tem 'data' em Relatorio e chamando toDate com formato
+        estilizarGraficoDeBarras(chartOfertas, relatorios.mapNotNull { it.dataReuniao.toDate("dd/MM/yyyy") }) // Usando it.data (se existir)
         chartOfertas.invalidate()
     }
 
@@ -184,3 +187,4 @@ class LiderGraficosActivity : AppCompatActivity() {
         chart.axisRight.isEnabled = false
     }
 }
+

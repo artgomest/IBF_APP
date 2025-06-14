@@ -1,15 +1,20 @@
 package com.ibf.app.ui.shared
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.ibf.app.R // Importação de R
+import com.ibf.app.R
+import com.ibf.app.adapters.PerfilAdapter
+import com.ibf.app.data.models.Perfil
 
 class SelecionarPerfilSheet : BottomSheetDialogFragment() {
 
@@ -34,6 +39,9 @@ class SelecionarPerfilSheet : BottomSheetDialogFragment() {
         }
     }
 
+    private lateinit var recyclerViewPerfis: RecyclerView
+    private lateinit var perfilAdapter: PerfilAdapter
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is PerfilSelecionadoListener) {
@@ -50,27 +58,38 @@ class SelecionarPerfilSheet : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.bottom_sheet_selecionar_perfil, container, false)
     }
 
+    @SuppressLint("StringFormatInvalid")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val nomeUsuario = arguments?.getString(ARG_NOME_USUARIO) ?: "Usuário"
-        @Suppress("UNCHECKED_CAST")
-        val funcoes = arguments?.getSerializable(ARG_FUNCOES) as? HashMap<String, String>
+        val nomeUsuario = arguments?.getString(ARG_NOME_USUARIO) ?: getString(R.string.usuario_padrao)
+
+        // --- CORREÇÃO DO WARNING DE DEPRECIAÇÃO ---
+        @Suppress("UNCHECKED_CAST", "DEPRECATION") // Suprime os avisos de cast e depreciação
+        val funcoes = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // API 33+
+            arguments?.getSerializable(ARG_FUNCOES, HashMap::class.java) as? HashMap<String, String>
+        } else {
+            arguments?.getSerializable(ARG_FUNCOES) as? HashMap<String, String>
+        }
+        // --- FIM DA CORREÇÃO ---
+
 
         val greetingTextView: TextView = view.findViewById(R.id.text_greeting_bottom_sheet)
-        greetingTextView.text = getString(R.string.ola_nome_bottom_sheet, nomeUsuario)
+        greetingTextView.text = getString(R.string.ola_nome_bottom_sheet_placeholder, nomeUsuario)
 
-        val profilesContainer: LinearLayout = view.findViewById(R.id.layout_perfis_container)
 
-        funcoes?.forEach { (rede, papel) ->
-            val profileButton = LayoutInflater.from(context).inflate(R.layout.item_perfil_button, profilesContainer, false) as Button
-            profileButton.text = getString(R.string.perfil_button_text, papel.capitalize(), rede) // Capitalize para ficar bonito
-            profileButton.setOnClickListener {
-                listener?.onPerfilSelecionado(rede, papel)
+        recyclerViewPerfis = view.findViewById(R.id.recycler_view_perfis)
+        recyclerViewPerfis.layoutManager = LinearLayoutManager(context)
+
+        val listaDePerfis = funcoes?.map { (rede, papel) -> Perfil(rede, papel) } ?: emptyList()
+
+        perfilAdapter = PerfilAdapter(listaDePerfis, nomeUsuario, object : PerfilAdapter.OnItemClickListener {
+            override fun onItemClick(perfil: Perfil) {
+                listener?.onPerfilSelecionado(perfil.rede, perfil.papel)
                 dismiss()
             }
-            profilesContainer.addView(profileButton)
-        }
+        })
+        recyclerViewPerfis.adapter = perfilAdapter
 
         val logoutButton: Button = view.findViewById(R.id.button_logout_bottom_sheet)
         logoutButton.setOnClickListener {

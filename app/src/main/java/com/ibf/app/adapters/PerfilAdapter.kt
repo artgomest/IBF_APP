@@ -10,6 +10,7 @@ import com.ibf.app.data.models.Perfil
 
 class PerfilAdapter(
     private val listaPerfis: List<Perfil>,
+    nomeUsuario: String,
     private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<PerfilAdapter.PerfilViewHolder>() {
 

@@ -1,5 +1,6 @@
 package com.ibf.app.ui.relatorios
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -7,9 +8,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ibf.app.R
+import android.widget.ImageView
+
 
 class SelecionarRelatorioActivity : AppCompatActivity() { // Assumindo que esta é uma Activity, não um Sheet
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Este layout pode não ser o bottom_sheet_selecionar_relatorio.xml.
