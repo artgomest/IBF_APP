@@ -1,4 +1,4 @@
-package com.ibf.app
+package com.ibf.app.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.ibf.app.R
 
 // Data class para representar o usuário na lista
 // Incluímos 'idRede' porque o campo 'funcoes' é um mapa, e precisamos
