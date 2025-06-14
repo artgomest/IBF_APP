@@ -1,5 +1,6 @@
 package com.ibf.app
 
+import android.content.Context // Importação necessária
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("FLUXO_APP", "MainActivity: onCreate")
         setContentView(R.layout.activity_main)
 
         firebaseAuth = FirebaseAuth.getInstance()
@@ -71,7 +73,8 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                         bottomSheet.show(supportFragmentManager, "SelecionarPerfilSheet")
                     } else {
                         val (rede, papel) = funcoes.entries.first()
-                        navegarParaTelaCorreta(rede, papel) // Agora passamos a rede também
+                        salvarRedeSelecionada(rede) // Salva a rede selecionada
+                        navegarParaTelaCorreta(rede, papel)
                     }
                 } else {
                     Toast.makeText(this, "Dados do usuário não encontrados.", Toast.LENGTH_LONG).show()
@@ -86,27 +89,49 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
 
     override fun onPerfilSelecionado(rede: String, papel: String) {
         Toast.makeText(this, "Entrando como $papel da $rede", Toast.LENGTH_SHORT).show()
-        navegarParaTelaCorreta(rede, papel) // Passamos a rede escolhida
+        salvarRedeSelecionada(rede) // Salva a rede selecionada aqui também!
+        navegarParaTelaCorreta(rede, papel)
     }
 
     override fun onLogoutSelecionado() {
         // Na tela de login, o logout não faz nada
     }
 
-    // A função de navegação agora também recebe a REDE
+    /**
+     * Salva a rede selecionada nas SharedPreferences.
+     * @param rede A string da rede a ser salva.
+     */
+    private fun salvarRedeSelecionada(rede: String) {
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        with (sharedPref.edit()) {
+            putString("REDE_SELECIONADA", rede)
+            apply()
+        }
+    }
+
+    /**
+     * Navega para a tela correta com base no papel do usuário e limpa a pilha de Activities.
+     * @param rede A rede selecionada para o perfil.
+     * @param papel O papel do usuário (pastor, lider, secretario).
+     */
     private fun navegarParaTelaCorreta(rede: String, papel: String?) {
+        Log.d("FLUXO_APP", "MainActivity: Navegando para papel: $papel, rede: $rede")
         val intent = when (papel) {
             "pastor" -> Intent(this, PastorDashboardActivity::class.java)
-            "lider" -> Intent(this, LiderDashboardActivity::class.java)
+            "lider" -> Intent(this, LiderDashboardActivity::class.java) // Nome da sua Activity de gráficos
             "secretario" -> Intent(this, SecretarioDashboardActivity::class.java)
             else -> null
         }
 
         if (intent != null) {
-            // Adicionamos a rede selecionada como um "extra" no intent
-            intent.putExtra("REDE_SELECIONADA", rede)
+            intent.putExtra("REDE_SELECIONADA", rede) // Ainda útil para o 1º carregamento ou debug
+
+            // Estas flags são CRUCIAIS para garantir que as Activities anteriores sejam recriadas
+            // quando a rede mudar. Elas limpam a pilha de tarefas atual e iniciam a nova Activity
+            // como a raiz de uma nova tarefa.
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
-            finish()
+            finish() // Finaliza a MainActivity para que o usuário não volte para o login pelo botão voltar
         } else {
             Toast.makeText(this, "Papel '$papel' desconhecido.", Toast.LENGTH_LONG).show()
             firebaseAuth.signOut()

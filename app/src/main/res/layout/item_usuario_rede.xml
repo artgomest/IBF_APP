@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    style="@style/Widget.MaterialComponents.CardView"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/dark_card_background"
+    app:strokeColor="@color/dark_divider"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/text_nome_usuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nome do Usuário"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/dark_text_primary"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/text_papel_usuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Papel: Líder"
+            android:textSize="14sp"
+            android:textColor="@color/dark_text_secondary"/>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

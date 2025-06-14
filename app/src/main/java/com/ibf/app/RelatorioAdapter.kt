@@ -50,7 +50,7 @@ class RelatorioAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val statusAtual = listaStatus[position]
-        val context = holder.itemView.context // Pegamos o contexto para usar o getString
+        val context = holder.itemView.context
 
         holder.itemView.setOnClickListener {
             listener.onItemClick(statusAtual)
@@ -59,15 +59,13 @@ class RelatorioAdapter(
         if (holder.itemViewType == TIPO_ENVIADO && statusAtual is StatusRelatorio.Enviado) {
             val enviadoHolder = holder as EnviadoViewHolder
             val relatorio = statusAtual.relatorio
-            // --- CORREÇÃO APLICADA AQUI ---
-            // Usando os recursos de string com placeholders para evitar avisos
+            // Garanta que `autorNome` existe na sua `data class Relatorio`
             enviadoHolder.data.text = context.getString(R.string.item_data_label, relatorio.dataReuniao)
             enviadoHolder.rede.text = context.getString(R.string.item_rede_label, relatorio.idRede)
             enviadoHolder.autor.text = context.getString(R.string.item_autor_label, relatorio.autorNome)
 
         } else if (holder.itemViewType == TIPO_FALTANTE && statusAtual is StatusRelatorio.Faltante) {
             val faltanteHolder = holder as FaltanteViewHolder
-            // --- CORREÇÃO APLICADA AQUI ---
             faltanteHolder.data.text = context.getString(R.string.item_faltante_data_label, statusAtual.dataEsperada)
             faltanteHolder.rede.text = context.getString(R.string.item_faltante_rede_label, statusAtual.nomeRede)
         }

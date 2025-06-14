@@ -27,6 +27,19 @@
             android:textStyle="bold"
             tools:text="Olá, Nome do Líder" />
 
+        <TextView
+            android:id="@+id/text_rede_dashboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rede: N/A"
+            android:textSize="16sp"
+            android:textColor="@color/dark_text_secondary"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_greeting"
+            tools:ignore="HardcodedText" />
+
         <androidx.gridlayout.widget.GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

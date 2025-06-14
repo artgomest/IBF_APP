@@ -13,15 +13,23 @@
         android:theme="@style/Theme.IBFAPP"
         tools:targetApi="31">
         <activity
-            android:name=".LiderGraficosActivity" />
+            android:name=".ListaUsuariosRedeActivity"
+            android:exported="false" />
         <activity
-            android:name=".item_status_relatorio"
+            android:name=".CadastroUsuarioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ConfiguracoesRedeActivity"
+            android:exported="false" />
+        <activity android:name=".LiderGraficosActivity" />
+        <activity
+            android:name=".StatusRelatorio"
             android:exported="false" />
         <activity
             android:name=".LiderStatusRelatoriosActivity"
             android:exported="false" />
         <activity
-            android:name=".sheet_selecionar_relatorio"
+            android:name=".SelecionarRelatorioActivity"
             android:exported="false" />
         <activity
             android:name=".SelecionarRelatorioActivity"

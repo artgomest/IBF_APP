@@ -1,56 +1,179 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
-    android:padding="16dp">
+    android:orientation="vertical"
+    android:background="@color/dark_background"
+    tools:context=".FormularioRedeActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="?attr/actionBarSize">
+        <ImageView
+            android:id="@+id/button_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:contentDescription="@string/voltar"
+            app:tint="@color/dark_text_primary" />
 
         <TextView
+            android:id="@+id/text_page_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/form_title"
-            android:textColor="@android:color/white"
-            android:textSize="24sp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="24dp"/>
+            android:layout_centerInParent="true"
+            android:text="@string/form_title" android:textColor="@color/dark_text_primary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
-        <TextView android:text="@string/form_nome" style="@style/formLabel"/>
-        <EditText android:id="@+id/formNome" style="@style/formEditText"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView android:text="@string/form_rede" style="@style/formLabel"/>
-        <EditText android:id="@+id/formRede" style="@style/formEditText"/>
-
-        <TextView android:text="@string/form_data" style="@style/formLabel"/>
-        <TextView
-            android:id="@+id/formData"
-            style="@style/formEditText"
-            android:hint="Clique para selecionar a data" />
-
-        <TextView android:text="@string/form_descricao_culto" style="@style/formLabel"/>
-        <EditText android:id="@+id/formDescricao" style="@style/formEditText" android:lines="4" android:gravity="top"/>
-
-        <TextView android:text="@string/form_total_pessoas" style="@style/formLabel"/>
-        <EditText android:id="@+id/formPessoas" style="@style/formEditText" android:inputType="number"/>
-
-        <TextView android:text="@string/form_total_visitantes" style="@style/formLabel"/>
-        <EditText android:id="@+id/formVisitantes" style="@style/formEditText" android:inputType="number"/>
-
-        <TextView android:text="@string/form_valor_oferta" style="@style/formLabel"/>
-        <EditText android:id="@+id/formOferta" style="@style/formEditText" android:inputType="numberDecimal"/>
-
-        <TextView android:text="@string/form_comentarios" style="@style/formLabel"/>
-        <EditText android:id="@+id/formComentarios" style="@style/formEditText" android:lines="3" android:gravity="top"/>
-
-        <Button
-            android:id="@+id/buttonEnviar"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/form_button_enviar"
-            android:layout_marginTop="24dp"/>
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    </LinearLayout>
-</ScrollView>
+            <TextView
+                android:id="@+id/text_data_reuniao_exibida"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Data da Reunião: --/--/----"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/dark_text_primary"
+                android:layout_marginBottom="16dp"
+                tools:ignore="HardcodedText" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/form_nome"
+                android:layout_marginBottom="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/formNome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/dark_text_primary"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/form_rede"
+                android:layout_marginBottom="16dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/formRede"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:textColor="@color/dark_text_primary"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/form_descricao_culto"
+                android:layout_marginBottom="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/formDescricao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|start"
+                    android:inputType="textMultiLine"
+                    android:lines="4"
+                    android:textColor="@color/dark_text_primary"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/form_total_pessoas"
+                android:layout_marginBottom="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/formPessoas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textColor="@color/dark_text_primary"
+                    android:textColorHint="#78909C"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/form_total_visitantes"
+                android:layout_marginBottom="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/formVisitantes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textColor="@color/dark_text_primary"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/form_valor_oferta"
+                android:layout_marginBottom="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/formOferta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/dark_text_primary"
+                    tools:ignore="TextContrastCheck,TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/form_comentarios"
+                android:layout_marginBottom="24dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/formComentarios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:lines="3"
+                    android:gravity="top|start"
+                    android:textColor="@color/dark_text_primary"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/buttonEnviar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/form_button_enviar"
+                android:layout_marginTop="24dp"
+                tools:ignore="VisualLintButtonSize" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

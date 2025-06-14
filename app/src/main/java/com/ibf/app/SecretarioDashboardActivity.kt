@@ -1,5 +1,7 @@
 package com.ibf.app
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -28,74 +30,89 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
     private var redeSelecionada: String? = null
     private lateinit var greetingText: TextView
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_secretario_dashboard)
 
-        // Pega a rede que foi selecionada ao fazer login ou ao trocar de perfil
-        redeSelecionada = intent.getStringExtra("REDE_SELECIONADA")
+        auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
+
+        greetingText = findViewById(R.id.text_greeting)
+
+        val redeInPrefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
+            .getString("REDE_SELECIONADA", null)
+
+        redeSelecionada = redeInPrefs ?: intent.getStringExtra("REDE_SELECIONADA")
+
         if (redeSelecionada == null) {
             Toast.makeText(this, "Erro: Nenhuma rede selecionada. Fazendo logout.", Toast.LENGTH_LONG).show()
             fazerLogout()
             return
         }
 
-        // Inicializa o Firebase
-        auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
+        greetingText.text = "Relatórios da ${redeSelecionada}"
 
-        // Inicializa os componentes da UI
-        greetingText = findViewById(R.id.text_greeting)
-        greetingText.text = "$redeSelecionada"
-
-        // Configura as funcionalidades da tela
         setupRecyclerView()
         setupNavigation()
+
+        carregarStatusDosRelatorios()
     }
 
     override fun onResume() {
         super.onResume()
-        // onResume é chamado toda vez que a tela volta a ficar ativa.
-        // É o lugar perfeito para garantir que os dados estejam sempre atualizados.
-        carregarStatusDosRelatorios()
+        val currentRedeInPrefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
+            .getString("REDE_SELECIONADA", null)
+
+        if (currentRedeInPrefs != null && currentRedeInPrefs != redeSelecionada) {
+            redeSelecionada = currentRedeInPrefs
+            greetingText.text = "Relatórios da ${redeSelecionada}"
+            carregarStatusDosRelatorios()
+        } else {
+            carregarStatusDosRelatorios()
+        }
     }
 
-    // Chamado pelo Adapter quando um item da lista de relatórios é clicado
     override fun onItemClick(status: StatusRelatorio) {
         val intent = Intent(this, FormularioRedeActivity::class.java)
 
-        // Sempre passamos a rede ativa para o formulário, para o caso de ser um novo relatório
         intent.putExtra("REDE_SELECIONADA", redeSelecionada)
 
         when (status) {
             is StatusRelatorio.Enviado -> {
-                // Se está editando, também passa o ID do relatório existente
+                Toast.makeText(this, "Editando relatório de ${status.relatorio.dataReuniao}", Toast.LENGTH_SHORT).show()
                 intent.putExtra("RELATORIO_ID", status.relatorio.id)
+                intent.putExtra("DATA_PENDENTE", status.relatorio.dataReuniao)
             }
             is StatusRelatorio.Faltante -> {
-                // Se está preenchendo um pendente, passa a data e a rede da pendência
-                Toast.makeText(this, "Preenchendo relatório pendente", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Preenchendo relatório pendente para ${status.dataEsperada}", Toast.LENGTH_SHORT).show()
                 intent.putExtra("DATA_PENDENTE", status.dataEsperada)
-                intent.putExtra("REDE_SELECIONADA", status.nomeRede) // Passa a rede específica do item pendente
+                intent.putExtra("REDE_SELECIONADA", status.nomeRede)
             }
         }
         startActivity(intent)
     }
 
-    // Chamado pela Bandeja de Perfil quando um perfil é escolhido
     override fun onPerfilSelecionado(rede: String, papel: String) {
         if (papel != "secretario") {
             navegarParaTelaCorreta(rede, papel)
         } else {
-            // Se apenas trocou para outra rede de secretário, atualiza a tela atual
-            Toast.makeText(this, "Exibindo relatórios da $rede", Toast.LENGTH_SHORT).show()
-            this.redeSelecionada = rede
-            greetingText.text = "Relatórios da $redeSelecionada"
-            carregarStatusDosRelatorios() // Recarrega a lista para a nova rede
+            if (rede != redeSelecionada) {
+                val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                with (sharedPref.edit()) {
+                    putString("REDE_SELECIONADA", rede)
+                    apply()
+                }
+                this.redeSelecionada = rede
+                greetingText.text = "Relatórios da $redeSelecionada"
+                carregarStatusDosRelatorios()
+                Toast.makeText(this, "Exibindo relatórios da $rede", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Já está exibindo relatórios da $rede", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
-    // Chamado pela Bandeja de Perfil quando o botão de Sair é clicado
     override fun onLogoutSelecionado() {
         fazerLogout()
     }
@@ -132,21 +149,35 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
 
     private fun carregarStatusDosRelatorios() {
         val usuarioAtual = auth.currentUser ?: return
-        val redeAtiva = redeSelecionada ?: return
+        val redeAtiva = redeSelecionada ?: run {
+            Log.e("SecretarioDashboard", "redeSelecionada é nula em carregarStatusDosRelatorios()")
+            return
+        }
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
         firestore.collection("redes").whereEqualTo("nome", redeAtiva).get().addOnSuccessListener { redesDocs ->
             if (redesDocs.isEmpty) {
                 Log.e("FirestoreError", "Nenhuma rede encontrada com o nome: $redeAtiva")
+                listaDeStatus.clear()
+                relatorioAdapter.notifyDataSetChanged()
                 return@addOnSuccessListener
             }
-            val diaDaSemana = redesDocs.documents.first().getLong("diaDaSemana")?.toInt() ?: return@addOnSuccessListener
+            val diaDaSemana = redesDocs.documents.first().getLong("diaDaSemana")?.toInt() ?: run {
+                Log.e("FirestoreError", "Dia da semana não encontrado para a rede: $redeAtiva")
+                return@addOnSuccessListener
+            }
 
             firestore.collection("relatorios")
-                .whereEqualTo("autorUid", usuarioAtual.uid)
+                .whereEqualTo("autorUid", usuarioAtual.uid!!) // <--- Corrigido aqui
                 .whereEqualTo("idRede", redeAtiva)
                 .get().addOnSuccessListener { relatoriosDocs ->
-                    val relatoriosEnviados = relatoriosDocs.mapNotNull { doc -> doc.toObject(Relatorio::class.java).apply { id = doc.id } }
+                    val relatoriosEnviados = relatoriosDocs.mapNotNull { doc ->
+                        val rel = doc.toObject(Relatorio::class.java).apply { id = doc.id }
+                        Log.d("SecretarioDashboard", "Relatório do Firestore: ID: ${rel.id}, Data: ${rel.dataReuniao}, Autor: ${rel.autorUid}, Rede: ${rel.idRede}")
+                        rel
+                    }
+                    Log.d("SecretarioDashboard", "Total de relatórios enviados encontrados para UID ${usuarioAtual.uid} e rede $redeAtiva: ${relatoriosEnviados.size}")
+
                     val statusFinal = mutableListOf<StatusRelatorio>()
                     val semanasParaVerificar = 8
 
@@ -158,26 +189,29 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
                         if (dataEsperadaCal.time.after(Date())) continue
 
                         val dataEsperadaStr = sdf.format(dataEsperadaCal.time)
+                        Log.d("SecretarioDashboard", "Verificando semana ${i+1}. Data esperada: $dataEsperadaStr (Dia da semana: ${dataEsperadaCal.get(Calendar.DAY_OF_WEEK)})")
+
                         val relatorioEncontrado = relatoriosEnviados.find { it.dataReuniao == dataEsperadaStr }
 
                         if (relatorioEncontrado != null) {
                             statusFinal.add(StatusRelatorio.Enviado(relatorioEncontrado))
+                            Log.d("SecretarioDashboard", "Relatório ENVIADO encontrado para $dataEsperadaStr")
                         } else {
                             statusFinal.add(StatusRelatorio.Faltante(dataEsperadaStr, redeAtiva))
+                            Log.d("SecretarioDashboard", "Relatório FALTANTE para $dataEsperadaStr")
                         }
                     }
 
                     listaDeStatus.clear()
-                    statusFinal.sortByDescending {
+                    listaDeStatus.addAll(statusFinal.sortedByDescending {
                         when(it) {
                             is StatusRelatorio.Enviado -> sdf.parse(it.relatorio.dataReuniao)
                             is StatusRelatorio.Faltante -> sdf.parse(it.dataEsperada)
                         }
-                    }
-                    listaDeStatus.addAll(statusFinal)
+                    })
                     relatorioAdapter.notifyDataSetChanged()
-                }
-                .addOnFailureListener { e -> Log.e("FirestoreError", "Falha ao buscar relatorios", e) }
+                    Log.d("SecretarioDashboard", "Adapter notificado. Total de itens na lista: ${listaDeStatus.size}")
+                }.addOnFailureListener { e -> Log.e("FirestoreError", "Falha ao buscar relatorios", e) }
         }.addOnFailureListener { e -> Log.e("FirestoreError", "Falha ao buscar redes", e) }
     }
 
@@ -214,8 +248,20 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
 
         if (intent != null) {
             if (this::class.java.simpleName == intent.component?.shortClassName?.removePrefix(".")) {
+                if (rede != redeSelecionada) {
+                    val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                    with (sharedPref.edit()) {
+                        putString("REDE_SELECIONADA", rede)
+                        apply()
+                    }
+                    this.redeSelecionada = rede
+                    greetingText.text = "Relatórios da $redeSelecionada"
+                    carregarStatusDosRelatorios()
+                    Toast.makeText(this, "Exibindo relatórios da $rede", Toast.LENGTH_SHORT).show()
+                }
                 return
             }
+
             intent.putExtra("REDE_SELECIONADA", rede)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)

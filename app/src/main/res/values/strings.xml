@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">AppIBF</string>
-
+    <string name="app_name">IBF</string>
     <string name="login_hint_email">EMAIL</string>
     <string name="login_hint_password">SENHA</string>
     <string name="login_button_text">ENTRAR</string>
@@ -53,4 +52,22 @@
     <string name="media_por_culto">MÉDIA POR CULTO</string>
     <string name="visitantes">VISITANTES</string>
     <string name="ofertas_por_culto">OFERTAS POR CULTO</string>
+    <string name="ol_pastor">Olá, Pastor!</string>
+    <string name="rede">Rede: N/A</string>
+    <string name="relat_rios_da_rede">Relatórios da Rede</string>
+    <string name="configuracoes_da_rede">Configurações da Rede</string>
+    <string name="rede_selecionada_label">Rede Selecionada: %s</string>
+    <string name="usuarios">USUÁRIOS</string>
+    <string name="rede_config">REDE</string>
+    <string name="cadastro_de_usuario">Cadastro de Usuário</string>
+    <string name="cadastrando_na_rede_label">Cadastrando na Rede: %s</string>
+    <string name="nome_completo_hint">Nome Completo</string>
+    <string name="email_hint">Email</string>
+    <string name="senha_hint">Senha (mínimo 6 caracteres)</string>
+    <string name="selecionar_papel_label">Selecionar Papel:</string>
+    <string name="cadastrar_usuario_button">Cadastrar Usuário</string>
+    <string name="sem_permissao_cadastro">Sem permissão para cadastrar</string>
+    <string name="usuarios_da_rede">Usuários da Rede</string>
+    <string name="rede_usuarios_lista_label">Rede: %s</string>
+    <string name="papel_usuario_label">Papel: %s</string>
 </resources>

@@ -1,29 +1,50 @@
 package com.ibf.app
 
-import android.app.DatePickerDialog
+// Importação que faltava para MoneyTextWatcher
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.ibf.app.MoneyTextWatcher
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class FormularioRedeActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
-    private lateinit var formData: TextView
-    private lateinit var buttonEnviar: Button
-    private lateinit var formRede: EditText
-    private lateinit var formNome: EditText
 
     private var relatorioId: String? = null
+    private var redeSelecionada: String? = null
+    private var dataPendente: String? = null
 
+    // Componentes de UI do formulário
+    private lateinit var editTextNome: EditText
+    private lateinit var editTextRede: EditText
+    private lateinit var textViewData: TextView // Variável correta para o findViewById(R.id.formData)
+    private lateinit var editTextDescricao: EditText
+    private lateinit var editTextTotalPessoas: EditText
+    private lateinit var editTextTotalVisitantes: EditText
+    private lateinit var editTextValorOferta: EditText
+    private lateinit var editTextComentarios: EditText
+    private lateinit var buttonEnviar: Button
+
+    private val currencyFormatter = NumberFormat.getCurrencyInstance(Locale("pt", "BR")) as DecimalFormat
+
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_formulario_rede)
@@ -31,143 +52,152 @@ class FormularioRedeActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
-        formNome = findViewById(R.id.formNome)
-        formRede = findViewById(R.id.formRede)
-        formData = findViewById(R.id.formData)
+        // Inicializar componentes da UI com os IDs do seu XML
+        editTextNome = findViewById(R.id.formNome)
+        editTextRede = findViewById(R.id.formRede)
+        textViewData = findViewById(R.id.formData) // Corrected reference here, no changes needed
+        editTextDescricao = findViewById(R.id.formDescricao)
+        editTextTotalPessoas = findViewById(R.id.formPessoas)
+        editTextTotalVisitantes = findViewById(R.id.formVisitantes)
+        editTextValorOferta = findViewById(R.id.formOferta)
+        editTextComentarios = findViewById(R.id.formComentarios)
         buttonEnviar = findViewById(R.id.buttonEnviar)
 
-        // Pega as informações que vieram da tela anterior
-        val redePreenchida = intent.getStringExtra("REDE_SELECIONADA")
-        val dataPendente = intent.getStringExtra("DATA_PENDENTE")
+        // Assegurar que text_page_title e button_back existem no XML ou remover esta linha se não
+        findViewById<TextView>(R.id.text_page_title)?.text = getString(R.string.form_title)
+        findViewById<ImageView>(R.id.button_back)?.setOnClickListener { finish() }
+
+        currencyFormatter.applyPattern("R$ #,##0.00")
+
         relatorioId = intent.getStringExtra("RELATORIO_ID")
+        redeSelecionada = intent.getStringExtra("REDE_SELECIONADA")
+        dataPendente = intent.getStringExtra("DATA_PENDENTE")
 
-        if (relatorioId != null) {
-            // MODO EDIÇÃO: Carrega um relatório existente para editar
-            buttonEnviar.text = getString(R.string.form_button_atualizar)
-            carregarDadosDoRelatorio(relatorioId!!)
-        } else {
-            // MODO CRIAÇÃO: Cria um relatório novo ou preenche um pendente
-            buttonEnviar.text = getString(R.string.form_button_enviar)
-            carregarDadosDoUsuario()
-
-            // Verifica se é um relatório PENDENTE ou totalmente NOVO
-            if (dataPendente != null) {
-                // Se for PENDENTE, preenche e bloqueia AMBOS os campos
-                formRede.setText(redePreenchida)
-                formData.text = dataPendente
-
-                formRede.isEnabled = false
-                formData.isEnabled = false
-            } else {
-                // Se for NOVO, preenche com os dados padrão e mantém editável
-                formRede.setText(redePreenchida)
-                formRede.isEnabled = true // ALTERADO: Permite edição
-
-                val calendario = Calendar.getInstance()
-                val formato = "dd/MM/yyyy"
-                val sdf = SimpleDateFormat(formato, Locale.getDefault())
-                formData.text = sdf.format(calendario.time)
-                formData.isEnabled = true // Permite edição
-            }
-        }
-
-        // Configura o seletor de data. Ele só funcionará se o campo formData estiver habilitado.
-        configurarSeletorDeData()
-
-        buttonEnviar.setOnClickListener {
-            enviarRelatorio()
-        }
-    }
-
-    private fun carregarDadosDoUsuario() {
-        val user = auth.currentUser
-        if (user != null) {
-            firestore.collection("usuarios").document(user.uid).get()
-                .addOnSuccessListener { document ->
-                    if (document != null && document.exists()) {
-                        formNome.setText(document.getString("nome"))
-                    }
-                }
-        }
-    }
-
-    private fun carregarDadosDoRelatorio(id: String) {
-        firestore.collection("relatorios").document(id).get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    formNome.setText(document.getString("autorNome"))
-                    formRede.setText(document.getString("idRede"))
-                    formRede.isEnabled = false // Também bloqueia a rede na edição
-
-                    formData.text = document.getString("dataReuniao")
-                    findViewById<EditText>(R.id.formDescricao).setText(document.getString("descricao"))
-                    findViewById<EditText>(R.id.formPessoas).setText(document.getLong("totalPessoas")?.toString() ?: "")
-                    findViewById<EditText>(R.id.formVisitantes).setText(document.getLong("totalVisitantes")?.toString() ?: "")
-                    findViewById<EditText>(R.id.formOferta).setText(document.getDouble("valorOferta")?.toString() ?: "")
-                    findViewById<EditText>(R.id.formComentarios).setText(document.getString("comentarios"))
-                }
-            }
-    }
-
-    private fun enviarRelatorio() {
-        val user = auth.currentUser ?: return
-
-        // Validação básica para garantir que campos essenciais não estão vazios
-        if (formData.text.isEmpty() || formRede.text.isEmpty()) {
-            Toast.makeText(this, "Data e Rede são campos obrigatórios.", Toast.LENGTH_SHORT).show()
+        if (redeSelecionada == null) {
+            Toast.makeText(this, "Erro: Rede não especificada para o formulário.", Toast.LENGTH_LONG).show()
+            finish()
             return
         }
 
-        val relatorioMap = hashMapOf<String, Any?>(
-            "autorUid" to user.uid,
-            "autorNome" to formNome.text.toString(),
-            "idRede" to formRede.text.toString(),
-            "dataReuniao" to formData.text.toString(),
-            "descricao" to findViewById<EditText>(R.id.formDescricao).text.toString(),
-            "totalPessoas" to findViewById<EditText>(R.id.formPessoas).text.toString().toIntOrNull(),
-            "totalVisitantes" to findViewById<EditText>(R.id.formVisitantes).text.toString().toIntOrNull(),
-            "valorOferta" to findViewById<EditText>(R.id.formOferta).text.toString().toDoubleOrNull(),
-            "comentarios" to findViewById<EditText>(R.id.formComentarios).text.toString(),
-            "timestamp" to com.google.firebase.Timestamp.now()
-        )
+        editTextRede.setText(redeSelecionada)
+        editTextRede.isEnabled = false
+
+        val dataReuniaoParaExibir = dataPendente ?: SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
+        textViewData.text = dataReuniaoParaExibir // <--- CORREÇÃO PARA ERRO 1
+
+        textViewData.setOnClickListener {
+            Toast.makeText(this, "Data da reunião: $dataReuniaoParaExibir", Toast.LENGTH_SHORT).show()
+        }
+
+        editTextValorOferta.addTextChangedListener(MoneyTextWatcher(editTextValorOferta, currencyFormatter))
 
         if (relatorioId != null) {
-            firestore.collection("relatorios").document(relatorioId!!)
-                .set(relatorioMap)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Relatório atualizado com sucesso!", Toast.LENGTH_LONG).show()
-                    finish()
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(this, "Erro ao atualizar relatório: ${e.message}", Toast.LENGTH_LONG).show()
-                }
+            carregarRelatorioExistente(relatorioId!!)
+            buttonEnviar.text = "Atualizar Relatório"
         } else {
-            firestore.collection("relatorios")
-                .add(relatorioMap)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Relatório enviado com sucesso!", Toast.LENGTH_LONG).show()
-                    finish()
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(this, "Erro ao enviar relatório: ${e.message}", Toast.LENGTH_LONG).show()
-                }
+            buttonEnviar.text = getString(R.string.form_button_enviar)
+        }
+
+        buttonEnviar.setOnClickListener {
+            val dadosColetados = coletarDadosDoFormulario()
+            salvarRelatorio(relatorioId, dadosColetados)
         }
     }
 
-    private fun configurarSeletorDeData() {
-        val calendario = Calendar.getInstance()
-        val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            calendario.set(Calendar.YEAR, year)
-            calendario.set(Calendar.MONTH, month)
-            calendario.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+    private fun coletarDadosDoFormulario(): Map<String, Any> {
+        val totalPessoas = editTextTotalPessoas.text.toString().toIntOrNull() ?: 0
+        val totalVisitantes = editTextTotalVisitantes.text.toString().toIntOrNull() ?: 0
 
-            val formato = "dd/MM/yyyy"
-            val sdf = SimpleDateFormat(formato, Locale.getDefault())
-            formData.text = sdf.format(calendario.time)
+        val valorOfertaString = editTextValorOferta.text.toString()
+        val valorOferta = try {
+            currencyFormatter.parse(valorOfertaString)?.toDouble() ?: 0.0
+        } catch (e: ParseException) {
+            Log.e("FormularioRede", "Erro ao parsear valor da oferta: $valorOfertaString", e)
+            0.0
         }
 
-        formData.setOnClickListener {
-            DatePickerDialog(this, dateSetListener, calendario.get(Calendar.YEAR), calendario.get(Calendar.MONTH), calendario.get(Calendar.DAY_OF_MONTH)).show()
+        val comentarios = editTextComentarios.text.toString().trim()
+        val descricao = editTextDescricao.text.toString().trim()
+        val nomeAutor = editTextNome.text.toString().trim()
+
+        return hashMapOf(
+            "totalPessoas" to totalPessoas,
+            "totalVisitantes" to totalVisitantes,
+            "valorOferta" to valorOferta,
+            "comentarios" to comentarios,
+            "descricao" to descricao,
+            "autorNome" to nomeAutor
+        )
+    }
+
+    private fun carregarRelatorioExistente(id: String) {
+        firestore.collection("relatorios").document(id).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    editTextNome.setText(document.getString("autorNome") ?: "")
+                    textViewData.text = document.getString("dataReuniao") ?: ""
+                    editTextDescricao.setText(document.getString("descricao") ?: "")
+                    editTextTotalPessoas.setText(document.getLong("totalPessoas")?.toString() ?: "")
+                    editTextTotalVisitantes.setText(document.getLong("totalVisitantes")?.toString() ?: "")
+
+                    val valorOfertaDouble = document.getDouble("valorOferta") ?: 0.0
+                    editTextValorOferta.setText(currencyFormatter.format(valorOfertaDouble))
+
+                    editTextComentarios.setText(document.getString("comentarios") ?: "")
+
+                } else {
+                    Toast.makeText(this, "Relatório não encontrado para edição.", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Erro ao carregar relatório para edição: ${e.message}", Toast.LENGTH_SHORT).show()
+                Log.e("FormularioRede", "Erro ao carregar para edição", e)
+                finish()
+            }
+    }
+
+    // Corrigido para receber o tipo certo de taskResult
+    private fun salvarRelatorio(relatorioIdParaSalvar: String?, relatorioDataMap: Map<String, Any>) {
+        val collectionRef = firestore.collection("relatorios")
+
+        val dataFinalReuniao: String = dataPendente ?: SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
+
+        val autorUid = auth.currentUser?.uid ?: ""
+        val autorNome = editTextNome.text.toString().trim()
+        val idRedeDoRelatorio = redeSelecionada!!
+
+        val finalRelatorioData = relatorioDataMap.toMutableMap().apply {
+            put("autorUid", autorUid)
+            put("autorNome", autorNome)
+            put("idRede", idRedeDoRelatorio)
+            put("dataReuniao", dataFinalReuniao)
+            put("timestamp", FieldValue.serverTimestamp())
         }
+
+        val saveTask = if (relatorioIdParaSalvar != null) {
+            collectionRef.document(relatorioIdParaSalvar).update(finalRelatorioData)
+        } else {
+            // Para 'add', o taskResult é um DocumentReference
+            collectionRef.add(finalRelatorioData)
+        }
+
+        saveTask.addOnSuccessListener { taskResult ->
+            // CORREÇÃO PARA ERRO 3
+            // Verifica o tipo de taskResult para pegar o ID corretamente
+            val savedDocId = if (taskResult is DocumentReference) {
+                taskResult.id // Se for um DocumentReference (para 'add'), pegamos o ID gerado
+            } else {
+                relatorioIdParaSalvar // Se for Unit (para 'update'), usamos o ID original
+            }
+
+            Toast.makeText(this, "Relatório salvo com sucesso! ID: $savedDocId", Toast.LENGTH_SHORT).show()
+            Log.d("FormularioRede", "Relatório salvo: ID ${savedDocId}, Dados: $finalRelatorioData")
+            finish()
+        }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Erro ao salvar relatório: ${e.message}", Toast.LENGTH_LONG).show()
+                Log.e("FormularioRede", "Erro ao salvar relatório", e)
+            }
     }
 }
