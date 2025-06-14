@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources> <color name="black">#FF000000</color>
+<resources>
+    <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="ffffff">#FFFFFF</color>
     <color name="dark_background">#121212</color>
     <color name="dark_card_background">#1E1E1E</color>
     <color name="dark_text_primary">#FFFFFF</color>
@@ -9,9 +9,7 @@
     <color name="dark_accent">#1DB954</color>
     <color name="status_green">#4CAF50</color>
     <color name="status_red">#F44336</color>
-    <color name="design_default_color_primary">#FFFFFF</color>
-    <color name="design_default_color_secondary">#b4b6b6</color>
-    <color name="dark_divider">#1FFFFFFF</color>
+    <color name="design_default_color_primary">#ffffff</color> <color name="design_default_color_secondary">#03DAC5</color> <color name="dark_divider">#1FFFFFFF</color>
     <color name="status_green_dark_theme">#2E7D32</color>
     <color name="status_red_dark_theme">#C62828</color>
-</resources>
+    <color name="bottom_nav_selected">#1DB954</color> <color name="bottom_nav_unselected">#B3B3B3</color> </resources>

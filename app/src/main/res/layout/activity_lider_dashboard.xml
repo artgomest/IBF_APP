@@ -1,176 +1,262 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/dark_background"
-    tools:context=".LiderDashboardActivity">
+    tools:context=".ui.dashboard.LiderDashboardActivity">
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="?attr/actionBarSize"> <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="?attr/actionBarSize"
+        android:paddingHorizontal="16dp">
 
         <TextView
             android:id="@+id/text_greeting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
+            android:text="@string/ola_nome_placeholder"
             android:textColor="@color/dark_text_primary"
-            android:textSize="28sp"
+            android:textSize="24sp"
             android:textStyle="bold"
-            tools:text="Olá, Nome do Líder" />
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true" />
 
-        <TextView
-            android:id="@+id/text_rede_dashboard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rede: N/A"
-            android:textSize="16sp"
-            android:textColor="@color/dark_text_secondary"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_greeting"
-            tools:ignore="HardcodedText" />
+        <ImageView
+            android:id="@+id/image_profile"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_profile_placeholder"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:padding="8dp"
+            android:contentDescription="@string/profile_image_content_description"
+            android:clickable="true"
+            android:focusable="true" />
+    </RelativeLayout>
 
-        <androidx.gridlayout.widget.GridLayout
+    <TextView
+        android:id="@+id/text_rede_dashboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rede_dashboard_label"
+        android:textSize="16sp"
+        android:textColor="@color/dark_text_secondary"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="16dp">
+
+        <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:columnCount="2"
-            app:rowCount="2"
-            app:useDefaultMargins="true">
+            android:columnCount="2"
+            android:rowCount="3"
+            android:alignmentMode="alignMargins"
+            android:columnOrderPreserved="false"
+            android:layout_marginBottom="16dp">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_relatorios"
-                style="@style/DashboardCard"
-                android:layout_width="0dp" app:layout_columnWeight="1"
-                app:layout_gravity="fill">
-
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_margin="8dp"
+                style="@style/Widget.MaterialComponents.CardView"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/dark_card_background"
+                app:strokeColor="@color/dark_divider"
+                app:strokeWidth="1dp">
                 <LinearLayout
-                    style="@style/DashboardCardContent"
                     android:layout_width="match_parent"
-                    tools:ignore="UseCompoundDrawables">
-
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="16dp">
                     <ImageView
-                        style="@style/DashboardCardIcon"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:src="@drawable/ic_reports"
-                        android:contentDescription="@string/lider_menu_relatorios" />
+                        android:contentDescription="@string/icon_reports_content_description"
+                        app:tint="@color/dark_text_primary"/>
                     <TextView
-                        style="@style/DashboardCardTitle"
-                        android:text="@string/lider_menu_relatorios" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/relatorios"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/dark_text_primary"
+                        android:layout_marginTop="8dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_graficos"
-                style="@style/DashboardCard"
-                android:layout_width="0dp" app:layout_columnWeight="1"
-                app:layout_gravity="fill">
-
-                <LinearLayout style="@style/DashboardCardContent"
-                    tools:ignore="UseCompoundDrawables">
-
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_margin="8dp"
+                style="@style/Widget.MaterialComponents.CardView"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/dark_card_background"
+                app:strokeColor="@color/dark_divider"
+                app:strokeWidth="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="16dp">
                     <ImageView
-                        style="@style/DashboardCardIcon"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:src="@drawable/ic_graficos"
-                        android:contentDescription="@string/lider_menu_graficos" />
+                        android:contentDescription="@string/icon_graficos_content_description"
+                        app:tint="@color/dark_text_primary"/>
                     <TextView
-                        style="@style/DashboardCardTitle"
-                        android:text="@string/lider_menu_graficos" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/graficos"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/dark_text_primary"
+                        android:layout_marginTop="8dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_membros"
-                style="@style/DashboardCard"
-                android:layout_width="0dp" app:layout_columnWeight="1"
-                app:layout_gravity="fill">
-
-                <LinearLayout style="@style/DashboardCardContent"
-                    tools:ignore="UseCompoundDrawables">
-
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_margin="8dp"
+                style="@style/Widget.MaterialComponents.CardView"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/dark_card_background"
+                app:strokeColor="@color/dark_divider"
+                app:strokeWidth="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="16dp">
                     <ImageView
-                        style="@style/DashboardCardIcon"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:src="@drawable/ic_membros"
-                        android:contentDescription="@string/lider_menu_membros" />
+                        android:contentDescription="@string/icon_membros_content_description"
+                        app:tint="@color/dark_text_primary"/>
                     <TextView
-                        style="@style/DashboardCardTitle"
-                        android:text="@string/lider_menu_membros" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/membros"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/dark_text_primary"
+                        android:layout_marginTop="8dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_config"
-                style="@style/DashboardCard"
-                android:layout_width="0dp" app:layout_columnWeight="1"
-                app:layout_gravity="fill">
-
-                <LinearLayout style="@style/DashboardCardContent"
-                    tools:ignore="UseCompoundDrawables">
-
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_margin="8dp"
+                style="@style/Widget.MaterialComponents.CardView"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/dark_card_background"
+                app:strokeColor="@color/dark_divider"
+                app:strokeWidth="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="16dp">
                     <ImageView
-                        style="@style/DashboardCardIcon"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:src="@drawable/ic_config"
-                        android:contentDescription="@string/lider_menu_config" />
+                        android:contentDescription="@string/icon_config_content_description"
+                        app:tint="@color/dark_text_primary"/>
                     <TextView
-                        style="@style/DashboardCardTitle"
-                        android:text="@string/lider_menu_config"
-                        android:textAlignment="center"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/config_da_rede"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/dark_text_primary"
+                        android:layout_marginTop="8dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-        </androidx.gridlayout.widget.GridLayout>
+        </GridLayout>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_mudar_perfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/DashboardCard"
-            android:layout_marginTop="16dp">
-
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            style="@style/Widget.MaterialComponents.CardView"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/dark_card_background"
+            app:strokeColor="@color/dark_divider"
+            app:strokeWidth="1dp">
             <LinearLayout
-                style="@style/DashboardCardContent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                tools:ignore="UseCompoundDrawables">
-
+                android:gravity="center_vertical"
+                android:padding="16dp">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/lider_menu_trocar_perfil"
-                    android:textColor="@color/dark_text_primary"
-                    android:textSize="18sp" />
-
+                    android:text="@string/mudar_perfil"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/dark_text_primary"/>
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:contentDescription="@string/lider_menu_trocar_perfil"
-                    android:src="@drawable/ic_change_account" />
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_change_account"
+                    android:contentDescription="@string/icon_mudar_perfil_content_description"
+                    app:tint="@color/dark_text_primary"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
-    </ScrollView>
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/dark_card_background"
-        app:itemIconTint="@color/dark_text_secondary"
-        app:itemTextColor="@color/dark_text_secondary"
-        app:menu="@menu/bottom_nav_menu"
-        tools:ignore="VisualLintBottomNav" />
+        android:background="?android:attr/windowBackground"
+        app:itemIconTint="@color/bottom_nav_item_color"
+        app:itemTextColor="@color/bottom_nav_item_color"
+        app:menu="@menu/bottom_nav_menu" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

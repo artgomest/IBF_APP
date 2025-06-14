@@ -1,14 +1,11 @@
 package com.ibf.app.ui.relatorios
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.card.MaterialCardView
+import com.ibf.app.R // Importação de R
 
 class SelecionarRelatorioSheet : BottomSheetDialogFragment() {
 
@@ -16,32 +13,23 @@ class SelecionarRelatorioSheet : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Infla (desenha) o nosso novo layout de bandeja
-        return inflater.inflate(R.layout.sheet_selecionar_relatorio, container, false)
+        return inflater.inflate(R.layout.bottom_sheet_selecionar_relatorio, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Encontra os componentes dentro da bandeja
-        val cardRede = view.findViewById<MaterialCardView>(R.id.card_relatorio_rede)
-        val cardFinanceiro = view.findViewById<MaterialCardView>(R.id.card_relatorio_financeiro)
-        val closeButton = view.findViewById<ImageButton>(R.id.buttonCloseSheet)
-
-        // Lógica para fechar a bandeja
-        closeButton.setOnClickListener {
-            dismiss() // Comando para fechar o BottomSheet
+        // Exemplo: Botões para "Ver Relatórios" e "Criar Novo Relatório"
+        view.findViewById<View>(R.id.button_ver_relatorios).setOnClickListener {
+            Toast.makeText(context, "Ver Relatórios clicado", Toast.LENGTH_SHORT).show()
+            dismiss() // Fecha o bottom sheet
+            // Implementar navegação para a tela de relatórios (ex: LiderStatusRelatoriosActivity)
         }
 
-        // Abre o formulário de rede que já temos
-        cardRede.setOnClickListener {
-            startActivity(Intent(requireContext(), FormularioRedeActivity::class.java))
-            dismiss() // Fecha a bandeja após a seleção
-        }
-
-        // Apenas mostra uma mensagem, pois ainda não criamos este formulário
-        cardFinanceiro.setOnClickListener {
-            Toast.makeText(context, "Função a ser implementada!", Toast.LENGTH_SHORT).show()
+        view.findViewById<View>(R.id.button_criar_relatorio).setOnClickListener {
+            Toast.makeText(context, "Criar Novo Relatório clicado", Toast.LENGTH_SHORT).show()
+            dismiss()
+            // Implementar navegação para a tela de formulário de relatório (ex: FormularioRedeActivity)
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.ibf.app.ui.main
 
-// import java.io.Serializable // Removida: Unused import directive
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.ibf.app.R
+import com.ibf.app.ui.dashboard.LiderDashboardActivity
+import com.ibf.app.ui.dashboard.PastorDashboardActivity
+import com.ibf.app.ui.dashboard.SecretarioDashboardActivity
+import com.ibf.app.ui.shared.SelecionarPerfilSheet
 
 class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionadoListener {
 
@@ -97,8 +102,7 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
     }
 
     private fun salvarRedeSelecionada(rede: String) {
-        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
-        // Correção para warning: Use KTX extension function SharedPreferences.edit instead?
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         sharedPref.edit {
             putString("REDE_SELECIONADA", rede)
         }
@@ -114,7 +118,7 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
 
         if (intent != null) {
             intent.putExtra("REDE_SELECIONADA", rede)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()
         } else {

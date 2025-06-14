@@ -9,7 +9,7 @@ import java.text.ParseException
 
 class MoneyTextWatcher(
     editText: EditText,
-    private val formatter: DecimalFormat // Formatador já configurado (R$ #,##0.00)
+    private val formatter: DecimalFormat
 ) : TextWatcher {
 
     private val editTextWeakReference: WeakReference<EditText> = WeakReference(editText)
@@ -23,24 +23,20 @@ class MoneyTextWatcher(
         if (s.toString() != current) {
             editTextWeakReference.get()?.removeTextChangedListener(this)
 
-            val cleanString = s.toString().replace("[R$,.]".toRegex(), "") // Remove R$, . e ,
+            val cleanString = s.toString().replace("[R$,.]".toRegex(), "")
 
             if (cleanString.isNotEmpty()) {
                 val parsed: Double
                 try {
-                    // Divide por 100 para tratar os centavos (últimos dois dígitos)
                     parsed = cleanString.toDouble() / 100
-                    val formatted = formatter.format(parsed) // Formata o número
+                    val formatted = formatter.format(parsed)
                     current = formatted
                     editTextWeakReference.get()?.setText(formatted)
-                    editTextWeakReference.get()?.setSelection(formatted.length) // Mantém o cursor no final
+                    editTextWeakReference.get()?.setSelection(formatted.length)
                 } catch (e: NumberFormatException) {
-                    // Ocorre se cleanString for muito longo ou vazio após remover chars
-                    // Deixe o campo como está ou redefina para vazio
                     editTextWeakReference.get()?.setText("")
                     current = ""
                 } catch (e: ParseException) {
-                    // Não deveria ocorrer com as regex
                     editTextWeakReference.get()?.setText("")
                     current = ""
                 }

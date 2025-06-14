@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView
+    android:id="@+id/card_item_status_relatorio"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -42,7 +43,7 @@
                 android:textColor="@color/dark_text_primary"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                tools:text="12/06/2025" />
+                tools:text="@string/data_reuniao_placeholder" />
 
             <TextView
                 android:id="@+id/text_status"
@@ -50,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/status_green"
                 android:textSize="14sp"
-                tools:text="Enviado" />
+                tools:text="@string/status_enviado_placeholder" />
 
         </LinearLayout>
 

@@ -5,8 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.ibf.app.R
-import com.ibf.app.StatusRelatorio
+import com.google.android.material.card.MaterialCardView
+import com.ibf.app.R // Importação de R
+import com.ibf.app.data.models.Relatorio // Importação do modelo Relatorio
+import com.ibf.app.data.models.StatusRelatorio // Importação do modelo StatusRelatorio
 
 class RelatorioAdapter(
     private val listaStatus: List<StatusRelatorio>,
@@ -17,14 +19,15 @@ class RelatorioAdapter(
         fun onItemClick(status: StatusRelatorio)
     }
 
-    // ViewHolders para cada tipo de item
     class EnviadoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val cardView: MaterialCardView = itemView.findViewById(R.id.card_item_relatorio)
         val data: TextView = itemView.findViewById(R.id.item_data)
         val rede: TextView = itemView.findViewById(R.id.item_rede)
         val autor: TextView = itemView.findViewById(R.id.item_autor)
     }
 
     class FaltanteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val cardView: MaterialCardView = itemView.findViewById(R.id.card_item_relatorio_faltante)
         val data: TextView = itemView.findViewById(R.id.item_faltante_data)
         val rede: TextView = itemView.findViewById(R.id.item_faltante_rede)
     }
@@ -61,15 +64,25 @@ class RelatorioAdapter(
         if (holder.itemViewType == TIPO_ENVIADO && statusAtual is StatusRelatorio.Enviado) {
             val enviadoHolder = holder as EnviadoViewHolder
             val relatorio = statusAtual.relatorio
-            // Garanta que `autorNome` existe na sua `data class Relatorio`
             enviadoHolder.data.text = context.getString(R.string.item_data_label, relatorio.dataReuniao)
             enviadoHolder.rede.text = context.getString(R.string.item_rede_label, relatorio.idRede)
             enviadoHolder.autor.text = context.getString(R.string.item_autor_label, relatorio.autorNome)
+
+            enviadoHolder.cardView.setCardBackgroundColor(context.resources.getColor(R.color.status_green_dark_theme, null))
+            enviadoHolder.cardView.strokeColor = context.resources.getColor(R.color.status_green, null)
+            enviadoHolder.data.setTextColor(context.resources.getColor(R.color.white, null))
+            enviadoHolder.rede.setTextColor(context.resources.getColor(R.color.white, null))
+            enviadoHolder.autor.setTextColor(context.resources.getColor(R.color.white, null))
 
         } else if (holder.itemViewType == TIPO_FALTANTE && statusAtual is StatusRelatorio.Faltante) {
             val faltanteHolder = holder as FaltanteViewHolder
             faltanteHolder.data.text = context.getString(R.string.item_faltante_data_label, statusAtual.dataEsperada)
             faltanteHolder.rede.text = context.getString(R.string.item_faltante_rede_label, statusAtual.nomeRede)
+
+            faltanteHolder.cardView.setCardBackgroundColor(context.resources.getColor(R.color.status_red_dark_theme, null))
+            faltanteHolder.cardView.strokeColor = context.resources.getColor(R.color.status_red, null)
+            faltanteHolder.data.setTextColor(context.resources.getColor(R.color.white, null))
+            faltanteHolder.rede.setTextColor(context.resources.getColor(R.color.white, null))
         }
     }
 

@@ -1,16 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/SelectableCard"> <LinearLayout style="@style/cardContent">
+android:id="@+id/card_item_relatorio"
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_marginBottom="8dp"
+style="@style/Widget.MaterialComponents.CardView"
+app:cardCornerRadius="8dp"
+app:cardElevation="2dp"
+app:cardBackgroundColor="@color/dark_card_background"
+app:strokeColor="@color/dark_divider"
+app:strokeWidth="1dp">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
     <TextView
-        android:id="@+id/item_perfil_rede"
-        style="@style/cardTitle"
-        android:text="Nome da Rede" />
+        android:id="@+id/item_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/item_data_label_placeholder"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/dark_text_primary"
+        android:layout_marginBottom="4dp"/>
+
     <TextView
-        android:id="@+id/item_perfil_papel"
-        style="@style/cardDescription"
-        android:text="Seu papel"
-        android:textAllCaps="true"/>
+        android:id="@+id/item_rede"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/item_rede_label_placeholder"
+        android:textSize="14sp"
+        android:textColor="@color/dark_text_secondary"/>
+
+    <TextView
+        android:id="@+id/item_autor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/item_autor_label_placeholder"
+        android:textSize="14sp"
+        android:textColor="@color/dark_text_secondary"/>
+
 </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

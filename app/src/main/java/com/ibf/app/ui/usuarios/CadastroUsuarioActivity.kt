@@ -15,9 +15,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.ibf.app.R
+import com.google.firebase.firestore.FieldValue
+
+import com.ibf.app.R // Importação de R
+import com.ibf.app.data.models.Perfil // Importação de Perfil, se for usado aqui
+import com.ibf.app.ui.shared.SelecionarPerfilSheet // Importação da Sheet
 
 class CadastroUsuarioActivity : AppCompatActivity() {
 
@@ -55,7 +58,7 @@ class CadastroUsuarioActivity : AppCompatActivity() {
         papelUsuarioLogado = intent.getStringExtra("PAPEL_USUARIO_LOGADO")
 
         if (redeSelecionada == null || papelUsuarioLogado == null) {
-            Toast.makeText(this, "Erro: Rede ou Papel do usuário não especificados.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.erro_rede_ou_papel_nao_especificados), Toast.LENGTH_LONG).show()
             finish()
             return
         }
@@ -112,51 +115,42 @@ class CadastroUsuarioActivity : AppCompatActivity() {
             val papelSelecionado = spinnerPapel.selectedItem.toString()
 
             if (nome.isEmpty() || email.isEmpty() || senha.isEmpty()) {
-                Toast.makeText(this, "Preencha todos os campos.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.preencher_todos_campos), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             if (senha.length < 6) {
-                Toast.makeText(this, "A senha deve ter no mínimo 6 caracteres.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.senha_minimo_caracteres), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // AQUI ESTÁ A MUDANÇA: Tentamos cadastrar diretamente.
-            // Se o email já estiver em uso, a exceção será capturada.
             cadastrarOuAtualizarUsuario(nome, email, senha, papelSelecionado, redeSelecionada!!)
         }
     }
 
-    // FUNÇÃO REESTRUTURADA: Tenta cadastrar ou captura o erro para atualizar
     private fun cadastrarOuAtualizarUsuario(nome: String, email: String, senha: String, papel: String, rede: String) {
-        buttonCadastrarUsuario.isEnabled = false // Desabilita o botão
+        buttonCadastrarUsuario.isEnabled = false
 
-        // Tenta criar o usuário no Firebase Authentication
         auth.createUserWithEmailAndPassword(email, senha)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Usuário criado com sucesso -> Salvar dados no Firestore
                     val user = task.result?.user
                     user?.let {
                         salvarDadosNovoUsuarioNoFirestore(it.uid, nome, email, papel, rede)
                     }
                 } else {
-                    // Falha na criação do usuário
                     val exception = task.exception
                     if (exception is FirebaseAuthUserCollisionException) {
-                        // E-mail já em uso! -> Prosseguir com a lógica de atualização
-                        Log.d("CadastroUsuario", "Email $email já está em uso, buscando no Firestore para atualizar funções.")
+                        Log.d("CadastroUsuario", "Email $email já está em uso no Auth. Buscando no Firestore para atualizar funções.")
                         buscarUsuarioExistenteParaAtualizarFuncao(email, nome, papel, rede)
                     } else {
-                        // Outro tipo de erro de cadastro
-                        Toast.makeText(this, "Falha no cadastro: ${exception?.message}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, getString(R.string.falha_cadastro, exception?.message), Toast.LENGTH_LONG).show()
                         Log.e("CadastroUsuario", "Erro genérico ao criar usuário no Auth", exception)
-                        buttonCadastrarUsuario.isEnabled = true // Reabilita o botão
+                        buttonCadastrarUsuario.isEnabled = true
                     }
                 }
             }
     }
 
-    // NOVA FUNÇÃO: Salva dados de um NOVO usuário no Firestore
     private fun salvarDadosNovoUsuarioNoFirestore(uid: String, nome: String, email: String, papel: String, rede: String) {
         val funcoesMap = hashMapOf(rede to papel)
         val userData = hashMapOf(
@@ -168,24 +162,18 @@ class CadastroUsuarioActivity : AppCompatActivity() {
 
         firestore.collection("usuarios").document(uid).set(userData)
             .addOnSuccessListener {
-                Toast.makeText(this, "Usuário $nome cadastrado como $papel na $rede!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.usuario_cadastrado_sucesso, nome, papel, rede), Toast.LENGTH_LONG).show()
                 limparCampos()
                 buttonCadastrarUsuario.isEnabled = true
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Falha ao salvar dados no Firestore: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.falha_salvar_dados_firestore, e.message), Toast.LENGTH_SHORT).show()
                 Log.e("CadastroUsuario", "Erro ao salvar usuário no Firestore", e)
-                // Opcional: tentar deletar o usuário do Auth se a gravação no Firestore falhou
-                auth.currentUser?.delete()?.addOnCompleteListener { deleteTask ->
-                    if (deleteTask.isSuccessful) Log.d("CadastroUsuario", "Usuário do Auth excluído após falha no Firestore.")
-                }
                 buttonCadastrarUsuario.isEnabled = true
             }
     }
 
-
-    // NOVA FUNÇÃO: Busca usuário existente pelo email para atualização de função
-    private fun buscarUsuarioExistenteParaAtualizarFuncao(email: String, novoNome: String, novoPapel: String, novaRede: String) {
+    private fun buscarUsuarioExistenteParaAtualizarFuncao(email: String, nomeFormulario: String, novoPapel: String, novaRede: String) {
         firestore.collection("usuarios")
             .whereEqualTo("email", email)
             .get()
@@ -193,42 +181,35 @@ class CadastroUsuarioActivity : AppCompatActivity() {
                 if (!querySnapshot.isEmpty) {
                     val existingDoc = querySnapshot.documents.first()
                     val existingUserUid = existingDoc.id
-                    val existingUserName = existingDoc.getString("nome") ?: "Usuário Existente"
+                    val existingUserName = existingDoc.getString("nome") ?: getString(R.string.usuario_existente_label)
                     @Suppress("UNCHECKED_CAST")
                     val existingFuncoes = existingDoc.get("funcoes") as? HashMap<String, String>
 
                     if (existingFuncoes != null && existingFuncoes.containsKey(novaRede)) {
-                        // Usuário já tem acesso a ESTA REDE com a função.
                         val papelExistente = existingFuncoes[novaRede]
                         Toast.makeText(
                             this,
-                            "'$email' ($existingUserName) já é $papelExistente na $novaRede.",
+                            getString(R.string.email_ja_na_rede, email, existingUserName, papelExistente, novaRede),
                             Toast.LENGTH_LONG
                         ).show()
                         limparCampos()
                         buttonCadastrarUsuario.isEnabled = true
                     } else {
-                        // E-mail existe, mas o usuário NÃO TEM acesso a esta rede.
-                        // Perguntar ao líder se quer adicionar nova função.
-                        mostrarDialogoAdicionarFuncao(existingUserUid, existingUserName, email, novoPapel, novaRede)
+                        mostrarDialogoAdicionarFuncao(existingUserUid, nomeFormulario, email, novoPapel, novaRede)
                     }
                 } else {
-                    // E-mail existe no Auth, mas não encontrou o documento no Firestore.
-                    // Isso pode indicar um erro de sincronização ou usuário antigo.
-                    Toast.makeText(this, "Erro: Email cadastrado no Auth, mas dados não encontrados no Firestore. Contacte suporte.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.erro_email_cadastrado_sem_dados), Toast.LENGTH_LONG).show()
                     Log.e("CadastroUsuario", "Email $email existe no Auth, mas documento não no Firestore.")
                     limparCampos()
                     buttonCadastrarUsuario.isEnabled = true
                 }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Erro ao buscar usuário existente no Firestore: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.erro_buscar_usuario_existente, e.message), Toast.LENGTH_SHORT).show()
                 Log.e("CadastroUsuario", "Erro no Firestore ao buscar usuário existente", e)
                 buttonCadastrarUsuario.isEnabled = true
             }
     }
-
-    // ... (restante das funções: mostrarDialogoAdicionarFuncao, adicionarFuncaoAUsuarioExistente, limparCampos) ...
 
     private fun mostrarDialogoAdicionarFuncao(
         existingUserUid: String,
@@ -238,14 +219,14 @@ class CadastroUsuarioActivity : AppCompatActivity() {
         novaRede: String
     ) {
         AlertDialog.Builder(this)
-            .setTitle("Usuário Existente")
-            .setMessage("O email '$email' ($existingUserName) já está cadastrado. Deseja adicionar o papel '$novoPapel' na '$novaRede' para este usuário?")
-            .setPositiveButton("Sim, Adicionar Função") { dialog, _ ->
-                adicionarFuncaoAUsuarioExistente(existingUserUid, novoPapel, novaRede)
+            .setTitle(getString(R.string.dialogo_usuario_existente_titulo))
+            .setMessage(getString(R.string.dialogo_adicionar_funcao_mensagem, email, existingUserName, novoPapel, novaRede))
+            .setPositiveButton(getString(R.string.sim_adicionar_funcao)) { dialog, _ ->
+                adicionarFuncaoAUsuarioExistente(existingUserUid, novoPapel, novaRede, existingUserName)
                 dialog.dismiss()
             }
-            .setNegativeButton("Não, Cancelar") { dialog, _ ->
-                Toast.makeText(this, "Operação cancelada.", Toast.LENGTH_SHORT).show()
+            .setNegativeButton(getString(R.string.nao_cancelar)) { dialog, _ ->
+                Toast.makeText(this, getString(R.string.operacao_cancelada), Toast.LENGTH_SHORT).show()
                 limparCampos()
                 buttonCadastrarUsuario.isEnabled = true
                 dialog.dismiss()
@@ -254,21 +235,25 @@ class CadastroUsuarioActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun adicionarFuncaoAUsuarioExistente(uid: String, novoPapel: String, novaRede: String) {
+    private fun adicionarFuncaoAUsuarioExistente(uid: String, novoPapel: String, novaRede: String, nomeParaAtualizar: String) {
         val userRef = firestore.collection("usuarios").document(uid)
 
-        // Atualiza o mapa 'funcoes' e o array 'redes'
-        userRef.update(
-            "funcoes.$novaRede", novoPapel,
-            "redes", FieldValue.arrayUnion(novaRede)
+        val updates = hashMapOf<String, Any>(
+            "funcoes.$novaRede" to novoPapel,
+            "redes" to FieldValue.arrayUnion(novaRede)
         )
+        // Opcional: Se o nome digitado no formulário for diferente do nome existente no Firestore,
+        // você pode atualizar o nome do usuário também.
+        // updates["nome"] = nomeParaAtualizar
+
+        userRef.update(updates)
             .addOnSuccessListener {
-                Toast.makeText(this, "Função '$novoPapel' na '$novaRede' adicionada ao usuário!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.funcao_adicionada_sucesso, novoPapel, novaRede, nomeParaAtualizar), Toast.LENGTH_LONG).show()
                 limparCampos()
                 buttonCadastrarUsuario.isEnabled = true
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Erro ao adicionar função: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.erro_adicionar_funcao, e.message), Toast.LENGTH_SHORT).show()
                 Log.e("CadastroUsuario", "Erro ao adicionar função ao usuário existente", e)
                 buttonCadastrarUsuario.isEnabled = true
             }

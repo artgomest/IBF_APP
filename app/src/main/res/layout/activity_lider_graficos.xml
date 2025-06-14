@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/dark_background"
-    tools:context=".LiderGraficosActivity">
+    tools:context=".ui.graficos.LiderGraficosActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -27,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/graficos"
+            android:text="@string/graficos_rede_label_placeholder"
             android:textColor="@color/dark_text_primary"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -36,8 +35,7 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:ignore="MissingClass">
+        android:layout_height="match_parent">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -55,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp">
                     <LinearLayout style="@style/GraficoContent"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             style="@style/GraficoTitle"
@@ -83,7 +81,7 @@
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1">
                         <LinearLayout style="@style/GraficoContent"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent">
                             <TextView
                                 style="@style/GraficoTitle.Small"
@@ -105,7 +103,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_weight="1">
                         <LinearLayout style="@style/GraficoContent"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <TextView
                                 style="@style/GraficoTitle.Small"
@@ -128,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp">
                     <LinearLayout style="@style/GraficoContent"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             style="@style/GraficoTitle"

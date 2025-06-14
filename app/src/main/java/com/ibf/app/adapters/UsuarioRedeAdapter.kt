@@ -1,25 +1,20 @@
 package com.ibf.app.adapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.ibf.app.R
+import com.ibf.app.R // Importação de R
+import com.ibf.app.data.models.UsuarioRede // Importação do modelo UsuarioRede
 
-// Data class para representar o usuário na lista
-// Incluímos 'idRede' porque o campo 'funcoes' é um mapa, e precisamos
-// saber o papel específico para a rede que estamos visualizando.
-data class UsuarioRede(
-    val uid: String,
-    val nome: String,
-    val papel: String
-)
+// Data class para representar o usuário na lista (se estiver em um arquivo separado, apague daqui)
+// Se UsuarioRede.kt está em data.models, esta data class não precisa estar aqui.
+// data class UsuarioRede(...)
 
 class UsuarioRedeAdapter(
     private val listaUsuarios: MutableList<UsuarioRede>,
-    private val listener: OnItemClickListener // Se quiser cliques nos usuários
+    private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<UsuarioRedeAdapter.UsuarioViewHolder>() {
 
     interface OnItemClickListener {
@@ -37,8 +32,7 @@ class UsuarioRedeAdapter(
     override fun onBindViewHolder(holder: UsuarioViewHolder, position: Int) {
         val usuario = listaUsuarios[position]
         holder.nome.text = usuario.nome
-        // --- CORREÇÃO AQUI para usar string resource com placeholder ---
-        val papelFormatado = usuario.papel.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() } // Capitaliza a primeira letra
+        val papelFormatado = usuario.papel.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
         holder.papel.text = holder.itemView.context.getString(R.string.papel_usuario_label_format, papelFormatado)
 
         holder.itemView.setOnClickListener {
@@ -46,11 +40,10 @@ class UsuarioRedeAdapter(
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun atualizarLista(novaLista: List<UsuarioRede>) {
         listaUsuarios.clear()
         listaUsuarios.addAll(novaLista)
-        notifyDataSetChanged() // Mantido intencionalmente para atualização completa da lista
+        notifyDataSetChanged() // Mantido intencionalmente
     }
 
     class UsuarioViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

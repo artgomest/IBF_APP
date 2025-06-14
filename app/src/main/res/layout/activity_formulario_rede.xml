@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/dark_background"
-    tools:context=".FormularioRedeActivity">
+    tools:context=".ui.relatorios.FormularioRedeActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -26,7 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/form_title" android:textColor="@color/dark_text_primary"
+            android:text="@string/form_title"
+            android:textColor="@color/dark_text_primary"
             android:textSize="22sp"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -42,15 +43,13 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/text_data_reuniao_exibida"
-                android:layout_width="wrap_content"
+                android:id="@+id/formData" android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Data da Reunião: --/--/----"
+                android:text="@string/form_data_reuniao_placeholder"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/dark_text_primary"
-                android:layout_marginBottom="16dp"
-                tools:ignore="HardcodedText" />
+                android:layout_marginBottom="16dp"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -58,14 +57,12 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/form_nome"
                 android:layout_marginBottom="16dp">
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/formNome"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:textColor="@color/dark_text_primary"
-                    tools:ignore="TextContrastCheck" />
+                    android:textColor="@color/dark_text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -89,16 +86,14 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/form_descricao_culto"
                 android:layout_marginBottom="16dp">
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/formDescricao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="top|start"
                     android:inputType="textMultiLine"
                     android:lines="4"
-                    android:textColor="@color/dark_text_primary"
-                    tools:ignore="TextContrastCheck" />
+                    android:gravity="top|start"
+                    android:textColor="@color/dark_text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -107,15 +102,12 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/form_total_pessoas"
                 android:layout_marginBottom="16dp">
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/formPessoas"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:textColor="@color/dark_text_primary"
-                    android:textColorHint="#78909C"
-                    tools:ignore="TextContrastCheck" />
+                    android:textColor="@color/dark_text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -124,14 +116,12 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/form_total_visitantes"
                 android:layout_marginBottom="16dp">
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/formVisitantes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:textColor="@color/dark_text_primary"
-                    tools:ignore="TextContrastCheck" />
+                    android:textColor="@color/dark_text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -140,14 +130,12 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/form_valor_oferta"
                 android:layout_marginBottom="16dp">
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/formOferta"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
-                    android:textColor="@color/dark_text_primary"
-                    tools:ignore="TextContrastCheck,TextContrastCheck" />
+                    android:textColor="@color/dark_text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -171,8 +159,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/form_button_enviar"
-                android:layout_marginTop="24dp"
-                tools:ignore="VisualLintButtonSize" />
+                android:layout_marginTop="24dp"/>
 
         </LinearLayout>
     </ScrollView>

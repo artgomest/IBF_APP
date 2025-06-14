@@ -1,16 +1,18 @@
-
 package com.ibf.app.data.models
 
-// Se o seu campo no Firestore for 'dataReuniao', e você espera uma String
-// e 'data' também for uma string, certifique-se dos nomes e tipos.
+import com.google.firebase.firestore.ServerTimestamp
+import java.util.Date
+
 data class Relatorio(
-    var id: String = "", // 'var' é importante para 'apply { id = doc.id }'
+    @JvmField var id: String = "",
+    @JvmField val autorUid: String = "",
+    @JvmField val autorNome: String = "",
     @JvmField val idRede: String = "",
+    @JvmField val dataReuniao: String = "",
+    @JvmField val comentarios: String = "",
+    @JvmField val descricao: String = "",
     @JvmField val totalPessoas: Int = 0,
     @JvmField val totalVisitantes: Int = 0,
     @JvmField val valorOferta: Double = 0.0,
-    @JvmField val data: String = "",
-    @JvmField val dataReuniao: String = "",
-    @JvmField val autorNome: String = ""
-    // Adicione aqui todos os outros campos que o Firestore retorna para 'relatorios'
+    @ServerTimestamp @JvmField val timestamp: Date? = null
 )

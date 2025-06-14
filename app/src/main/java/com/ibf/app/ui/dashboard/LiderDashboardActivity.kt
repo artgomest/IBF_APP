@@ -12,8 +12,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.ibf.app.R
+import com.ibf.app.ui.configuracoes.ConfiguracoesRedeActivity
+import com.ibf.app.ui.graficos.LiderGraficosActivity
+import com.ibf.app.ui.main.MainActivity
+import com.ibf.app.ui.relatorios.LiderStatusRelatoriosActivity
+import com.ibf.app.ui.relatorios.SelecionarRelatorioSheet
+import com.ibf.app.ui.shared.SelecionarPerfilSheet
 
-// Adicionamos a interface para "ouvir" a seleção de perfil, igual ao secretário
 class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionadoListener {
 
     private lateinit var auth: FirebaseAuth
@@ -56,7 +62,7 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
                     val funcoes = document.get("funcoes") as? HashMap<String, String>
                     papelUsuarioLogado = funcoes?.get(redeSelecionada)
                     if (papelUsuarioLogado == null) {
-                        papelUsuarioLogado = funcoes?.get("geral") // Verifica se tem um papel 'geral'
+                        papelUsuarioLogado = funcoes?.get("geral")
                     }
 
                     if (papelUsuarioLogado == null) {
@@ -168,8 +174,7 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         }
     }
 
-    // @Suppress("unused") // Pode ser adicionado para suprimir o warning, se desejar
-    private fun navegarParaTelaCorreta(rede: String, papel: String?) {
+    override fun onPerfilSelecionado(rede: String, papel: String) {
         val intent = when (papel) {
             "pastor" -> Intent(this, PastorDashboardActivity::class.java)
             "lider" -> Intent(this, LiderDashboardActivity::class.java)
@@ -198,21 +203,15 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         }
     }
 
+    override fun onLogoutSelecionado() {
+        fazerLogout()
+    }
+
     private fun fazerLogout() {
         auth.signOut()
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
-    }
-
-    override fun onPerfilSelecionado(rede: String, papel: String) {
-        // A implementação deve ser a mesma da função navegarParaTelaCorreta
-        // ou chamar diretamente navegarParaTelaCorreta
-        navegarParaTelaCorreta(rede, papel)
-    }
-
-    override fun onLogoutSelecionado() {
-        fazerLogout()
     }
 }

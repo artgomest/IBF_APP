@@ -1,60 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="24dp"
-    android:background="#000000"
-    tools:context=".MainActivity">
+    android:padding="16dp"
+    android:background="@color/dark_background"
+    tools:context=".ui.main.MainActivity">
 
     <ImageView
-        android:id="@+id/imageViewLogo"
-        android:layout_width="351dp"
-        android:layout_height="183dp"
-        android:layout_marginBottom="48dp"
-        android:contentDescription="@string/login_logo_description"
-        android:rotation="0"
-        app:srcCompat="@drawable/logobranca" />
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/logobranca"
+        android:contentDescription="@string/app_logo_content_description"
+        android:layout_marginBottom="48dp"/>
 
     <EditText
         android:id="@+id/editTextEmailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/login_hint_email"
+        android:hint="@string/email_hint"
         android:inputType="textEmailAddress"
-        android:autofillHints="emailAddress"
-        android:minHeight="48dp"
+        android:padding="12dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/edit_text_background"
-        android:textColor="@android:color/white"
-        android:textColorHint="#999999"
-        android:padding="12dp"/>
+        android:textColor="@color/dark_text_primary"
+        android:textColorHint="@color/dark_text_secondary"/>
 
     <EditText
         android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/login_hint_password"
+        android:hint="@string/senha_hint"
         android:inputType="textPassword"
-        android:autofillHints="password"
-        android:minHeight="48dp"
+        android:padding="12dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/edit_text_background"
-        android:textColor="@android:color/white"
-        android:textColorHint="#999999"
-        android:padding="12dp"/>
+        android:textColor="@color/dark_text_primary"
+        android:textColorHint="@color/dark_text_secondary"/>
 
     <Button
         android:id="@+id/buttonLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/login_button_text"
-        android:textSize="18sp"
-        android:background="@drawable/button_background"
-        android:textColor="@android:color/white"/>
+        android:padding="12dp"
+        android:backgroundTint="@color/dark_accent"
+        android:textColor="@color/white"/>
 
 </LinearLayout>

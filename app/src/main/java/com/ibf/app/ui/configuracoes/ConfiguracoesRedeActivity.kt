@@ -8,6 +8,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.card.MaterialCardView
+import com.ibf.app.R // Importação de R
+import com.ibf.app.ui.usuarios.ListaUsuariosRedeActivity // Importação da Activity de usuários
 
 class ConfiguracoesRedeActivity : AppCompatActivity() {
 
@@ -35,7 +37,6 @@ class ConfiguracoesRedeActivity : AppCompatActivity() {
 
         textRedeAtualConfig.text = getString(R.string.rede_selecionada_label, redeSelecionada)
 
-        // Configura o clique no card de USUÁRIOS
         findViewById<MaterialCardView>(R.id.card_usuarios).setOnClickListener {
             val intent = Intent(this, ListaUsuariosRedeActivity::class.java)
             intent.putExtra("REDE_SELECIONADA", redeSelecionada)
@@ -43,7 +44,6 @@ class ConfiguracoesRedeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Configura o clique no card de REDE
         findViewById<MaterialCardView>(R.id.card_rede_config).setOnClickListener {
             Toast.makeText(this, getString(R.string.configuracoes_rede_em_breve), Toast.LENGTH_SHORT).show()
         }

@@ -1,5 +1,6 @@
-package com.ibf.app.ui.dashboard
+package com.ibf.app.ui.dashboard // Seu package name correto
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,16 +12,18 @@ import androidx.core.content.edit
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.ibf.app.R
+import com.ibf.app.ui.main.MainActivity
+import com.ibf.app.ui.shared.SelecionarPerfilSheet
 
-// Adicionamos a interface para "ouvir" a seleção de perfil
 class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionadoListener {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private var redeSelecionada: String? = null
-    private var papelUsuarioLogado: String? = null // Adicionado para armazenar o papel do usuário logado
-    private lateinit var textRedeAtual: TextView // Novo TextView para mostrar a rede
-    private lateinit var greetingText: TextView // Para o texto de boas-vindas do pastor
+    private var papelUsuarioLogado: String? = null
+    private lateinit var textRedeAtual: TextView
+    private lateinit var greetingText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,12 +32,10 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
-        // Inicializa o TextView para a rede atual (você precisará adicionar este ID ao seu XML)
         textRedeAtual = findViewById(R.id.text_rede_dashboard)
         greetingText = findViewById(R.id.text_greeting)
 
-        // --- Lógica de Carregamento da Rede na Criação ---
-        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val redeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
         redeSelecionada = redeInPrefs ?: intent.getStringExtra("REDE_SELECIONADA")
@@ -45,24 +46,19 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
             return
         }
 
-        // --- CORREÇÃO DE WARNING (String literal) ---
         textRedeAtual.text = getString(R.string.rede_dashboard_label, redeSelecionada)
 
-        // Configura o texto de boas-vindas do pastor e busca o papel
         auth.currentUser?.uid?.let { uid ->
             firestore.collection("usuarios").document(uid).get()
                 .addOnSuccessListener { document ->
                     val nome = document.getString("nome") ?: getString(R.string.pastor_padrao)
-                    // --- CORREÇÃO DE WARNING (String literal) ---
                     greetingText.text = getString(R.string.ola_pastor_nome, nome)
 
                     @Suppress("UNCHECKED_CAST")
                     val funcoes = document.get("funcoes") as? HashMap<String, String>
-                    papelUsuarioLogado = funcoes?.get(redeSelecionada) // Pode ser 'pastor' ou outro se tiver papel específico para a rede
-                    // Se o pastor tem um papel "geral", ele pode não ter um papel específico para cada rede.
-                    // Adicione uma lógica para verificar o papel "geral" se aplicável.
+                    papelUsuarioLogado = funcoes?.get(redeSelecionada)
                     if (papelUsuarioLogado == null) {
-                        papelUsuarioLogado = funcoes?.get("geral") // Verifica se tem um papel 'geral'
+                        papelUsuarioLogado = funcoes?.get("geral")
                     }
 
                     if (papelUsuarioLogado == null) {
@@ -76,24 +72,19 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
                 }
         }
 
-        // Configura a navegação inferior e o botão de perfil
         setupNavigationAndProfileButton()
 
         // Aqui você chamaria funções para carregar quaisquer dados específicos do Pastor
-        // que dependam da 'redeSelecionada'. Ex:
-        // carregarDadosEstatisticosPastor()
     }
 
     override fun onResume() {
         super.onResume()
-        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val currentRedeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
         if (currentRedeInPrefs != null && currentRedeInPrefs != redeSelecionada) {
             redeSelecionada = currentRedeInPrefs
-            // --- CORREÇÃO DE WARNING (String literal) ---
             textRedeAtual.text = getString(R.string.rede_dashboard_label, redeSelecionada)
-            // Re-busca o papel para a nova rede selecionada, se necessário
             auth.currentUser?.uid?.let { uid ->
                 firestore.collection("usuarios").document(uid).get()
                     .addOnSuccessListener { document ->
@@ -107,8 +98,6 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
                     }
             }
             Toast.makeText(this, getString(R.string.dados_atualizados_rede, redeSelecionada), Toast.LENGTH_SHORT).show()
-            // Chame aqui a função para recarregar dados específicos do Pastor, se houver
-            // carregarDadosEstatisticosPastor()
         }
     }
 
@@ -129,7 +118,6 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
                 }
                 R.id.navigation_reports -> {
                     Toast.makeText(this, getString(R.string.clicou_em_relatorios), Toast.LENGTH_SHORT).show()
-                    // TODO: Pastor Dashboard pode ter uma tela de relatórios diferente
                     true
                 }
                 R.id.navigation_profile -> {
@@ -164,7 +152,7 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
         finish()
     }
 
-    private fun navegarParaTelaCorreta(rede: String, papel: String?) {
+    override fun onPerfilSelecionado(rede: String, papel: String) {
         val intent = when (papel) {
             "pastor" -> Intent(this, PastorDashboardActivity::class.java)
             "lider" -> Intent(this, LiderDashboardActivity::class.java)
@@ -175,17 +163,13 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
         if (intent != null) {
             if (this::class.java.simpleName == intent.component?.shortClassName?.removePrefix(".")) {
                 if (rede != redeSelecionada) {
-                    val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
-                    // --- CORREÇÃO DE WARNING (KTX extension) ---
+                    val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
                     sharedPref.edit {
                         putString("REDE_SELECIONADA", rede)
                     }
                     this.redeSelecionada = rede
-                    // --- CORREÇÃO DE WARNING (String literal) ---
                     textRedeAtual.text = getString(R.string.rede_dashboard_label, redeSelecionada)
                     Toast.makeText(this, getString(R.string.exibindo_dados_rede_pastor, rede), Toast.LENGTH_SHORT).show()
-                    // Chame aqui a função para recarregar dados específicos do Pastor, se houver
-                    // carregarDadosEstatisticosPastor()
                 }
                 return
             }
@@ -195,11 +179,6 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
             startActivity(intent)
             finish()
         }
-    }
-
-    // --- MÉTODOS DA INTERFACE 'PerfilSelecionadoListener' ---
-    override fun onPerfilSelecionado(rede: String, papel: String) {
-        navegarParaTelaCorreta(rede, papel)
     }
 
     override fun onLogoutSelecionado() {

@@ -1,6 +1,7 @@
 package com.ibf.app.ui.graficos
 
-import android.content.Context // Importação necessária
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
@@ -22,43 +23,32 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-// Mantenha a função de extensão toDate() no topo do arquivo
-fun String.toDate(format: String = "yyyy-MM-dd"): Date? {
-    return try {
-        SimpleDateFormat(format, Locale.getDefault()).parse(this)
-    } catch (e: Exception) {
-        Log.e("DateConverter", "Erro ao converter data '$this' com formato '$format': ${e.message}")
-        null
-    }
-}
+import com.ibf.app.R // Importação de R
+import com.ibf.app.data.models.Relatorio // Importação do modelo Relatorio
+import com.ibf.app.util.toDate // Importação da função de extensão toDate
 
 class LiderGraficosActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
-    private var redeSelecionada: String? = null // Rede que a Activity está exibindo no momento
+    private var redeSelecionada: String? = null
 
-    // Componentes do layout
     private lateinit var chartPessoas: BarChart
     private lateinit var chartOfertas: BarChart
     private lateinit var textMedia: TextView
     private lateinit var textVisitantes: TextView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var textPageTitle: TextView // O TextView que você já tem no layout para o título
+    private lateinit var textPageTitle: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("FLUXO_APP", "LiderGraficosActivity: onCreate")
+        setContentView(R.layout.activity_lider_graficos)
 
-        //Log.d("FLUXO_APP", "MainActivity: onCreate")
-        setContentView(R.layout.activity_lider_graficos) // Confirme o nome do seu layout
-
-        // Inicialização dos componentes do layout
         chartPessoas = findViewById(R.id.chart_pessoas_por_culto)
         chartOfertas = findViewById(R.id.chart_ofertas_por_culto)
-        textMedia = findViewById(R.id.text_media_valor) // ID corrigido
+        textMedia = findViewById(R.id.text_media_valor)
         textVisitantes = findViewById(R.id.text_visitantes_valor)
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
-        textPageTitle = findViewById(R.id.text_page_title) // Referencia o TextView existente
+        textPageTitle = findViewById(R.id.text_page_title)
 
         findViewById<ImageView>(R.id.button_back).setOnClickListener {
             finish()
@@ -68,43 +58,37 @@ class LiderGraficosActivity : AppCompatActivity() {
             carregarDadosParaGraficos()
         }
 
-        // --- Lógica de Carregamento Inicial (onCreate) ---
-        // Lê a rede das SharedPreferences na criação da Activity
-        val redeInPrefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-            .getString("REDE_SELECIONADA", null)
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val redeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
+        redeSelecionada = redeInPrefs ?: intent.getStringExtra("REDE_SELECIONADA")
 
-        redeSelecionada = redeInPrefs // Define a rede que esta Activity irá usar
+        if (redeSelecionada == null) {
+            Toast.makeText(this, getString(R.string.erro_rede_nao_especificada_logout), Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
 
-        // Atualiza o título da tela com a rede selecionada
-        textPageTitle.text = getString(R.string.graficos) + " - " + (redeSelecionada ?: "N/A")
+        textPageTitle.text = getString(R.string.graficos_rede_label, redeSelecionada)
 
-        // Inicia o carregamento de dados para a rede definida
         carregarDadosParaGraficos()
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d("FLUXO_APP", "LiderGraficosActivity: onResume")
-        // --- Lógica de Verificação e Recarregamento (onResume) ---
-        // Sempre que a Activity volta ao primeiro plano, verifica se a rede mudou
-        val currentRedeInPrefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-            .getString("REDE_SELECIONADA", null)
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val currentRedeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
-        // Se a rede nas preferências for diferente da que a Activity está mostrando
-        // E não for nula, recarrega os dados.
         if (currentRedeInPrefs != null && currentRedeInPrefs != redeSelecionada) {
-            redeSelecionada = currentRedeInPrefs // Atualiza a rede da Activity
-            textPageTitle.text = getString(R.string.graficos) + " - " + redeSelecionada // Atualiza o título
-            carregarDadosParaGraficos() // Recarrega os dados para a nova rede
+            redeSelecionada = currentRedeInPrefs
+            textPageTitle.text = getString(R.string.graficos_rede_label, redeSelecionada)
+            carregarDadosParaGraficos()
         }
     }
-
-    // ... (o restante das suas funções de gráfico e carregamento, que já estão corretas na lógica) ...
 
     private fun carregarDadosParaGraficos() {
         swipeRefreshLayout.isRefreshing = true
         val redeId = redeSelecionada ?: run {
-            Toast.makeText(this, "Erro: Rede não especificada para carregar dados.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.erro_rede_nao_especificada_carregar_dados), Toast.LENGTH_SHORT).show()
             swipeRefreshLayout.isRefreshing = false
             return
         }
@@ -116,15 +100,15 @@ class LiderGraficosActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { documents ->
                 if (documents.isEmpty) {
-                    Toast.makeText(this, "Nenhum relatório encontrado para esta rede.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.nenhum_relatorio_encontrado_rede), Toast.LENGTH_SHORT).show()
                     chartPessoas.clear()
                     chartOfertas.clear()
                     textVisitantes.text = "0"
                     textMedia.text = "0"
                 } else {
-                    val relatorios = documents.map { it.toObject(Relatorio::class.java) }
+                    val relatorios = documents.map { it.toObject(Relatorio::class.java).apply { id = it.id } }
                         .filterNotNull()
-                        .sortedBy { it.dataReuniao.toDate() }
+                        .sortedBy { it.dataReuniao.toDate("dd/MM/yyyy") }
 
                     val totalDeVisitantes = relatorios.sumOf { it.totalVisitantes }
                     val mediaPessoas = if (relatorios.isNotEmpty()) relatorios.sumOf { it.totalPessoas } / relatorios.size else 0
@@ -140,7 +124,7 @@ class LiderGraficosActivity : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 Log.e("GraficosDebug", "Falha ao carregar dados: ", exception)
-                Toast.makeText(this, "Falha ao carregar dados: ${exception.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.falha_carregar_dados_graficos, exception.message), Toast.LENGTH_LONG).show()
                 swipeRefreshLayout.isRefreshing = false
             }
     }
@@ -149,12 +133,12 @@ class LiderGraficosActivity : AppCompatActivity() {
         val entries = relatorios.mapIndexed { index, relatorio ->
             BarEntry(index.toFloat(), relatorio.totalPessoas.toFloat())
         }
-        val dataSet = BarDataSet(entries, "Pessoas por Culto")
+        val dataSet = BarDataSet(entries, getString(R.string.pessoas_por_culto))
         dataSet.color = ContextCompat.getColor(this, R.color.design_default_color_primary)
         dataSet.valueTextColor = ContextCompat.getColor(this, R.color.dark_text_primary)
         dataSet.valueTextSize = 12f
         chartPessoas.data = BarData(dataSet)
-        estilizarGraficoDeBarras(chartPessoas, relatorios.mapNotNull { it.dataReuniao.toDate() })
+        estilizarGraficoDeBarras(chartPessoas, relatorios.mapNotNull { it.dataReuniao.toDate("dd/MM/yyyy") })
         chartPessoas.invalidate()
     }
 
@@ -162,12 +146,12 @@ class LiderGraficosActivity : AppCompatActivity() {
         val entries = relatorios.mapIndexed { index, relatorio ->
             BarEntry(index.toFloat(), relatorio.valorOferta.toFloat())
         }
-        val dataSet = BarDataSet(entries, "Ofertas por Culto")
+        val dataSet = BarDataSet(entries, getString(R.string.ofertas_por_culto))
         dataSet.color = ContextCompat.getColor(this, R.color.design_default_color_secondary)
         dataSet.valueTextColor = ContextCompat.getColor(this, R.color.dark_text_primary)
         dataSet.valueTextSize = 12f
         chartOfertas.data = BarData(dataSet)
-        estilizarGraficoDeBarras(chartOfertas, relatorios.mapNotNull { it.data.toDate() })
+        estilizarGraficoDeBarras(chartOfertas, relatorios.mapNotNull { it.data.toDate("dd/MM/yyyy") })
         chartOfertas.invalidate()
     }
 

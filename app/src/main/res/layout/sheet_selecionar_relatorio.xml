@@ -4,58 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/dark_card_background"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/dark_background">
 
-    <View
-        android:layout_width="40dp"
-        android:layout_height="4dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/edit_text_background"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/selecionar_tipo_relatorio"
+        android:textColor="@color/dark_text_primary"
+        android:textSize="20sp"
+        android:textStyle="bold"
         android:layout_marginBottom="16dp"/>
 
-    <FrameLayout
+    <Button
+        android:id="@+id/button_ver_relatorios"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp">
+        android:text="@string/ver_relatorios_button"
+        android:layout_marginBottom="8dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/selecionar_relatorio_title"
-            android:textColor="@color/dark_text_primary"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_gravity="center"/>
-
-        <ImageButton
-            android:id="@+id/buttonCloseSheet"
-            android:layout_width="wrap_content"
-            android:layout_height="16dp"
-            android:layout_gravity="end|center_vertical"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Fechar"
-            android:src="@drawable/ic_close"
-            app:tint="@color/dark_text_secondary" />
-
-    </FrameLayout>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_relatorio_rede"
-        style="@style/SelectableCard">
-        <LinearLayout style="@style/cardContent">
-            <TextView style="@style/cardTitle" android:text="@string/selecionar_relatorio_rede"/>
-            <TextView style="@style/cardDescription" android:text="@string/selecionar_relatorio_rede_desc"/>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_relatorio_financeiro"
-        style="@style/SelectableCard">
-        <LinearLayout style="@style/cardContent">
-            <TextView style="@style/cardTitle" android:text="@string/selecionar_relatorio_financeiro"/>
-            <TextView style="@style/cardDescription" android:text="@string/selecionar_relatorio_financeiro_desc"/>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    <Button
+        android:id="@+id/button_criar_relatorio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/criar_novo_relatorio_button"/>
 
 </LinearLayout>

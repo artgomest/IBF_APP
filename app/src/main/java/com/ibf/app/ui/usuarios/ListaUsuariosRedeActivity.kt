@@ -12,9 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
-import com.ibf.app.R
-import com.ibf.app.adapters.UsuarioRede
-import com.ibf.app.adapters.UsuarioRedeAdapter
+
+import com.ibf.app.R // Importação de R
+import com.ibf.app.adapters.UsuarioRedeAdapter // Importação do adapter
+import com.ibf.app.data.models.UsuarioRede // Importação do modelo UsuarioRede
 
 class ListaUsuariosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickListener {
 

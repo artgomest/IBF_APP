@@ -1,6 +1,8 @@
 package com.ibf.app.ui.relatorios
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -9,15 +11,20 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.DocumentReference
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.Calendar
+
+import com.ibf.app.R // Importação de R
+import com.ibf.app.util.MoneyTextWatcher // Importação da classe MoneyTextWatcher
+import com.ibf.app.data.models.Relatorio // Importação do modelo Relatorio
 
 class FormularioRedeActivity : AppCompatActivity() {
 
@@ -49,7 +56,7 @@ class FormularioRedeActivity : AppCompatActivity() {
 
         editTextNome = findViewById(R.id.formNome)
         editTextRede = findViewById(R.id.formRede)
-        textViewData = findViewById(R.id.text_data_reuniao_exibida)
+        textViewData = findViewById(R.id.formData) // AQUI DEVE SER R.id.formData no seu XML
         editTextDescricao = findViewById(R.id.formDescricao)
         editTextTotalPessoas = findViewById(R.id.formPessoas)
         editTextTotalVisitantes = findViewById(R.id.formVisitantes)
@@ -67,7 +74,7 @@ class FormularioRedeActivity : AppCompatActivity() {
         dataPendente = intent.getStringExtra("DATA_PENDENTE")
 
         if (redeSelecionada == null) {
-            Toast.makeText(this, "Erro: Rede não especificada para o formulário.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.erro_rede_nao_especificada_formulario), Toast.LENGTH_LONG).show()
             finish()
             return
         }
@@ -79,14 +86,14 @@ class FormularioRedeActivity : AppCompatActivity() {
         textViewData.text = dataReuniaoParaExibir
 
         textViewData.setOnClickListener {
-            Toast.makeText(this, "Data da reunião: $dataReuniaoParaExibir", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.data_reuniao_exibida_toast, dataReuniaoParaExibir), Toast.LENGTH_SHORT).show()
         }
 
         editTextValorOferta.addTextChangedListener(MoneyTextWatcher(editTextValorOferta, currencyFormatter))
 
         if (relatorioId != null) {
             carregarRelatorioExistente(relatorioId!!)
-            buttonEnviar.text = "Atualizar Relatório"
+            buttonEnviar.text = getString(R.string.form_button_atualizar)
         } else {
             buttonEnviar.text = getString(R.string.form_button_enviar)
         }
@@ -139,12 +146,12 @@ class FormularioRedeActivity : AppCompatActivity() {
                     editTextComentarios.setText(document.getString("comentarios") ?: "")
 
                 } else {
-                    Toast.makeText(this, "Relatório não encontrado para edição.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.relatorio_nao_encontrado_edicao), Toast.LENGTH_SHORT).show()
                     finish()
                 }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Erro ao carregar relatório para edição: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.erro_carregar_relatorio_edicao, e.message), Toast.LENGTH_SHORT).show()
                 Log.e("FormularioRede", "Erro ao carregar para edição", e)
                 finish()
             }
@@ -174,20 +181,17 @@ class FormularioRedeActivity : AppCompatActivity() {
         }
 
         saveTask.addOnSuccessListener { taskResult ->
-            // CORREÇÃO PARA ERRO 1 (Acessa o ID de forma mais defensiva)
-            val savedDocId: String = if (relatorioIdParaSalvar != null) {
-                relatorioIdParaSalvar
-            } else {
-                // Aqui, 'taskResult' é DocumentReference para add(), então podemos acessar 'id'
-                (taskResult as? DocumentReference)?.id ?: "ID_DESCONHECIDO" // Use as? e Elvis operator para segurança
+            val savedDocId: String = when (taskResult) {
+                is DocumentReference -> taskResult.id
+                else -> relatorioIdParaSalvar ?: "ID_DESCONHECIDO_UPDATE"
             }
 
-            Toast.makeText(this, "Relatório salvo com sucesso! ID: $savedDocId", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.relatorio_salvo_sucesso, savedDocId), Toast.LENGTH_SHORT).show()
             Log.d("FormularioRede", "Relatório salvo: ID ${savedDocId}, Dados: $finalRelatorioData")
             finish()
         }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Erro ao salvar relatório: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.erro_salvar_relatorio, e.message), Toast.LENGTH_LONG).show()
                 Log.e("FormularioRede", "Erro ao salvar relatório", e)
             }
     }
