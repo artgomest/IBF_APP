@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -39,8 +40,8 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
 
         greetingText = findViewById(R.id.text_greeting)
 
-        val redeInPrefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
-            .getString("REDE_SELECIONADA", null)
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val redeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
         redeSelecionada = redeInPrefs ?: intent.getStringExtra("REDE_SELECIONADA")
 
@@ -60,15 +61,15 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
 
     override fun onResume() {
         super.onResume()
-        val currentRedeInPrefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
-            .getString("REDE_SELECIONADA", null)
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val currentRedeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
         if (currentRedeInPrefs != null && currentRedeInPrefs != redeSelecionada) {
             redeSelecionada = currentRedeInPrefs
             greetingText.text = getString(R.string.relatorios_da_rede, redeSelecionada)
             carregarStatusDosRelatorios()
         } else {
-            carregarStatusDosRelatorios()
+            carregarStatusDosRelatorios() // Mantido para recarregar em caso de mudança de relatório
         }
     }
 
@@ -92,16 +93,14 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
         startActivity(intent)
     }
 
-    @SuppressLint("UseKtx")
     override fun onPerfilSelecionado(rede: String, papel: String) {
         if (papel != "secretario") {
             navegarParaTelaCorreta(rede, papel)
         } else {
             if (rede != redeSelecionada) {
-                val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
-                with (sharedPref.edit()) {
+                val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                sharedPref.edit { // <--- CORREÇÃO DE WARNING (KTX extension)
                     putString("REDE_SELECIONADA", rede)
-                    apply()
                 }
                 this.redeSelecionada = rede
                 greetingText.text = getString(R.string.relatorios_da_rede, redeSelecionada)
@@ -147,6 +146,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
         profileImage.setOnClickListener { abrirSeletorDePerfil() }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun carregarStatusDosRelatorios() {
         val usuarioAtual = auth.currentUser ?: return
         val redeAtiva = redeSelecionada ?: run {
@@ -159,7 +159,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
             if (redesDocs.isEmpty) {
                 Log.e("FirestoreError", "Nenhuma rede encontrada com o nome: $redeAtiva")
                 listaDeStatus.clear()
-                relatorioAdapter.notifyDataSetChanged()
+                relatorioAdapter.notifyDataSetChanged() // Mantido para atualização completa
                 return@addOnSuccessListener
             }
             val diaDaSemana = redesDocs.documents.first().getLong("diaDaSemana")?.toInt() ?: run {
@@ -168,7 +168,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
             }
 
             firestore.collection("relatorios")
-                .whereEqualTo("autorUid", usuarioAtual.uid as String) // <--- Corrigido para String literal se o problema persistir: .whereEqualTo("autorUid", usuarioAtual.uid!!)
+                .whereEqualTo("autorUid", usuarioAtual.uid) // <--- CORREÇÃO DE WARNING (No cast needed.)
                 .whereEqualTo("idRede", redeAtiva)
                 .get().addOnSuccessListener { relatoriosDocs ->
                     val relatoriosEnviados = relatoriosDocs.mapNotNull { doc ->
@@ -209,7 +209,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
                             is StatusRelatorio.Faltante -> sdf.parse(it.dataEsperada)
                         }
                     })
-                    relatorioAdapter.notifyDataSetChanged()
+                    relatorioAdapter.notifyDataSetChanged() // Mantido para atualização completa
                     Log.d("SecretarioDashboard", "Adapter notificado. Total de itens na lista: ${listaDeStatus.size}")
                 }.addOnFailureListener { e -> Log.e("FirestoreError", "Falha ao buscar relatorios", e) }
         }.addOnFailureListener { e -> Log.e("FirestoreError", "Falha ao buscar redes", e) }
@@ -219,7 +219,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
         val user = auth.currentUser ?: return
         firestore.collection("usuarios").document(user.uid).get().addOnSuccessListener { document ->
             if (document != null && document.exists()) {
-                val nomeUsuario = document.getString("nome") ?: "Usuário"
+                val nomeUsuario = document.getString("nome") ?: getString(R.string.usuario_padrao)
                 @Suppress("UNCHECKED_CAST")
                 val funcoes = document.get("funcoes") as? HashMap<String, String>
                 if (!funcoes.isNullOrEmpty()) {
@@ -250,9 +250,8 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
             if (this::class.java.simpleName == intent.component?.shortClassName?.removePrefix(".")) {
                 if (rede != redeSelecionada) {
                     val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-                    with (sharedPref.edit()) {
+                    sharedPref.edit {
                         putString("REDE_SELECIONADA", rede)
-                        apply()
                     }
                     this.redeSelecionada = rede
                     greetingText.text = getString(R.string.relatorios_da_rede, redeSelecionada)

@@ -133,5 +133,6 @@
     <string name="relatorio_pendente_data">Relatório pendente para a data %s</string>
     <string name="configuracoes_rede_em_breve">Configurações de Rede em breve!</string>
     <string name="rede_atualizada_para">Rede atualizada para: %s</string>
+    <string name="nome_desconhecido">Nome Desconhecido</string>
 
 </resources>

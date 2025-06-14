@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.firestore.FirebaseFirestore // Mantido para clareza
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ListaUsuariosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickListener {
 
@@ -47,7 +47,6 @@ class ListaUsuariosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItem
             return
         }
 
-        // --- CORREÇÃO DE WARNING (String literal) ---
         textRedeUsuariosLista.text = getString(R.string.rede_usuarios_lista_label, redeSelecionada)
 
         setupRecyclerView()
@@ -72,7 +71,6 @@ class ListaUsuariosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItem
 
         if (currentRedeInPrefs != null && currentRedeInPrefs != redeSelecionada) {
             redeSelecionada = currentRedeInPrefs
-            // --- CORREÇÃO DE WARNING (String literal) ---
             textRedeUsuariosLista.text = getString(R.string.rede_usuarios_lista_label, redeSelecionada)
             Toast.makeText(this, getString(R.string.lista_usuarios_atualizada_para, redeSelecionada), Toast.LENGTH_SHORT).show()
         }
@@ -101,7 +99,7 @@ class ListaUsuariosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItem
 
                 for (document in documents) {
                     val uid = document.id
-                    val nome = document.getString("nome") ?: "Nome Desconhecido"
+                    val nome = document.getString("nome") ?: getString(R.string.nome_desconhecido)
                     @Suppress("UNCHECKED_CAST")
                     val funcoes = document.get("funcoes") as? HashMap<String, String>
 

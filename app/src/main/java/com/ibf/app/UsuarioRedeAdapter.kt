@@ -1,5 +1,6 @@
 package com.ibf.app
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,10 +45,11 @@ class UsuarioRedeAdapter(
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun atualizarLista(novaLista: List<UsuarioRede>) {
         listaUsuarios.clear()
         listaUsuarios.addAll(novaLista)
-        notifyDataSetChanged()
+        notifyDataSetChanged() // Mantido intencionalmente para atualização completa da lista
     }
 
     class UsuarioViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
