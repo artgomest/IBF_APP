@@ -4,7 +4,7 @@ package com.ibf.app
 // Se o seu campo no Firestore for 'dataReuniao', e você espera uma String
 // e 'data' também for uma string, certifique-se dos nomes e tipos.
 data class Relatorio(
-    @JvmField var id: String = "", // 'var' é importante para 'apply { id = doc.id }'
+    var id: String = "", // 'var' é importante para 'apply { id = doc.id }'
     @JvmField val idRede: String = "",
     @JvmField val totalPessoas: Int = 0,
     @JvmField val totalVisitantes: Int = 0,

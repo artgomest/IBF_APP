@@ -1,6 +1,5 @@
 package com.ibf.app
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -30,7 +29,6 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
     private var redeSelecionada: String? = null
     private lateinit var greetingText: TextView
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_secretario_dashboard)
@@ -40,7 +38,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
 
         greetingText = findViewById(R.id.text_greeting)
 
-        val redeInPrefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        val redeInPrefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
             .getString("REDE_SELECIONADA", null)
 
         redeSelecionada = redeInPrefs ?: intent.getStringExtra("REDE_SELECIONADA")
@@ -61,7 +59,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
 
     override fun onResume() {
         super.onResume()
-        val currentRedeInPrefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        val currentRedeInPrefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
             .getString("REDE_SELECIONADA", null)
 
         if (currentRedeInPrefs != null && currentRedeInPrefs != redeSelecionada) {
@@ -168,7 +166,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
             }
 
             firestore.collection("relatorios")
-                .whereEqualTo("autorUid", usuarioAtual.uid!!) // <--- Corrigido aqui
+                .whereEqualTo("autorUid", usuarioAtual.uid as String) // <--- CORREÇÃO PARA ERRO 2
                 .whereEqualTo("idRede", redeAtiva)
                 .get().addOnSuccessListener { relatoriosDocs ->
                     val relatoriosEnviados = relatoriosDocs.mapNotNull { doc ->

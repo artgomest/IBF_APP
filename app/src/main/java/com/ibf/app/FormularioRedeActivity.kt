@@ -1,7 +1,5 @@
 package com.ibf.app
 
-// Importação que faltava para MoneyTextWatcher
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -14,13 +12,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.ibf.app.MoneyTextWatcher
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.ibf.app.MoneyTextWatcher
 
 class FormularioRedeActivity : AppCompatActivity() {
 
@@ -31,10 +29,9 @@ class FormularioRedeActivity : AppCompatActivity() {
     private var redeSelecionada: String? = null
     private var dataPendente: String? = null
 
-    // Componentes de UI do formulário
     private lateinit var editTextNome: EditText
     private lateinit var editTextRede: EditText
-    private lateinit var textViewData: TextView // Variável correta para o findViewById(R.id.formData)
+    private lateinit var textViewData: TextView
     private lateinit var editTextDescricao: EditText
     private lateinit var editTextTotalPessoas: EditText
     private lateinit var editTextTotalVisitantes: EditText
@@ -44,7 +41,6 @@ class FormularioRedeActivity : AppCompatActivity() {
 
     private val currencyFormatter = NumberFormat.getCurrencyInstance(Locale("pt", "BR")) as DecimalFormat
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_formulario_rede)
@@ -52,10 +48,9 @@ class FormularioRedeActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
-        // Inicializar componentes da UI com os IDs do seu XML
         editTextNome = findViewById(R.id.formNome)
         editTextRede = findViewById(R.id.formRede)
-        textViewData = findViewById(R.id.formData) // Corrected reference here, no changes needed
+        textViewData = findViewById(R.id.formData)
         editTextDescricao = findViewById(R.id.formDescricao)
         editTextTotalPessoas = findViewById(R.id.formPessoas)
         editTextTotalVisitantes = findViewById(R.id.formVisitantes)
@@ -63,7 +58,6 @@ class FormularioRedeActivity : AppCompatActivity() {
         editTextComentarios = findViewById(R.id.formComentarios)
         buttonEnviar = findViewById(R.id.buttonEnviar)
 
-        // Assegurar que text_page_title e button_back existem no XML ou remover esta linha se não
         findViewById<TextView>(R.id.text_page_title)?.text = getString(R.string.form_title)
         findViewById<ImageView>(R.id.button_back)?.setOnClickListener { finish() }
 
@@ -83,7 +77,7 @@ class FormularioRedeActivity : AppCompatActivity() {
         editTextRede.isEnabled = false
 
         val dataReuniaoParaExibir = dataPendente ?: SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
-        textViewData.text = dataReuniaoParaExibir // <--- CORREÇÃO PARA ERRO 1
+        textViewData.text = dataReuniaoParaExibir
 
         textViewData.setOnClickListener {
             Toast.makeText(this, "Data da reunião: $dataReuniaoParaExibir", Toast.LENGTH_SHORT).show()
@@ -157,7 +151,6 @@ class FormularioRedeActivity : AppCompatActivity() {
             }
     }
 
-    // Corrigido para receber o tipo certo de taskResult
     private fun salvarRelatorio(relatorioIdParaSalvar: String?, relatorioDataMap: Map<String, Any>) {
         val collectionRef = firestore.collection("relatorios")
 
@@ -178,17 +171,16 @@ class FormularioRedeActivity : AppCompatActivity() {
         val saveTask = if (relatorioIdParaSalvar != null) {
             collectionRef.document(relatorioIdParaSalvar).update(finalRelatorioData)
         } else {
-            // Para 'add', o taskResult é um DocumentReference
             collectionRef.add(finalRelatorioData)
         }
 
         saveTask.addOnSuccessListener { taskResult ->
-            // CORREÇÃO PARA ERRO 3
-            // Verifica o tipo de taskResult para pegar o ID corretamente
-            val savedDocId = if (taskResult is DocumentReference) {
-                taskResult.id // Se for um DocumentReference (para 'add'), pegamos o ID gerado
+            // CORREÇÃO PARA ERRO 1 (Acessa o ID de forma mais defensiva)
+            val savedDocId: String = if (relatorioIdParaSalvar != null) {
+                relatorioIdParaSalvar
             } else {
-                relatorioIdParaSalvar // Se for Unit (para 'update'), usamos o ID original
+                // Aqui, 'taskResult' é DocumentReference para add(), então podemos acessar 'id'
+                (taskResult as? DocumentReference)?.id ?: "ID_DESCONHECIDO" // Use as? e Elvis operator para segurança
             }
 
             Toast.makeText(this, "Relatório salvo com sucesso! ID: $savedDocId", Toast.LENGTH_SHORT).show()
