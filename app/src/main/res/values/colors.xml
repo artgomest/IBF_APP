@@ -9,7 +9,11 @@
     <color name="dark_accent">#1DB954</color>
     <color name="status_green">#4CAF50</color>
     <color name="status_red">#F44336</color>
-    <color name="design_default_color_primary">#ffffff</color> <color name="design_default_color_secondary">#03DAC5</color> <color name="dark_divider">#1FFFFFFF</color>
+    <color name="design_default_color_primary">#BB86FC</color>
+    <color name="design_default_color_secondary">#03DAC5</color>
+    <color name="dark_divider">#1FFFFFFF</color>
     <color name="status_green_dark_theme">#2E7D32</color>
     <color name="status_red_dark_theme">#C62828</color>
-    <color name="bottom_nav_selected">#1DB954</color> <color name="bottom_nav_unselected">#B3B3B3</color> </resources>
+    <color name="bottom_nav_selected">#1DB954</color>
+    <color name="bottom_nav_unselected">#B3B3B3</color>
+</resources>

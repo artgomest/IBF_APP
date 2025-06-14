@@ -8,24 +8,22 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.IBFAPP"> <activity
-        android:name=".MainActivity"
-        android:exported="true">
+        android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"> <activity
+        android:name=".ui.main.MainActivity" android:exported="true">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
 
-        <activity android:name=".LiderDashboardActivity" />
-        <activity android:name=".PastorDashboardActivity" />
-        <activity android:name=".SecretarioDashboardActivity" />
-        <activity android:name=".LiderGraficosActivity" />
-        <activity android:name=".LiderStatusRelatoriosActivity" />
-        <activity android:name=".ConfiguracoesRedeActivity" />
-        <activity android:name=".CadastroUsuarioActivity" />
-        <activity android:name=".ListaUsuariosRedeActivity" />
-
-    </application>
+        <activity android:name=".ui.dashboard.LiderDashboardActivity" />
+        <activity android:name=".ui.dashboard.PastorDashboardActivity" />
+        <activity android:name=".ui.dashboard.SecretarioDashboardActivity" />
+        <activity android:name=".ui.graficos.LiderGraficosActivity" />
+        <activity android:name=".ui.relatorios.LiderStatusRelatoriosActivity" />
+        <activity android:name=".ui.configuracoes.ConfiguracoesRedeActivity" />
+        <activity android:name=".ui.usuarios.CadastroUsuarioActivity" />
+        <activity android:name=".ui.usuarios.ListaUsuariosRedeActivity" />
+        <activity android:name=".ui.main.HomeActivity" /> <activity android:name=".ui.relatorios.FormularioRedeActivity" /> </application>
 
 </manifest>
