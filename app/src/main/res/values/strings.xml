@@ -19,7 +19,14 @@
     <string name="item_faltante_data_label">Data Esperada: %s</string>
     <string name="item_faltante_rede_label">Rede: %s</string>
     <string name="papel_usuario_label_format">Papel: %s</string>
-    <string name="item_data_label_placeholder">Data: 20/10/2025</string> <string name="item_rede_label_placeholder">Rede: Nome da Rede</string> <string name="item_autor_label_placeholder">Enviado por: Nome do Secretário</string> <string name="item_faltante_data_label_placeholder">Data: 12/06/2025</string> <string name="item_faltante_rede_label_placeholder">Rede: Nome da Rede</string> <string name="form_title">Relatório de Culto</string>
+    <string name="item_data_label_placeholder">Data: 20/10/2025</string>
+    <string name="item_rede_label_placeholder">Rede: Nome da Rede</string>
+    <string name="item_autor_label_placeholder">Enviado por: Nome do Secretário</string>
+    <string name="item_faltante_data_label_placeholder">Data: 12/06/2025</string>
+    <string name="item_faltante_rede_label_placeholder">Rede: Nome da Rede</string>
+
+
+    <string name="form_title">Relatório de Culto</string>
     <string name="form_nome">Nome do Autor</string>
     <string name="form_rede">Rede</string>
     <string name="form_data">Data da Reunião</string>
@@ -49,7 +56,8 @@
     <string name="info_rede_papel_ausentes">Informações da rede ou papel ausentes. Tente novamente.</string>
     <string name="dados_atualizados_rede">Dados do dashboard atualizados para a rede: %s</string>
     <string name="exibindo_dados_rede">Exibindo dados da %s</string>
-    <string name="relatorios">Relatórios</string> <string name="membros">Membros</string>
+    <string name="relatorios">Relatórios</string>
+    <string name="membros">Membros</string>
     <string name="config_da_rede">Config. da Rede</string>
     <string name="mudar_perfil">Mudar Perfil</string>
     <string name="ola_nome_placeholder">Olá, nome!</string>
@@ -58,6 +66,7 @@
     <string name="icon_membros_content_description">Ícone de Membros</string>
     <string name="icon_config_content_description">Ícone de Configurações</string>
     <string name="icon_mudar_perfil_content_description">Ícone de Mudar Perfil</string>
+    <string name="profile_image_content_description">Imagem de perfil do usuário</string>
 
 
     <string name="preencher_todos_campos">Por favor, preencha todos os campos.</string>
@@ -147,4 +156,22 @@
     <string name="nenhum_relatorio_encontrado_rede">Nenhum relatório encontrado para esta rede.</string>
     <string name="falha_carregar_dados_graficos">Falha ao carregar dados: %s</string>
 
+    <string name="ola_nome_bottom_sheet_placeholder">Olá, nome!</string>
+    <string name="perfil_button_text">%1$s: %2$s</string>
+    <string name="logout_button_text_bottom_sheet">Sair</string>
+
+    <string name="selecionar_tipo_relatorio">Selecionar Tipo de Relatório</string>
+    <string name="ver_relatorios_button">Ver Relatórios</string>
+    <string name="criar_novo_relatorio_button">Criar Novo Relatório</string>
+
+    <string name="status_do_relatorio_menu_item">Status do Relatório</string>
+
+    <string name="item_papel_autor_label_placeholder">Papel do Autor: Secretário</string>
+    <string name="erro_rede_nao_selecionada_logout">Rede não selecionada</string>
+    <string name="graficos_rede_label_placeholder">grafico rede</string>
+    <string name="ola_secretario">Olá, secretário!</string>
+    <string name="profile_icon_content_description">Perfil</string>
+    <string name="arrow_forward_content_description">acessar perfil</string>
+    <string name="nome_do_usuario_label">Nome do usuário</string>
+    <string name="papel_usuario_label_exemplo">Papel do usuário</string>
 </resources>

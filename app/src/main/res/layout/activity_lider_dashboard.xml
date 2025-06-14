@@ -47,6 +47,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"/>
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -58,153 +59,165 @@
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:rowCount="3"
+            android:layout_marginBottom="16dp"
             android:alignmentMode="alignMargins"
+            android:columnCount="2"
             android:columnOrderPreserved="false"
-            android:layout_marginBottom="16dp">
+            android:rowCount="3">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_relatorios"
+                style="@style/Widget.MaterialComponents.CardView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
                 android:layout_margin="8dp"
-                style="@style/Widget.MaterialComponents.CardView"
+                app:cardBackgroundColor="@color/dark_card_background"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/dark_card_background"
                 app:strokeColor="@color/dark_divider"
                 app:strokeWidth="1dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:gravity="center"
+                    android:orientation="vertical"
                     android:padding="16dp">
+
                     <ImageView
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:src="@drawable/ic_reports"
                         android:contentDescription="@string/icon_reports_content_description"
-                        app:tint="@color/dark_text_primary"/>
+                        android:src="@drawable/ic_reports"
+                        app:tint="@color/dark_text_primary" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:text="@string/relatorios"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
                         android:textColor="@color/dark_text_primary"
-                        android:layout_marginTop="8dp"/>
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_graficos"
+                style="@style/Widget.MaterialComponents.CardView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
                 android:layout_margin="8dp"
-                style="@style/Widget.MaterialComponents.CardView"
+                app:cardBackgroundColor="@color/dark_card_background"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/dark_card_background"
                 app:strokeColor="@color/dark_divider"
                 app:strokeWidth="1dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:gravity="center"
+                    android:orientation="vertical"
                     android:padding="16dp">
+
                     <ImageView
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:src="@drawable/ic_graficos"
                         android:contentDescription="@string/icon_graficos_content_description"
-                        app:tint="@color/dark_text_primary"/>
+                        android:src="@drawable/ic_graficos"
+                        app:tint="@color/dark_text_primary" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:text="@string/graficos"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
                         android:textColor="@color/dark_text_primary"
-                        android:layout_marginTop="8dp"/>
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_membros"
+                style="@style/Widget.MaterialComponents.CardView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
                 android:layout_margin="8dp"
-                style="@style/Widget.MaterialComponents.CardView"
+                app:cardBackgroundColor="@color/dark_card_background"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/dark_card_background"
                 app:strokeColor="@color/dark_divider"
                 app:strokeWidth="1dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:gravity="center"
+                    android:orientation="vertical"
                     android:padding="16dp">
+
                     <ImageView
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:src="@drawable/ic_membros"
                         android:contentDescription="@string/icon_membros_content_description"
-                        app:tint="@color/dark_text_primary"/>
+                        android:src="@drawable/ic_membros"
+                        app:tint="@color/dark_text_primary" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:text="@string/membros"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
                         android:textColor="@color/dark_text_primary"
-                        android:layout_marginTop="8dp"/>
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_config"
+                style="@style/Widget.MaterialComponents.CardView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
                 android:layout_margin="8dp"
-                style="@style/Widget.MaterialComponents.CardView"
+                app:cardBackgroundColor="@color/dark_card_background"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/dark_card_background"
                 app:strokeColor="@color/dark_divider"
                 app:strokeWidth="1dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:gravity="center"
+                    android:orientation="vertical"
                     android:padding="16dp">
+
                     <ImageView
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:src="@drawable/ic_config"
                         android:contentDescription="@string/icon_config_content_description"
-                        app:tint="@color/dark_text_primary"/>
+                        android:src="@drawable/ic_config"
+                        app:tint="@color/dark_text_primary" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:text="@string/config_da_rede"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
                         android:textColor="@color/dark_text_primary"
-                        android:layout_marginTop="8dp"/>
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -212,42 +225,44 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_mudar_perfil"
+            style="@style/Widget.MaterialComponents.CardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            style="@style/Widget.MaterialComponents.CardView"
+            app:cardBackgroundColor="@color/dark_card_background"
             app:cardCornerRadius="8dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/dark_card_background"
             app:strokeColor="@color/dark_divider"
             app:strokeWidth="1dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:padding="16dp">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/mudar_perfil"
+                    android:textColor="@color/dark_text_primary"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/dark_text_primary"/>
+                    android:textStyle="bold" />
+
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_change_account"
                     android:contentDescription="@string/icon_mudar_perfil_content_description"
-                    app:tint="@color/dark_text_primary"/>
+                    android:src="@drawable/ic_change_account"
+                    app:tint="@color/dark_text_primary" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
-
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"

@@ -3,34 +3,18 @@ package com.ibf.app.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
-import com.ibf.app.R
+import com.ibf.app.R // VERIFIQUE ESTA IMPORTAÇÃO!
 import com.ibf.app.data.models.Perfil
 
 class PerfilAdapter(
     private val listaPerfis: List<Perfil>,
-    private val listener: OnPerfilClickListener
+    private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<PerfilAdapter.PerfilViewHolder>() {
 
-    interface OnPerfilClickListener {
-        fun onPerfilClick(perfil: Perfil)
-    }
-
-    inner class PerfilViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        val redeTextView: TextView = itemView.findViewById(R.id.item_perfil_rede)
-        val papelTextView: TextView = itemView.findViewById(R.id.item_perfil_papel)
-
-        init {
-            itemView.setOnClickListener(this)
-        }
-
-        override fun onClick(v: View?) {
-            val position = adapterPosition
-            if (position != RecyclerView.NO_POSITION) {
-                listener.onPerfilClick(listaPerfis[position])
-            }
-        }
+    interface OnItemClickListener {
+        fun onItemClick(perfil: Perfil)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PerfilViewHolder {
@@ -42,8 +26,19 @@ class PerfilAdapter(
     override fun getItemCount() = listaPerfis.size
 
     override fun onBindViewHolder(holder: PerfilViewHolder, position: Int) {
-        val perfilAtual = listaPerfis[position]
-        holder.redeTextView.text = perfilAtual.rede
-        holder.papelTextView.text = perfilAtual.papel
+        val perfil = listaPerfis[position]
+        val context = holder.itemView.context
+
+        val papelFormatado = perfil.papel.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+        holder.perfilButton.text = context.getString(R.string.perfil_button_text, papelFormatado, perfil.rede)
+
+        holder.itemView.setOnClickListener {
+            listener.onItemClick(perfil)
+        }
+    }
+
+    class PerfilViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        // LINHA 42: VERIFIQUE ESTA REFERÊNCIA E SE item_perfil.xml TEM O ID item_perfil_button
+        val perfilButton: Button = itemView.findViewById(R.id.card_perfil_button)
     }
 }

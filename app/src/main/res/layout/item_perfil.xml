@@ -1,50 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView
-android:id="@+id/card_item_relatorio"
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_marginBottom="8dp"
-style="@style/Widget.MaterialComponents.CardView"
-app:cardCornerRadius="8dp"
-app:cardElevation="2dp"
-app:cardBackgroundColor="@color/dark_card_background"
-app:strokeColor="@color/dark_divider"
-app:strokeWidth="1dp">
-
-<LinearLayout
+    android:id="@+id/card_perfil_button" xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_marginBottom="8dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    style="@style/Widget.MaterialComponents.CardView"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@color/dark_card_background"
+    app:strokeColor="@color/dark_divider"
+    app:strokeWidth="1dp"
+    android:clickable="true"
+    android:focusable="true">
 
-    <TextView
-        android:id="@+id/item_data"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/item_data_label_placeholder"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@color/dark_text_primary"
-        android:layout_marginBottom="4dp"/>
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/item_rede"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/item_rede_label_placeholder"
-        android:textSize="14sp"
-        android:textColor="@color/dark_text_secondary"/>
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_profile"
+            android:contentDescription="@string/profile_icon_content_description"
+            app:tint="@color/dark_text_primary"
+            android:layout_marginEnd="16dp"/>
 
-    <TextView
-        android:id="@+id/item_autor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/item_autor_label_placeholder"
-        android:textSize="14sp"
-        android:textColor="@color/dark_text_secondary"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/text_perfil_papel_rede"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark_text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="Líder: Rede Alpha" />
+
+            <TextView
+                android:id="@+id/text_perfil_nome_usuario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark_text_secondary"
+                android:textSize="14sp"
+                android:layout_marginTop="2dp"
+                tools:text="Arthur Esteves" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_arrow_forward"
+            android:contentDescription="@string/arrow_forward_content_description"
+            app:tint="@color/dark_text_primary"
+            android:layout_marginStart="16dp"/>
+
+    </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
