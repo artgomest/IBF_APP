@@ -18,7 +18,6 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import com.ibf.app.MoneyTextWatcher
 
 class FormularioRedeActivity : AppCompatActivity() {
 
@@ -50,7 +49,7 @@ class FormularioRedeActivity : AppCompatActivity() {
 
         editTextNome = findViewById(R.id.formNome)
         editTextRede = findViewById(R.id.formRede)
-        textViewData = findViewById(R.id.formData)
+        textViewData = findViewById(R.id.text_data_reuniao_exibida)
         editTextDescricao = findViewById(R.id.formDescricao)
         editTextTotalPessoas = findViewById(R.id.formPessoas)
         editTextTotalVisitantes = findViewById(R.id.formVisitantes)
