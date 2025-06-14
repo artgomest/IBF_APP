@@ -4,15 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import androidx.core.content.edit
 
 // Adicionamos a interface para "ouvir" a seleção de perfil, igual ao secretário
 class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionadoListener {
@@ -205,5 +204,15 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
+    }
+
+    override fun onPerfilSelecionado(rede: String, papel: String) {
+        // A implementação deve ser a mesma da função navegarParaTelaCorreta
+        // ou chamar diretamente navegarParaTelaCorreta
+        navegarParaTelaCorreta(rede, papel)
+    }
+
+    override fun onLogoutSelecionado() {
+        fazerLogout()
     }
 }
