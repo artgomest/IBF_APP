@@ -1,7 +1,6 @@
 package com.ibf.app
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -40,7 +39,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
 
         greetingText = findViewById(R.id.text_greeting)
 
-        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
         val redeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
         redeSelecionada = redeInPrefs ?: intent.getStringExtra("REDE_SELECIONADA")
@@ -61,7 +60,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
 
     override fun onResume() {
         super.onResume()
-        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
         val currentRedeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
         if (currentRedeInPrefs != null && currentRedeInPrefs != redeSelecionada) {
@@ -98,7 +97,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
             navegarParaTelaCorreta(rede, papel)
         } else {
             if (rede != redeSelecionada) {
-                val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
                 sharedPref.edit { // <--- CORREÇÃO DE WARNING (KTX extension)
                     putString("REDE_SELECIONADA", rede)
                 }
@@ -249,7 +248,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
         if (intent != null) {
             if (this::class.java.simpleName == intent.component?.shortClassName?.removePrefix(".")) {
                 if (rede != redeSelecionada) {
-                    val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                    val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
                     sharedPref.edit {
                         putString("REDE_SELECIONADA", rede)
                     }

@@ -1,26 +1,28 @@
 package com.ibf.app
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.edit
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import androidx.core.content.edit
 
 // Adicionamos a interface para "ouvir" a seleção de perfil, igual ao secretário
 class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionadoListener {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
-    private var redeSelecionada: String? = null // Rede que a Activity está exibindo
-    private var papelUsuarioLogado: String? = null // Papel do usuário que abriu esta tela
+    private var redeSelecionada: String? = null
+    private var papelUsuarioLogado: String? = null
     private lateinit var textRedeAtual: TextView
-    private lateinit var textGreeting: TextView // Para o texto de boas-vindas
+    private lateinit var textGreeting: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +34,7 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         textRedeAtual = findViewById(R.id.text_rede_dashboard)
         textGreeting = findViewById(R.id.text_greeting)
 
-        // --- Lógica de Carregamento da Rede na Criação ---
-        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val redeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
         redeSelecionada = redeInPrefs ?: intent.getStringExtra("REDE_SELECIONADA")
@@ -44,20 +45,21 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
             return
         }
 
-        // --- CORREÇÃO DE WARNING (String literal) ---
         textRedeAtual.text = getString(R.string.rede_dashboard_label, redeSelecionada)
 
-        // Configura o texto de boas-vindas e busca o papel do usuário logado
         auth.currentUser?.uid?.let { uid ->
             firestore.collection("usuarios").document(uid).get()
                 .addOnSuccessListener { document ->
                     val nome = document.getString("nome") ?: getString(R.string.usuario_padrao)
-                    // --- CORREÇÃO DE WARNING (String literal) ---
                     textGreeting.text = getString(R.string.ola_nome, nome)
 
                     @Suppress("UNCHECKED_CAST")
                     val funcoes = document.get("funcoes") as? HashMap<String, String>
                     papelUsuarioLogado = funcoes?.get(redeSelecionada)
+                    if (papelUsuarioLogado == null) {
+                        papelUsuarioLogado = funcoes?.get("geral") // Verifica se tem um papel 'geral'
+                    }
+
                     if (papelUsuarioLogado == null) {
                         Log.e("LiderDashboard", "Papel do usuário não encontrado para a rede $redeSelecionada")
                         Toast.makeText(this, getString(R.string.erro_papel_nao_definido), Toast.LENGTH_LONG).show()
@@ -71,26 +73,22 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
 
         setupNavigation()
 
-        // Card de Relatórios
         findViewById<MaterialCardView>(R.id.card_relatorios).setOnClickListener {
             val intent = Intent(this, LiderStatusRelatoriosActivity::class.java)
             intent.putExtra("REDE_SELECIONADA", redeSelecionada)
             startActivity(intent)
         }
 
-        // Card de Gráficos
         findViewById<MaterialCardView>(R.id.card_graficos).setOnClickListener {
             val intent = Intent(this, LiderGraficosActivity::class.java)
             intent.putExtra("REDE_SELECIONADA", redeSelecionada)
             startActivity(intent)
         }
 
-        // Card de Membros
         findViewById<MaterialCardView>(R.id.card_membros).setOnClickListener {
             Toast.makeText(this, getString(R.string.funcao_membros_implementar), Toast.LENGTH_SHORT).show()
         }
 
-        // Card de Configurações
         findViewById<MaterialCardView>(R.id.card_config).setOnClickListener {
             if (redeSelecionada != null && papelUsuarioLogado != null) {
                 val intent = Intent(this, ConfiguracoesRedeActivity::class.java)
@@ -111,12 +109,11 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
 
     override fun onResume() {
         super.onResume()
-        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val currentRedeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
         if (currentRedeInPrefs != null && currentRedeInPrefs != redeSelecionada) {
             redeSelecionada = currentRedeInPrefs
-            // --- CORREÇÃO DE WARNING (String literal) ---
             textRedeAtual.text = getString(R.string.rede_dashboard_label, redeSelecionada)
             auth.currentUser?.uid?.let { uid ->
                 firestore.collection("usuarios").document(uid).get()
@@ -124,6 +121,9 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
                         @Suppress("UNCHECKED_CAST")
                         val funcoes = document.get("funcoes") as? HashMap<String, String>
                         papelUsuarioLogado = funcoes?.get(redeSelecionada)
+                        if (papelUsuarioLogado == null) {
+                            papelUsuarioLogado = funcoes?.get("geral")
+                        }
                         Log.d("LiderDashboard", "Papel atualizado para $papelUsuarioLogado na rede $redeSelecionada")
                     }
             }
@@ -169,6 +169,7 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         }
     }
 
+    // @Suppress("unused") // Pode ser adicionado para suprimir o warning, se desejar
     private fun navegarParaTelaCorreta(rede: String, papel: String?) {
         val intent = when (papel) {
             "pastor" -> Intent(this, PastorDashboardActivity::class.java)
@@ -180,13 +181,11 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         if (intent != null) {
             if (this::class.java.simpleName == intent.component?.shortClassName?.removePrefix(".")) {
                 if (rede != redeSelecionada) {
-                    val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
-                    // --- CORREÇÃO DE WARNING (KTX extension) ---
+                    val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
                     sharedPref.edit {
                         putString("REDE_SELECIONADA", rede)
                     }
                     this.redeSelecionada = rede
-                    // --- CORREÇÃO DE WARNING (String literal) ---
                     textRedeAtual.text = getString(R.string.rede_dashboard_label, redeSelecionada)
                     Toast.makeText(this, getString(R.string.exibindo_dados_rede, rede), Toast.LENGTH_SHORT).show()
                 }
@@ -206,13 +205,5 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
-    }
-
-    override fun onPerfilSelecionado(rede: String, papel: String) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onLogoutSelecionado() {
-        TODO("Not yet implemented")
     }
 }
