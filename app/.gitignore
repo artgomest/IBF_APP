@@ -1,1 +1,24 @@
-/build
+# Arquivos gerados pelo Gradle
+.gradle/
+build/
+
+# Arquivos de configuração local (NUNCA versione este arquivo!)
+# Ele pode conter chaves de API e outras informações sensíveis.
+local.properties
+
+# Arquivos de configuração do IntelliJ / Android Studio
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# Arquivos gerados pelo sistema operacional
+*.iml
+.DS_Store
+Thumbs.db
+
+# Logs
+captures/
+output.json
