@@ -1,6 +1,7 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 pluginManagement {
     repositories {
-        google {
+        google { // Repositório Maven do Google para plugins
             content {
                 includeGroupByRegex("com\\.android.*")
                 includeGroupByRegex("com\\.google.*")
@@ -13,12 +14,11 @@ pluginManagement {
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        // A LINHA ABAIXO É ESSENCIAL E RESOLVERÁ O ERRO
-        maven { url = uri("https://jitpack.io") }
-    }
+        repositories {
+            google() // <--- CORREÇÃO AQUI: Adiciona o repositório Google explicitamente
+            mavenCentral()
+            maven { url = uri("https://jitpack.io") } // Para MPAndroidChart, por exemplo
+        }
 }
 
 rootProject.name = "IBF APP"

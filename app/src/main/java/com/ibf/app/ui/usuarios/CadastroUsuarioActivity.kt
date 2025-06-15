@@ -1,5 +1,6 @@
 package com.ibf.app.ui.usuarios
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -15,17 +16,17 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue
-
-import com.ibf.app.R // Importação de R
-import com.ibf.app.data.models.Perfil // Importação de Perfil, se for usado aqui
-import com.ibf.app.ui.shared.SelecionarPerfilSheet // Importação da Sheet
+import com.google.firebase.firestore.FirebaseFirestore
+import com.ibf.app.R
+import com.ibf.app.ui.main.MainActivity
 
 class CadastroUsuarioActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var firestore: FirebaseFirestore
+    private lateinit var firestore: FirebaseFirestore // Mantenha Firestore
+
 
     private lateinit var textRedeCadastro: TextView
     private lateinit var editTextNome: TextInputEditText
@@ -123,19 +124,22 @@ class CadastroUsuarioActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            cadastrarOuAtualizarUsuario(nome, email, senha, papelSelecionado, redeSelecionada!!)
+            // --- VOLTANDO À LÓGICA SEM CLOUD FUNCTIONS ---
+            cadastrarOuAtualizarUsuarioLocal(nome, email, senha, papelSelecionado, redeSelecionada!!)
         }
     }
 
-    private fun cadastrarOuAtualizarUsuario(nome: String, email: String, senha: String, papel: String, rede: String) {
+    // --- NOVA FUNÇÃO QUE SUBSTITUI A CHAMADA À CLOUD FUNCTION ---
+    private fun cadastrarOuAtualizarUsuarioLocal(nome: String, email: String, senha: String, papel: String, rede: String) {
         buttonCadastrarUsuario.isEnabled = false
 
+        // 1. Tenta criar o usuário no Firebase Authentication
         auth.createUserWithEmailAndPassword(email, senha)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = task.result?.user
                     user?.let {
-                        salvarDadosNovoUsuarioNoFirestore(it.uid, nome, email, papel, rede)
+                        salvarDadosNovoUsuarioNoFirestore(it, nome, email, papel, rede)
                     }
                 } else {
                     val exception = task.exception
@@ -151,7 +155,7 @@ class CadastroUsuarioActivity : AppCompatActivity() {
             }
     }
 
-    private fun salvarDadosNovoUsuarioNoFirestore(uid: String, nome: String, email: String, papel: String, rede: String) {
+    private fun salvarDadosNovoUsuarioNoFirestore(newUser: FirebaseUser, nome: String, email: String, papel: String, rede: String) {
         val funcoesMap = hashMapOf(rede to papel)
         val userData = hashMapOf(
             "nome" to nome,
@@ -160,19 +164,34 @@ class CadastroUsuarioActivity : AppCompatActivity() {
             "redes" to listOf(rede)
         )
 
-        firestore.collection("usuarios").document(uid).set(userData)
+        firestore.collection("usuarios").document(newUser.uid).set(userData)
             .addOnSuccessListener {
                 Toast.makeText(this, getString(R.string.usuario_cadastrado_sucesso, nome, papel, rede), Toast.LENGTH_LONG).show()
                 limparCampos()
-                buttonCadastrarUsuario.isEnabled = true
+
+                // --- DESLOGAR NOVO USUÁRIO E REDIRECIONAR PARA LOGIN PRINCIPAL ---
+                auth.signOut()
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                Toast.makeText(this, getString(R.string.novo_usuario_criado_relogin), Toast.LENGTH_LONG).show()
+                finish()
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, getString(R.string.falha_salvar_dados_firestore, e.message), Toast.LENGTH_SHORT).show()
                 Log.e("CadastroUsuario", "Erro ao salvar usuário no Firestore", e)
+                newUser.delete().addOnCompleteListener { deleteTask ->
+                    if (deleteTask.isSuccessful) {
+                        Log.d("CadastroUsuario", "Usuário do Auth excluído após falha no Firestore.")
+                    } else {
+                        Log.e("CadastroUsuario", "Falha ao excluir usuário do Auth após erro no Firestore: ${deleteTask.exception?.message}")
+                    }
+                }
                 buttonCadastrarUsuario.isEnabled = true
             }
     }
 
+    // --- RE-ADICIONANDO FUNÇÕES PARA O FLUXO SEM CLOUD FUNCTIONS ---
     private fun buscarUsuarioExistenteParaAtualizarFuncao(email: String, nomeFormulario: String, novoPapel: String, novaRede: String) {
         firestore.collection("usuarios")
             .whereEqualTo("email", email)
@@ -242,15 +261,20 @@ class CadastroUsuarioActivity : AppCompatActivity() {
             "funcoes.$novaRede" to novoPapel,
             "redes" to FieldValue.arrayUnion(novaRede)
         )
-        // Opcional: Se o nome digitado no formulário for diferente do nome existente no Firestore,
-        // você pode atualizar o nome do usuário também.
-        // updates["nome"] = nomeParaAtualizar
 
         userRef.update(updates)
             .addOnSuccessListener {
                 Toast.makeText(this, getString(R.string.funcao_adicionada_sucesso, novoPapel, novaRede, nomeParaAtualizar), Toast.LENGTH_LONG).show()
                 limparCampos()
                 buttonCadastrarUsuario.isEnabled = true
+
+                // --- DESLOGAR USUÁRIO ATUAL E REDIRECIONAR ---
+                auth.signOut()
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                Toast.makeText(this, getString(R.string.funcao_adicionada_relogin), Toast.LENGTH_LONG).show()
+                finish()
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, getString(R.string.erro_adicionar_funcao, e.message), Toast.LENGTH_SHORT).show()

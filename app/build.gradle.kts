@@ -1,7 +1,9 @@
+// build.gradle.kts (App:)
+
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.google.gms.google.services)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services") // Importante para o Firebase
 }
 
 android {
@@ -37,18 +39,27 @@ android {
 }
 
 dependencies {
+    // Importar o Firebase BOM primeiro para gerenciar as versões
+    // SEMPRE use 'platform()' ao importar o BOM
+    implementation(platform(libs.firebase.bom))
 
+    // As dependências individuais do Firebase, agora gerenciadas pelo BOM,
+    // não precisam mais da referência de versão aqui.
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.firestore.ktx)
+
+    // Suas outras dependências
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.gridlayout)
+    implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.material)
     implementation(libs.mpandroidchart)
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.firestore)
-    implementation(libs.androidx.gridlayout)
-    implementation (libs.mpandroidchart)
-    implementation(libs.androidx.swiperefreshlayout)
+
+
+    // Dependências de teste
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

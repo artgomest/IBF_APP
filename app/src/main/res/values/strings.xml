@@ -181,8 +181,16 @@
     <string name="exibindo_relatorios_da_rede">Exibindo relatórios da %s</string>
     <string name="ja_exibindo_relatorios_da_rede">Já está exibindo relatórios da %s</string>
     <string name="ola_nome_bottom_sheet">Olá %s</string>
+    <string name="ja_exibindo_dados_rede">"Acessando %s"</string>
 
+    <string name="novo_usuario_criado_relogin">Usuário criado! Por favor, faça login novamente com sua conta original.</string>
+    <string name="erro_usuario_original_nao_encontrado">Erro: Usuário original não encontrado para relogar.</string>
+    <string name="funcao_adicionada_relogin">Função adicionada! Por favor, faça login novamente com sua conta original.</string>
 
+    <string name="erro_permissao_cloud_function">Você não tem permissão para realizar esta operação.</string>
+    <string name="erro_argumentos_invalidos_cloud_function">Dados inválidos. Verifique os campos.</string>
+    <string name="erro_email_ja_em_uso_cloud_function">Este e-mail já está em uso.</string>
+    <string name="erro_cloud_function_generico">Erro na operação: %s</string>
 
 
 

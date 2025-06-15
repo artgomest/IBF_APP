@@ -117,9 +117,12 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val currentRedeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
+        // IMPORTANTE: VERIFICA SE A REDE MUDOU NAS PREFERÊNCIAS
         if (currentRedeInPrefs != null && currentRedeInPrefs != redeSelecionada) {
-            redeSelecionada = currentRedeInPrefs
-            textRedeAtual.text = getString(R.string.rede_dashboard_label, redeSelecionada)
+            redeSelecionada = currentRedeInPrefs // Atualiza a rede da Activity
+            textRedeAtual.text = getString(R.string.rede_dashboard_label, redeSelecionada) // Atualiza UI
+
+            // Recarrega o papel do usuário para a nova rede
             auth.currentUser?.uid?.let { uid ->
                 firestore.collection("usuarios").document(uid).get()
                     .addOnSuccessListener { document ->
@@ -132,6 +135,8 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
                         Log.d("LiderDashboard", "Papel atualizado para $papelUsuarioLogado na rede $redeSelecionada")
                     }
             }
+            // Se houver dados visuais no dashboard que dependam da rede, chame uma função para recarregá-los.
+            // Por exemplo: carregarMetricasDoDashboard(redeSelecionada!!)
             Toast.makeText(this, getString(R.string.dados_atualizados_rede, redeSelecionada), Toast.LENGTH_SHORT).show()
         }
     }
@@ -174,7 +179,27 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         }
     }
 
+    // --- MÉTODOS DA INTERFACE 'PerfilSelecionadoListener' ---
     override fun onPerfilSelecionado(rede: String, papel: String) {
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        // --- CORREÇÃO CRÍTICA: SALVAR A NOVA REDE NAS SHARED PREFERENCES ---
+        sharedPref.edit {
+            putString("REDE_SELECIONADA", rede)
+        }
+
+        // Se a nova rede for a mesma que já está exibindo (e o papel é o mesmo do dashboard),
+        // apenas avisa e recarrega. Isso evita recriar a Activity desnecessariamente.
+        if (rede == redeSelecionada && papel == papelUsuarioLogado?.let { getRoleFromMap(it) }) { // Compara apenas o papel principal do dashboard
+            Toast.makeText(this, getString(R.string.ja_exibindo_dados_rede, rede, papel), Toast.LENGTH_SHORT).show()
+            // Como a rede nas preferências foi atualizada, o onResume vai pegar a mudança
+            // e recarregar os dados, mesmo que a Activity não tenha sido recriada.
+            redeSelecionada = rede // Atualiza localmente para onResume não re-detectar
+            // Não chame carregarDados aqui diretamente, deixe o onResume fazer o trabalho
+            return
+        }
+
+        // Se a rede ou papel principal (lider/pastor/secretario) mudou, navega para a tela correta,
+        // limpando a pilha de volta para garantir que a Activity seja recriada (ou receba onResume).
         val intent = when (papel) {
             "pastor" -> Intent(this, PastorDashboardActivity::class.java)
             "lider" -> Intent(this, LiderDashboardActivity::class.java)
@@ -183,23 +208,13 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         }
 
         if (intent != null) {
-            if (this::class.java.simpleName == intent.component?.shortClassName?.removePrefix(".")) {
-                if (rede != redeSelecionada) {
-                    val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-                    sharedPref.edit {
-                        putString("REDE_SELECIONADA", rede)
-                    }
-                    this.redeSelecionada = rede
-                    textRedeAtual.text = getString(R.string.rede_dashboard_label, redeSelecionada)
-                    Toast.makeText(this, getString(R.string.exibindo_dados_rede, rede), Toast.LENGTH_SHORT).show()
-                }
-                return
-            }
-
             intent.putExtra("REDE_SELECIONADA", rede)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()
+        } else {
+            Toast.makeText(this, getString(R.string.papel_desconhecido, papel), Toast.LENGTH_LONG).show()
+            fazerLogout()
         }
     }
 
@@ -213,5 +228,12 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
+    }
+
+    // Helper para extrair o papel "principal" se funcoes for um mapa mais complexo
+    private fun getRoleFromMap(papel: String): String {
+        // Se seu papelUsuarioLogado já é "lider" ou "pastor", apenas retorne.
+        // Se for algo como "Rede Alpha:lider", você precisaria parsear.
+        return papel.substringBefore(":") // Ex: "lider" de "Rede Alpha:lider"
     }
 }

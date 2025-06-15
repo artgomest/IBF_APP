@@ -2,6 +2,7 @@ package com.ibf.app.ui.relatorios
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
@@ -21,11 +22,10 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-// A classe implementa o OnItemClickListener para saber quando um item da lista é clicado
 class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnItemClickListener {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var firestore: FirebaseFirestore
+    private lateinit var firestore: FirebaseFirestore // Variável 'firestore' estava com 'var' indevido
     private lateinit var recyclerView: RecyclerView
     private lateinit var relatorioAdapter: RelatorioAdapter
     private val listaDeStatus = mutableListOf<StatusRelatorio>()
@@ -39,7 +39,7 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
         setContentView(R.layout.activity_lider_status_relatorios)
 
         auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
+        firestore = FirebaseFirestore.getInstance() // Inicializa firestore
 
         findViewById<ImageView>(R.id.button_back).setOnClickListener {
             finish()
@@ -142,14 +142,27 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
         }.addOnFailureListener { e -> Log.e("FirestoreError", "Falha ao buscar redes", e) }
     }
 
+    // --- CORREÇÃO AQUI: onitemClick para o líder ---
     override fun onItemClick(status: StatusRelatorio) {
-        when (status){
+        val intent = Intent(this, FormularioRedeActivity::class.java)
+
+        // Passamos a rede selecionada para o formulário
+        intent.putExtra("REDE_SELECIONADA", redeSelecionada)
+
+        when (status) {
             is StatusRelatorio.Enviado -> {
-                Toast.makeText(this, getString(R.string.visualizando_detalhes_relatorio, status.relatorio.dataReuniao), Toast.LENGTH_SHORT).show()
+                // Se clicou em um relatório JÁ ENVIADO, passa o ID para edição
+                Toast.makeText(this, getString(R.string.editando_relatorio, status.relatorio.dataReuniao), Toast.LENGTH_SHORT).show()
+                intent.putExtra("RELATORIO_ID", status.relatorio.id)
+                intent.putExtra("DATA_PENDENTE", status.relatorio.dataReuniao) // Passa a data do relatório existente
             }
             is StatusRelatorio.Faltante -> {
-                Toast.makeText(this, getString(R.string.relatorio_pendente_data, status.dataEsperada), Toast.LENGTH_SHORT).show()
+                // Se clicou em um relatório PENDENTE, passa a data para preenchimento
+                Toast.makeText(this, getString(R.string.preenchendo_relatorio_pendente, status.dataEsperada), Toast.LENGTH_SHORT).show()
+                intent.putExtra("DATA_PENDENTE", status.dataEsperada)
+                intent.putExtra("REDE_SELECIONADA", status.nomeRede) // Passa a rede específica da pendência
             }
         }
+        startActivity(intent)
     }
 }

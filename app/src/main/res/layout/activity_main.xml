@@ -10,11 +10,11 @@
     tools:context=".ui.main.MainActivity">
 
     <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/logobranca"
+        android:layout_width="279dp"
+        android:layout_height="190dp"
+        android:layout_marginBottom="48dp"
         android:contentDescription="@string/app_logo_content_description"
-        android:layout_marginBottom="48dp"/>
+        android:src="@drawable/logobranca" />
 
     <EditText
         android:id="@+id/editTextEmailAddress"

@@ -1,8 +1,6 @@
 package com.ibf.app.ui.relatorios
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -11,20 +9,17 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.ibf.app.R
+import com.ibf.app.util.MoneyTextWatcher
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.Calendar
-
-import com.ibf.app.R // Importação de R
-import com.ibf.app.util.MoneyTextWatcher // Importação da classe MoneyTextWatcher
-import com.ibf.app.data.models.Relatorio // Importação do modelo Relatorio
 
 class FormularioRedeActivity : AppCompatActivity() {
 
@@ -56,7 +51,7 @@ class FormularioRedeActivity : AppCompatActivity() {
 
         editTextNome = findViewById(R.id.formNome)
         editTextRede = findViewById(R.id.formRede)
-        textViewData = findViewById(R.id.formData) // AQUI DEVE SER R.id.formData no seu XML
+        textViewData = findViewById(R.id.formData)
         editTextDescricao = findViewById(R.id.formDescricao)
         editTextTotalPessoas = findViewById(R.id.formPessoas)
         editTextTotalVisitantes = findViewById(R.id.formVisitantes)
@@ -96,6 +91,27 @@ class FormularioRedeActivity : AppCompatActivity() {
             buttonEnviar.text = getString(R.string.form_button_atualizar)
         } else {
             buttonEnviar.text = getString(R.string.form_button_enviar)
+            // --- NOVO CÓDIGO: PREENCHER NOME DO USUÁRIO ---
+            auth.currentUser?.uid?.let { uid ->
+                firestore.collection("usuarios").document(uid).get()
+                    .addOnSuccessListener { document ->
+                        val nomeUsuario = document.getString("nome")
+                        if (!nomeUsuario.isNullOrEmpty()) {
+                            editTextNome.setText(nomeUsuario)
+                        } else {
+                            // Fallback para displayName se o nome não estiver no Firestore
+                            editTextNome.setText(auth.currentUser?.displayName ?: "")
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("FormularioRede", "Falha ao buscar nome do usuário logado: ${e.message}")
+                        editTextNome.setText(auth.currentUser?.displayName ?: "") // Fallback
+                    }
+            } ?: run {
+                // Se não há usuário logado (embora não devesse acontecer aqui)
+                editTextNome.setText(auth.currentUser?.displayName ?: "")
+            }
+            // --- FIM DO NOVO CÓDIGO ---
         }
 
         buttonEnviar.setOnClickListener {

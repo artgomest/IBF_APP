@@ -8,24 +8,24 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 import com.ibf.app.R
 import com.ibf.app.adapters.RelatorioAdapter
 import com.ibf.app.data.models.Relatorio
 import com.ibf.app.data.models.StatusRelatorio
+import com.ibf.app.ui.main.MainActivity
 import com.ibf.app.ui.relatorios.FormularioRedeActivity
 import com.ibf.app.ui.relatorios.SelecionarRelatorioSheet
 import com.ibf.app.ui.shared.SelecionarPerfilSheet
-import com.ibf.app.ui.main.MainActivity
-import androidx.core.content.edit
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItemClickListener, SelecionarPerfilSheet.PerfilSelecionadoListener {
 
@@ -174,7 +174,6 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
             }
 
             firestore.collection("relatorios")
-                .whereEqualTo("autorUid", usuarioAtual.uid)
                 .whereEqualTo("idRede", redeAtiva)
                 .get().addOnSuccessListener { relatoriosDocs ->
                     val relatoriosEnviados = relatoriosDocs.mapNotNull { doc ->

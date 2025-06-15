@@ -1,8 +1,8 @@
 package com.ibf.app.data.models
 
-// Data class para representar o usuário na lista
 data class UsuarioRede(
     val uid: String,
     val nome: String,
-    val papel: String
+    val papel: String, // O papel real que ele tem na rede
+    val statusAprovacao: String = "pendente" // NOVO CAMPO: "pendente", "aprovado", "rejeitado"
 )
