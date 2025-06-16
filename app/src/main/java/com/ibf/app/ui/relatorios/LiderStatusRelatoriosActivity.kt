@@ -1,7 +1,6 @@
 package com.ibf.app.ui.relatorios
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -55,7 +54,7 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
 
         textPageTitle = findViewById(R.id.text_page_title)
 
-        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
         val redeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
         redeSelecionada = redeInPrefs ?: intent.getStringExtra("REDE_SELECIONADA")
@@ -74,7 +73,7 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
 
     override fun onResume() {
         super.onResume()
-        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
         val currentRedeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
         if (currentRedeInPrefs != null && currentRedeInPrefs != redeSelecionada) {
@@ -149,7 +148,7 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
                     relatorioAdapter.notifyDataSetChanged()
                     swipeRefreshLayout.isRefreshing = false
                 }.addOnFailureListener { e -> Log.e("FirestoreError", "Falha ao buscar relatorios", e) }
-                9swipeRefreshLayout.isRefreshing = false
+                swipeRefreshLayout.isRefreshing = false
         }.addOnFailureListener { e -> Log.e("FirestoreError", "Falha ao buscar redes", e) }
     }
 
