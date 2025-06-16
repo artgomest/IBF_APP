@@ -199,6 +199,7 @@
     <string name="solicitar_entrada_em">Solicitar entrada na Rede:</string>
     <string name="enviar_solicitacao">Enviar Solicitação</string>
 
-
+    <string name="rejeitar">Rejeitar</string>
+    <string name="aprovar">Aprovar</string>9
 
 </resources>
