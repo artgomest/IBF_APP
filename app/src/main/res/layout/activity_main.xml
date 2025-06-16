@@ -49,4 +49,15 @@
         android:backgroundTint="@color/dark_accent"
         android:textColor="@color/white"/>
 
+    <TextView
+        android:id="@+id/text_cadastre_se"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nao_tem_conta_cadastre_se"
+        android:textColor="@color/dark_accent"
+        android:layout_marginTop="24dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="8dp"/>
+
 </LinearLayout>

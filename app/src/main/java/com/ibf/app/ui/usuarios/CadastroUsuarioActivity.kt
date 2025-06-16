@@ -1,6 +1,7 @@
+// Em app/src/main/java/com/ibf/app/ui/usuarios/CadastroUsuarioActivity.kt
+
 package com.ibf.app.ui.usuarios
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,22 +12,19 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ibf.app.R
-import com.ibf.app.ui.main.MainActivity
+import com.ibf.app.data.models.SolicitacaoCadastro
 
 class CadastroUsuarioActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var firestore: FirebaseFirestore // Mantenha Firestore
-
+    private lateinit var firestore: FirebaseFirestore
 
     private lateinit var textRedeCadastro: TextView
     private lateinit var editTextNome: TextInputEditText
@@ -80,11 +78,7 @@ class CadastroUsuarioActivity : AppCompatActivity() {
             return
         }
 
-        val adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_item,
-            papeisPermitidos
-        )
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, papeisPermitidos)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerPapel.adapter = adapter
 
@@ -92,7 +86,6 @@ class CadastroUsuarioActivity : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 buttonCadastrarUsuario.isEnabled = true
             }
-
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 buttonCadastrarUsuario.isEnabled = false
             }
@@ -124,164 +117,77 @@ class CadastroUsuarioActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // --- VOLTANDO À LÓGICA SEM CLOUD FUNCTIONS ---
-            cadastrarOuAtualizarUsuarioLocal(nome, email, senha, papelSelecionado, redeSelecionada!!)
+            criarUsuarioPendente(nome, email, senha, papelSelecionado, redeSelecionada!!)
         }
     }
 
-    // --- NOVA FUNÇÃO QUE SUBSTITUI A CHAMADA À CLOUD FUNCTION ---
-    private fun cadastrarOuAtualizarUsuarioLocal(nome: String, email: String, senha: String, papel: String, rede: String) {
+    /**
+     * NOVA LÓGICA: Cria o usuário no Auth, mas gera uma solicitação pendente no Firestore.
+     */
+    private fun criarUsuarioPendente(nome: String, email: String, senha: String, papel: String, rede: String) {
         buttonCadastrarUsuario.isEnabled = false
+        val solicitanteUid = auth.currentUser?.uid
+        if (solicitanteUid == null) {
+            Toast.makeText(this, "Erro: Usuário solicitante não está logado.", Toast.LENGTH_LONG).show()
+            buttonCadastrarUsuario.isEnabled = true
+            return
+        }
 
-        // 1. Tenta criar o usuário no Firebase Authentication
+        // Tenta criar o usuário no Firebase Authentication
         auth.createUserWithEmailAndPassword(email, senha)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    val user = task.result?.user
-                    user?.let {
-                        salvarDadosNovoUsuarioNoFirestore(it, nome, email, papel, rede)
+                    // Usuário criado no Auth com sucesso!
+                    val newUser = task.result?.user
+                    newUser?.let {
+                        salvarSolicitacaoDeCadastro(it, nome, email, papel, rede, solicitanteUid)
                     }
                 } else {
+                    // Trata falhas, como e-mail já existente
                     val exception = task.exception
                     if (exception is FirebaseAuthUserCollisionException) {
-                        Log.d("CadastroUsuario", "Email $email já está em uso no Auth. Buscando no Firestore para atualizar funções.")
-                        buscarUsuarioExistenteParaAtualizarFuncao(email, nome, papel, rede)
+                        Toast.makeText(this, "Este e-mail já possui uma conta.", Toast.LENGTH_LONG).show()
                     } else {
                         Toast.makeText(this, getString(R.string.falha_cadastro, exception?.message), Toast.LENGTH_LONG).show()
-                        Log.e("CadastroUsuario", "Erro genérico ao criar usuário no Auth", exception)
-                        buttonCadastrarUsuario.isEnabled = true
                     }
-                }
-            }
-    }
-
-    private fun salvarDadosNovoUsuarioNoFirestore(newUser: FirebaseUser, nome: String, email: String, papel: String, rede: String) {
-        val funcoesMap = hashMapOf(rede to papel)
-        val userData = hashMapOf(
-            "nome" to nome,
-            "email" to email,
-            "funcoes" to funcoesMap,
-            "redes" to listOf(rede)
-        )
-
-        firestore.collection("usuarios").document(newUser.uid).set(userData)
-            .addOnSuccessListener {
-                Toast.makeText(this, getString(R.string.usuario_cadastrado_sucesso, nome, papel, rede), Toast.LENGTH_LONG).show()
-                limparCampos()
-
-                // --- DESLOGAR NOVO USUÁRIO E REDIRECIONAR PARA LOGIN PRINCIPAL ---
-                auth.signOut()
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                Toast.makeText(this, getString(R.string.novo_usuario_criado_relogin), Toast.LENGTH_LONG).show()
-                finish()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, getString(R.string.falha_salvar_dados_firestore, e.message), Toast.LENGTH_SHORT).show()
-                Log.e("CadastroUsuario", "Erro ao salvar usuário no Firestore", e)
-                newUser.delete().addOnCompleteListener { deleteTask ->
-                    if (deleteTask.isSuccessful) {
-                        Log.d("CadastroUsuario", "Usuário do Auth excluído após falha no Firestore.")
-                    } else {
-                        Log.e("CadastroUsuario", "Falha ao excluir usuário do Auth após erro no Firestore: ${deleteTask.exception?.message}")
-                    }
-                }
-                buttonCadastrarUsuario.isEnabled = true
-            }
-    }
-
-    // --- RE-ADICIONANDO FUNÇÕES PARA O FLUXO SEM CLOUD FUNCTIONS ---
-    private fun buscarUsuarioExistenteParaAtualizarFuncao(email: String, nomeFormulario: String, novoPapel: String, novaRede: String) {
-        firestore.collection("usuarios")
-            .whereEqualTo("email", email)
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                if (!querySnapshot.isEmpty) {
-                    val existingDoc = querySnapshot.documents.first()
-                    val existingUserUid = existingDoc.id
-                    val existingUserName = existingDoc.getString("nome") ?: getString(R.string.usuario_existente_label)
-                    @Suppress("UNCHECKED_CAST")
-                    val existingFuncoes = existingDoc.get("funcoes") as? HashMap<String, String>
-
-                    if (existingFuncoes != null && existingFuncoes.containsKey(novaRede)) {
-                        val papelExistente = existingFuncoes[novaRede]
-                        Toast.makeText(
-                            this,
-                            getString(R.string.email_ja_na_rede, email, existingUserName, papelExistente, novaRede),
-                            Toast.LENGTH_LONG
-                        ).show()
-                        limparCampos()
-                        buttonCadastrarUsuario.isEnabled = true
-                    } else {
-                        mostrarDialogoAdicionarFuncao(existingUserUid, nomeFormulario, email, novoPapel, novaRede)
-                    }
-                } else {
-                    Toast.makeText(this, getString(R.string.erro_email_cadastrado_sem_dados), Toast.LENGTH_LONG).show()
-                    Log.e("CadastroUsuario", "Email $email existe no Auth, mas documento não no Firestore.")
-                    limparCampos()
+                    Log.e("CadastroUsuario", "Erro ao criar usuário no Auth", exception)
                     buttonCadastrarUsuario.isEnabled = true
                 }
             }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, getString(R.string.erro_buscar_usuario_existente, e.message), Toast.LENGTH_SHORT).show()
-                Log.e("CadastroUsuario", "Erro no Firestore ao buscar usuário existente", e)
-                buttonCadastrarUsuario.isEnabled = true
-            }
     }
 
-    private fun mostrarDialogoAdicionarFuncao(
-        existingUserUid: String,
-        existingUserName: String,
-        email: String,
-        novoPapel: String,
-        novaRede: String
-    ) {
-        AlertDialog.Builder(this)
-            .setTitle(getString(R.string.dialogo_usuario_existente_titulo))
-            .setMessage(getString(R.string.dialogo_adicionar_funcao_mensagem, email, existingUserName, novoPapel, novaRede))
-            .setPositiveButton(getString(R.string.sim_adicionar_funcao)) { dialog, _ ->
-                adicionarFuncaoAUsuarioExistente(existingUserUid, novoPapel, novaRede, existingUserName)
-                dialog.dismiss()
-            }
-            .setNegativeButton(getString(R.string.nao_cancelar)) { dialog, _ ->
-                Toast.makeText(this, getString(R.string.operacao_cancelada), Toast.LENGTH_SHORT).show()
-                limparCampos()
-                buttonCadastrarUsuario.isEnabled = true
-                dialog.dismiss()
-            }
-            .setCancelable(false)
-            .show()
-    }
-
-    private fun adicionarFuncaoAUsuarioExistente(uid: String, novoPapel: String, novaRede: String, nomeParaAtualizar: String) {
-        val userRef = firestore.collection("usuarios").document(uid)
-
-        val updates = hashMapOf<String, Any>(
-            "funcoes.$novaRede" to novoPapel,
-            "redes" to FieldValue.arrayUnion(novaRede)
+    /**
+     * NOVA FUNÇÃO: Salva um documento na coleção 'solicitacoesCadastro'.
+     */
+    private fun salvarSolicitacaoDeCadastro(newUser: FirebaseUser, nome: String, email: String, papel: String, rede: String, solicitanteUid: String) {
+        val solicitacao = SolicitacaoCadastro(
+            uid = newUser.uid,
+            nome = nome,
+            email = email,
+            redeId = rede,
+            papelSolicitado = papel,
+            status = "pendente",
+            solicitadoPorUid = solicitanteUid
         )
 
-        userRef.update(updates)
+        firestore.collection("solicitacoesCadastro").add(solicitacao)
             .addOnSuccessListener {
-                Toast.makeText(this, getString(R.string.funcao_adicionada_sucesso, novoPapel, novaRede, nomeParaAtualizar), Toast.LENGTH_LONG).show()
+                // SUCESSO! A solicitação foi enviada.
+                Toast.makeText(this, "Solicitação de cadastro enviada para aprovação.", Toast.LENGTH_LONG).show()
                 limparCampos()
-                buttonCadastrarUsuario.isEnabled = true
-
-                // --- DESLOGAR USUÁRIO ATUAL E REDIRECIONAR ---
-                auth.signOut()
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                Toast.makeText(this, getString(R.string.funcao_adicionada_relogin), Toast.LENGTH_LONG).show()
+                // A Activity é finalizada e o líder volta para a tela anterior.
+                // Não há necessidade de deslogar/relogar aqui, pois a sessão do líder continua ativa.
                 finish()
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, getString(R.string.erro_adicionar_funcao, e.message), Toast.LENGTH_SHORT).show()
-                Log.e("CadastroUsuario", "Erro ao adicionar função ao usuário existente", e)
+                Toast.makeText(this, "Falha ao enviar solicitação: ${e.message}", Toast.LENGTH_SHORT).show()
+                Log.e("CadastroUsuario", "Erro ao salvar solicitação no Firestore", e)
+                // Se falhar ao salvar a solicitação, devemos apagar o usuário criado no Auth para não deixar lixo.
+                newUser.delete()
                 buttonCadastrarUsuario.isEnabled = true
             }
     }
+
 
     private fun limparCampos() {
         editTextNome.text?.clear()

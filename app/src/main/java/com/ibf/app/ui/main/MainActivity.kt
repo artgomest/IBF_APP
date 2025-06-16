@@ -16,6 +16,8 @@ import com.ibf.app.ui.dashboard.LiderDashboardActivity
 import com.ibf.app.ui.dashboard.PastorDashboardActivity
 import com.ibf.app.ui.dashboard.SecretarioDashboardActivity
 import com.ibf.app.ui.shared.SelecionarPerfilSheet
+import android.widget.TextView
+import com.ibf.app.ui.usuarios.SolicitacaoCadastroActivity
 
 class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionadoListener {
 
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
     private lateinit var emailInput: EditText
     private lateinit var passwordInput: EditText
     private lateinit var loginButton: Button
+    private lateinit var textCadastreSe: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +38,7 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
         emailInput = findViewById(R.id.editTextEmailAddress)
         passwordInput = findViewById(R.id.editTextPassword)
         loginButton = findViewById(R.id.buttonLogin)
+        textCadastreSe = findViewById(R.id.text_cadastre_se)
 
         loginButton.setOnClickListener {
             val email = emailInput.text.toString().trim()
@@ -45,6 +49,8 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                 return@setOnClickListener
             }
 
+
+
             firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
@@ -53,6 +59,10 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                         Toast.makeText(this, getString(R.string.falha_login_credenciais), Toast.LENGTH_SHORT).show()
                     }
                 }
+        }
+        textCadastreSe.setOnClickListener {
+            val intent = Intent(this, SolicitacaoCadastroActivity::class.java)
+            startActivity(intent)
         }
     }
 

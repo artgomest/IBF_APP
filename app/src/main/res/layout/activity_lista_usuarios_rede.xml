@@ -32,24 +32,20 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/text_rede_usuarios_lista"
-        android:layout_width="wrap_content"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/rede_usuarios_lista_label"
-        android:textSize="16sp"
-        android:textColor="@color/dark_text_secondary"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:background="@color/dark_background"
+        app:tabTextColor="@color/dark_text_secondary"
+        app:tabSelectedTextColor="@color/dark_accent"
+        app:tabIndicatorColor="@color/dark_accent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_usuarios"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingHorizontal="16dp"
-        tools:listitem="@layout/item_usuario_rede"/>
+        android:layout_weight="1" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_adicionar_usuario"

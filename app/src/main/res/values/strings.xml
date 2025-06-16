@@ -192,6 +192,13 @@
     <string name="erro_email_ja_em_uso_cloud_function">Este e-mail já está em uso.</string>
     <string name="erro_cloud_function_generico">Erro na operação: %s</string>
 
+    <string name="solicitacao_enviada_sucesso">Solicitação de cadastro enviada para aprovação.</string>
+
+    <string name="nao_tem_conta_cadastre_se">Não tem uma conta? <b>Cadastre-se</b></string>
+    <string name="criar_nova_conta">Criar Nova Conta</string>
+    <string name="solicitar_entrada_em">Solicitar entrada na Rede:</string>
+    <string name="enviar_solicitacao">Enviar Solicitação</string>
+
 
 
 </resources>

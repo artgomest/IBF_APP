@@ -50,6 +50,7 @@ dependencies {
 
     // Suas outras dependências
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.viewpager2)
     implementation(libs.androidx.gridlayout)
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.androidx.appcompat)
