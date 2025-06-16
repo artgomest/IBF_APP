@@ -11,17 +11,20 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.ibf.app.R
 import com.ibf.app.adapters.SolicitacoesAdapter
 import com.ibf.app.data.models.SolicitacaoCadastro
 
+
 class SolicitacoesPendentesFragment : Fragment(), SolicitacoesAdapter.SolicitacaoClickListener {
 
     private lateinit var firestore: FirebaseFirestore
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SolicitacoesAdapter
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private val listaSolicitacoes = mutableListOf<SolicitacaoCadastro>()
 
     private var redeId: String? = null
@@ -54,6 +57,10 @@ class SolicitacoesPendentesFragment : Fragment(), SolicitacoesAdapter.Solicitaca
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout_solicitacoes)
+        swipeRefreshLayout.setOnRefreshListener {
+            carregarSolicitacoes()
+        }
         setupRecyclerView(view)
         carregarSolicitacoes()
     }
@@ -66,6 +73,7 @@ class SolicitacoesPendentesFragment : Fragment(), SolicitacoesAdapter.Solicitaca
     }
 
     private fun carregarSolicitacoes() {
+        swipeRefreshLayout.isRefreshing = true
         if (redeId == null) {
             Log.e("SolicitacoesFragment", "ID da Rede não fornecido.")
             return
@@ -84,11 +92,13 @@ class SolicitacoesPendentesFragment : Fragment(), SolicitacoesAdapter.Solicitaca
                 if (novasSolicitacoes.isEmpty()) {
                     Toast.makeText(context, "Nenhuma solicitação pendente.", Toast.LENGTH_SHORT).show()
                 }
+                swipeRefreshLayout.isRefreshing = false
             }
             .addOnFailureListener { e ->
                 Log.e("SolicitacoesFragment", "Erro ao carregar solicitações", e)
                 Toast.makeText(context, "Erro ao carregar solicitações.", Toast.LENGTH_SHORT).show()
             }
+            swipeRefreshLayout.isRefreshing = false
     }
 
     override fun onAprovarClick(solicitacao: SolicitacaoCadastro) {

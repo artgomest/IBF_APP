@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ibf.app.R
@@ -29,6 +30,7 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
     private lateinit var recyclerView: RecyclerView
     private lateinit var relatorioAdapter: RelatorioAdapter
     private val listaDeStatus = mutableListOf<StatusRelatorio>()
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     private var redeSelecionada: String? = null
     private lateinit var textPageTitle: TextView
@@ -43,6 +45,12 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
 
         findViewById<ImageView>(R.id.button_back).setOnClickListener {
             finish()
+        }
+
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_relatorios)
+        swipeRefreshLayout.setOnRefreshListener {
+            // A ação de arrastar vai simplesmente chamar nossa função de carregar dados
+            carregarStatusDosRelatorios()
         }
 
         textPageTitle = findViewById(R.id.text_page_title)
@@ -90,6 +98,7 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
     private fun carregarStatusDosRelatorios() {
         val redeAtiva = redeSelecionada ?: run {
             Log.e("LiderRelatorios", "redeSelecionada é nula em carregarStatusDosRelatorios()")
+            swipeRefreshLayout.isRefreshing = false
             return
         }
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -138,7 +147,9 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
                         }
                     })
                     relatorioAdapter.notifyDataSetChanged()
+                    swipeRefreshLayout.isRefreshing = false
                 }.addOnFailureListener { e -> Log.e("FirestoreError", "Falha ao buscar relatorios", e) }
+                9swipeRefreshLayout.isRefreshing = false
         }.addOnFailureListener { e -> Log.e("FirestoreError", "Falha ao buscar redes", e) }
     }
 

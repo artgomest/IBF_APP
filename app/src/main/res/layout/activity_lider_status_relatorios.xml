@@ -33,11 +33,18 @@
 
 </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewRelatorios"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout_relatorios"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/header_layout"
-        tools:listitem="@layout/item_status_relatorio" />
+        android:layout_below="@id/header_layout">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewRelatorios"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_status_relatorio" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>
