@@ -57,8 +57,9 @@ class ListaUsuariosRedeActivity : AppCompatActivity() {
         // Adiciona os fragments ao adapter
         // NOTA: UsuariosAtivosFragment ainda não foi criado, usaremos um placeholder por enquanto.
         // Faremos ele no próximo passo.
+        adapter.addFragment(UsuariosAtivosFragment.newInstance(redeSelecionada!!), "Ativos")
         adapter.addFragment(SolicitacoesPendentesFragment.newInstance(redeSelecionada!!), "Pendentes")
-        // adapter.addFragment(UsuariosAtivosFragment.newInstance(redeSelecionada!!), "Ativos") // Linha para o futuro
+
 
         viewPager.adapter = adapter
 
