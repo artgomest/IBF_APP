@@ -1,6 +1,5 @@
 package com.ibf.app.ui.usuarios
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -19,7 +18,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ibf.app.R
-import com.ibf.app.ui.main.MainActivity
 
 class CadastroUsuarioActivity : AppCompatActivity() {
 
@@ -35,7 +33,6 @@ class CadastroUsuarioActivity : AppCompatActivity() {
 
     private var redeSelecionada: String? = null
     private var papelUsuarioLogado: String? = null
-    private var usuarioOriginal: FirebaseUser? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +40,6 @@ class CadastroUsuarioActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
-        usuarioOriginal = auth.currentUser
 
         findViewById<TextView>(R.id.text_page_title).text = getString(R.string.cadastro_de_usuario)
         findViewById<ImageView>(R.id.button_back).setOnClickListener { finish() }
@@ -75,6 +71,12 @@ class CadastroUsuarioActivity : AppCompatActivity() {
             val nome = editTextNome.text.toString().trim()
             val email = editTextEmail.text.toString().trim()
             val senha = editTextSenha.text.toString().trim()
+
+            // Verifica se há algo selecionado no spinner antes de prosseguir
+            if (spinnerPapel.selectedItem == null) {
+                Toast.makeText(this, "Por favor, selecione um papel.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             val papelSelecionado = spinnerPapel.selectedItem.toString().lowercase()
 
             if (nome.isEmpty() || email.isEmpty() || senha.isEmpty()) {
@@ -90,7 +92,6 @@ class CadastroUsuarioActivity : AppCompatActivity() {
         }
     }
 
-    // --- FUNÇÃO CORRIGIDA ---
     private fun configurarSpinnerDePapel() {
         val papeisPermitidos = getPapeisPermitidosParaCadastro(papelUsuarioLogado!!)
         if (papeisPermitidos.isEmpty()) {
@@ -108,19 +109,17 @@ class CadastroUsuarioActivity : AppCompatActivity() {
         // CORREÇÃO: Habilita o botão imediatamente, já que sabemos que há papéis para selecionar.
         buttonCadastrarUsuario.isEnabled = true
 
-        // O listener agora é só uma segurança extra caso o spinner fique sem seleção.
         spinnerPapel.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                // Não precisa mais habilitar o botão aqui, ele já começa habilitado.
+                // Não precisa mais habilitar o botão aqui.
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Se por algum motivo o spinner ficar sem seleção, desabilita o botão.
                 buttonCadastrarUsuario.isEnabled = false
             }
         }
     }
-
-    // As funções abaixo permanecem as mesmas que já corrigimos antes
 
     private fun getPapeisPermitidosParaCadastro(papelLogado: String): List<String> {
         return when (papelLogado) {
@@ -132,10 +131,15 @@ class CadastroUsuarioActivity : AppCompatActivity() {
 
     private fun cadastrarOuAtualizarUsuarioLocal(nome: String, email: String, senha: String, papel: String, rede: String) {
         buttonCadastrarUsuario.isEnabled = false
-        auth.createUserWithEmailAndPassword(email, senha)
+        val tempAuth = FirebaseAuth.getInstance()
+
+        tempAuth.createUserWithEmailAndPassword(email, senha)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    task.result?.user?.let { salvarDadosNovoUsuarioNoFirestore(it, nome, email, papel, rede) }
+                    task.result?.user?.let { newUser ->
+                        salvarDadosNovoUsuarioNoFirestore(newUser, nome, email, papel, rede)
+                        tempAuth.signOut()
+                    }
                 } else {
                     val exception = task.exception
                     if (exception is FirebaseAuthUserCollisionException) {
@@ -156,7 +160,7 @@ class CadastroUsuarioActivity : AppCompatActivity() {
         firestore.collection("usuarios").document(newUser.uid).set(userData)
             .addOnSuccessListener {
                 Toast.makeText(this, getString(R.string.usuario_cadastrado_sucesso, nome, papel, rede), Toast.LENGTH_LONG).show()
-                relogarUsuarioOriginal()
+                finish()
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, getString(R.string.falha_salvar_dados_firestore, e.message), Toast.LENGTH_SHORT).show()
@@ -183,8 +187,8 @@ class CadastroUsuarioActivity : AppCompatActivity() {
                     buttonCadastrarUsuario.isEnabled = true
                 }
             }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, getString(R.string.erro_buscar_dados, e.message), Toast.LENGTH_SHORT).show()
+            .addOnFailureListener {
+                Toast.makeText(this, getString(R.string.erro_buscar_dados), Toast.LENGTH_SHORT).show()
                 buttonCadastrarUsuario.isEnabled = true
             }
     }
@@ -209,24 +213,11 @@ class CadastroUsuarioActivity : AppCompatActivity() {
         firestore.collection("usuarios").document(uid).update(updates)
             .addOnSuccessListener {
                 Toast.makeText(this, getString(R.string.funcao_adicionada_sucesso, novoPapel, novaRede, nome), Toast.LENGTH_LONG).show()
-                relogarUsuarioOriginal()
+                finish()
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, getString(R.string.erro_adicionar_funcao, e.message), Toast.LENGTH_SHORT).show()
                 buttonCadastrarUsuario.isEnabled = true
             }
-    }
-
-    private fun relogarUsuarioOriginal() {
-        auth.signOut()
-        if (usuarioOriginal != null) {
-            Toast.makeText(this, "Operação concluída. Voltando à tela anterior.", Toast.LENGTH_SHORT).show()
-            finish()
-        } else {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
-        }
     }
 }

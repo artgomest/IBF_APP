@@ -86,11 +86,12 @@
             android:id="@+id/spinner_papel_detalhes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:spinnerMode="dropdown"
-            android:background="@drawable/spinner_background"
             android:layout_marginBottom="16dp"
+            android:background="@drawable/spinner_background"
+            android:spinnerMode="dropdown"
             android:visibility="gone"
-            tools:visibility="visible"/>
+            tools:ignore="TouchTargetSizeCheck"
+            tools:visibility="visible" />
 
     </LinearLayout>
 
