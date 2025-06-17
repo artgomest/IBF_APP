@@ -200,6 +200,12 @@
     <string name="enviar_solicitacao">Enviar Solicitação</string>
 
     <string name="rejeitar">Rejeitar</string>
-    <string name="aprovar">Aprovar</string>9
+    <string name="aprovar">Aprovar</string>
+
+    <string name="detalhes_do_usuario">Detalhes do Usuário</string>
+    <string name="papel_na_rede">Papel na Rede</string>
+    <string name="remover_da_rede">Remover da Rede</string>
+    <string name="editar_informacoes">Editar Informações</string>
+    <string name="salvar_alteracoes">Salvar Alterações</string>
 
 </resources>

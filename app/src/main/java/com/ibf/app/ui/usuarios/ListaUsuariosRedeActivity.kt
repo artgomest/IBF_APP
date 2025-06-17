@@ -1,4 +1,5 @@
 // Em app/src/main/java/com/ibf/app/ui/usuarios/ListaUsuariosRedeActivity.kt
+// (Substitua o arquivo inteiro)
 
 package com.ibf.app.ui.usuarios
 
@@ -15,6 +16,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.ibf.app.R
 import com.ibf.app.adapters.ViewPagerAdapter
 import com.ibf.app.ui.usuarios.fragments.SolicitacoesPendentesFragment
+import com.ibf.app.ui.usuarios.fragments.UsuariosAtivosFragment
 
 class ListaUsuariosRedeActivity : AppCompatActivity() {
 
@@ -40,7 +42,6 @@ class ListaUsuariosRedeActivity : AppCompatActivity() {
         setupViewPagerAndTabs()
 
         findViewById<FloatingActionButton>(R.id.fab_adicionar_usuario).setOnClickListener {
-            // Lógica para adicionar usuário que já tínhamos
             val intent = Intent(this, CadastroUsuarioActivity::class.java)
             intent.putExtra("REDE_SELECIONADA", redeSelecionada)
             intent.putExtra("PAPEL_USUARIO_LOGADO", papelUsuarioLogado)
@@ -54,16 +55,12 @@ class ListaUsuariosRedeActivity : AppCompatActivity() {
 
         val adapter = ViewPagerAdapter(this)
 
-        // Adiciona os fragments ao adapter
-        // NOTA: UsuariosAtivosFragment ainda não foi criado, usaremos um placeholder por enquanto.
-        // Faremos ele no próximo passo.
-        adapter.addFragment(UsuariosAtivosFragment.newInstance(redeSelecionada!!), "Ativos")
+        // Passando o papel do usuário logado para os fragments
+        adapter.addFragment(UsuariosAtivosFragment.newInstance(redeSelecionada!!, papelUsuarioLogado!!), "Ativos")
         adapter.addFragment(SolicitacoesPendentesFragment.newInstance(redeSelecionada!!), "Pendentes")
-
 
         viewPager.adapter = adapter
 
-        // Conecta o TabLayout com o ViewPager para que as abas funcionem
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = adapter.getPageTitle(position)
         }.attach()
