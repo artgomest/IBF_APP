@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
         <activity
+            android:name=".ui.perfil.PerfilActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.configuracoes.EditarRedeActivity"
             android:exported="false" />
         <activity
