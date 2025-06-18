@@ -208,4 +208,22 @@
     <string name="editar_informacoes">Editar Informações</string>
     <string name="salvar_alteracoes">Salvar Alterações</string>
 
+    <string name="editar_rede_titulo">Editar Rede</string>
+    <string name="editar_rede_nome_hint">Nome da Rede</string>
+    <string name="editar_rede_dia_label">Dia da Reunião</string>
+    <string name="rede_atualizada_sucesso">Rede atualizada com sucesso!</string>
+    <string name="falha_atualizar_rede">Falha ao atualizar a rede.</string>
+    <string name="falha_carregar_dados_rede">Falha ao carregar os dados da rede.</string>
+
+    <string name="perfil_titulo">Meu Perfil</string>
+    <string name="perfil_nome">Nome</string>
+    <string name="perfil_email">E-mail</string>
+    <string name="perfil_editar">EDITAR</string>
+    <string name="perfil_salvar">SALVAR</string>
+    <string name="perfil_estatisticas">Minhas Estatísticas</string>
+    <string name="perfil_notificacoes">Notificações</string>
+    <string name="perfil_ajuda">Ajuda e Suporte</string>
+    <string name="perfil_info_atualizadas">Informações atualizadas com sucesso!</string>
+    <string name="perfil_falha_atualizar">Falha ao atualizar informações.</string>
+
 </resources>

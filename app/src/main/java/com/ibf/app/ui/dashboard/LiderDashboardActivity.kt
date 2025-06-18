@@ -149,12 +149,6 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
             when (item.itemId) {
                 R.id.navigation_home -> true
 
-                R.id.navigation_reports -> {
-                    val bottomSheet = SelecionarRelatorioSheet()
-                    bottomSheet.show(supportFragmentManager, "SelecionarRelatorioSheet")
-                    true
-                }
-
                 R.id.navigation_profile -> {
                     abrirSeletorDePerfil()
                     true

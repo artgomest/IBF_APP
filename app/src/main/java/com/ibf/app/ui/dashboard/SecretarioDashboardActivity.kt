@@ -138,11 +138,6 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> true
-                R.id.navigation_reports -> {
-                    val bottomSheet = SelecionarRelatorioSheet()
-                    bottomSheet.show(supportFragmentManager, "SelecionarRelatorioSheet")
-                    true
-                }
                 R.id.navigation_profile -> {
                     abrirSeletorDePerfil()
                     true

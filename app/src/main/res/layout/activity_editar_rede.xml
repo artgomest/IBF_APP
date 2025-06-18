@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/dark_background"
+    tools:context=".ui.configuracoes.EditarRedeActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+        <ImageView
+            android:id="@+id/button_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:contentDescription="@string/voltar"
+            app:tint="@color/dark_text_primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/editar_rede_titulo"
+            android:textColor="@color/dark_text_primary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/editar_rede_nome_hint"
+            android:layout_marginBottom="16dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_nome_rede"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:textColor="@color/dark_text_primary"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/editar_rede_dia_label"
+            android:textColor="@color/dark_text_secondary"
+            android:layout_marginBottom="8dp"/>
+
+        <Spinner
+            android:id="@+id/spinner_dia_semana"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/spinner_background"
+            android:minHeight="48dp"
+            android:spinnerMode="dropdown"
+            android:layout_marginBottom="24dp"/>
+
+        <Button
+            android:id="@+id/button_salvar_rede"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/salvar_alteracoes"/>
+
+    </LinearLayout>
+</LinearLayout>

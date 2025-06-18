@@ -116,10 +116,7 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
                     Toast.makeText(this, getString(R.string.clicou_em_inicio), Toast.LENGTH_SHORT).show()
                     true
                 }
-                R.id.navigation_reports -> {
-                    Toast.makeText(this, getString(R.string.clicou_em_relatorios), Toast.LENGTH_SHORT).show()
-                    true
-                }
+
                 R.id.navigation_profile -> {
                     abrirSeletorDePerfil()
                     true

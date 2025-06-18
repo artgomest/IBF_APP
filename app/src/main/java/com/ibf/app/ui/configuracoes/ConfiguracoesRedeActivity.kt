@@ -45,7 +45,9 @@ class ConfiguracoesRedeActivity : AppCompatActivity() {
         }
 
         findViewById<MaterialCardView>(R.id.card_rede_config).setOnClickListener {
-            Toast.makeText(this, getString(R.string.configuracoes_rede_em_breve), Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, EditarRedeActivity::class.java)
+            intent.putExtra("REDE_SELECIONADA", redeSelecionada)
+            startActivity(intent)
         }
     }
 
