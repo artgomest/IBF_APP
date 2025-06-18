@@ -49,21 +49,51 @@
 
                 <LinearLayout style="@style/DashboardCardContent" android:gravity="start">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
-                        <TextView style="@style/cardTitle" android:text="@string/perfil_informacoes_pessoais" android:layout_weight="1"/>
-                        <Button android:id="@+id/button_editar_salvar" style="@style/Widget.MaterialComponents.Button.TextButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/perfil_editar"/>
+                        <TextView
+                            android:text="@string/perfil_informacoes_pessoais"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/dark_text_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/button_editar_salvar"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/perfil_editar"
+                            android:textColor="#78909C" />
                     </LinearLayout>
 
                     <TextView style="@style/formLabel" android:text="@string/perfil_nome" android:layout_marginTop="16dp"/>
-                    <EditText android:id="@+id/edit_text_nome_perfil" android:enabled="false" style="@style/LoginEditText" android:layout_marginBottom="8dp"/>
+
+                    <EditText
+                        android:id="@+id/edit_text_nome_perfil"
+                        style="@style/LoginEditText"
+                        android:layout_marginBottom="8dp"
+                        android:autofillHints=""
+                        android:enabled="false"
+                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
 
                     <TextView style="@style/formLabel" android:text="@string/perfil_email"/>
-                    <EditText android:id="@+id/edit_text_email_perfil" android:enabled="false" style="@style/LoginEditText"/>
+
+                    <EditText
+                        android:id="@+id/edit_text_email_perfil"
+                        style="@style/LoginEditText"
+                        android:autofillHints=""
+                        android:enabled="false"
+                        tools:ignore="LabelFor,TextFields,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <Button android:id="@+id/button_estatisticas" android:text="@string/perfil_estatisticas" style="@style/MenuButton" />
-            <Button android:id="@+id/button_notificacoes" android:text="@string/perfil_notificacoes" style="@style/MenuButton" />
-            <Button android:id="@+id/button_ajuda" android:text="@string/perfil_ajuda" style="@style/MenuButton" />
+            <Button android:id="@+id/button_estatisticas" android:text="@string/perfil_estatisticas" style="@style/MenuButton"
+                tools:ignore="VisualLintButtonSize" />
+            <Button android:id="@+id/button_notificacoes" android:text="@string/perfil_notificacoes" style="@style/MenuButton"
+                tools:ignore="VisualLintButtonSize" />
+            <Button android:id="@+id/button_ajuda" android:text="@string/perfil_ajuda" style="@style/MenuButton"
+                tools:ignore="VisualLintButtonSize" />
 
         </LinearLayout>
     </ScrollView>

@@ -21,7 +21,6 @@ import com.ibf.app.data.models.StatusRelatorio
 import com.ibf.app.ui.main.MainActivity
 import com.ibf.app.ui.perfil.PerfilActivity
 import com.ibf.app.ui.relatorios.FormularioRedeActivity
-import com.ibf.app.ui.relatorios.SelecionarRelatorioSheet
 import com.ibf.app.ui.shared.SelecionarPerfilSheet
 import java.text.SimpleDateFormat
 import java.util.Calendar
