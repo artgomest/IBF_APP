@@ -150,7 +150,7 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
                 R.id.navigation_home -> true
 
                 R.id.navigation_profile -> {
-                    abrirSeletorDePerfil()
+                    startActivity(Intent(this, PerfilActivity::class.java))
                     true
                 }
                 else -> false

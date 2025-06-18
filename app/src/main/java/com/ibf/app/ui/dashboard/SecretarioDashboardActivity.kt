@@ -139,7 +139,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
             when (item.itemId) {
                 R.id.navigation_home -> true
                 R.id.navigation_profile -> {
-                    abrirSeletorDePerfil()
+                    startActivity(Intent(this, PerfilActivity::class.java))
                     true
                 }
                 else -> false
