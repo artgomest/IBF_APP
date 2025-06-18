@@ -19,6 +19,7 @@ import com.ibf.app.adapters.RelatorioAdapter
 import com.ibf.app.data.models.Relatorio
 import com.ibf.app.data.models.StatusRelatorio
 import com.ibf.app.ui.main.MainActivity
+import com.ibf.app.ui.perfil.PerfilActivity
 import com.ibf.app.ui.relatorios.FormularioRedeActivity
 import com.ibf.app.ui.relatorios.SelecionarRelatorioSheet
 import com.ibf.app.ui.shared.SelecionarPerfilSheet
@@ -139,7 +140,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
             when (item.itemId) {
                 R.id.navigation_home -> true
                 R.id.navigation_profile -> {
-                    abrirSeletorDePerfil()
+                    startActivity(Intent(this, PerfilActivity::class.java))
                     true
                 }
                 else -> false
