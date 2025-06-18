@@ -16,8 +16,8 @@ import com.ibf.app.R
 import com.ibf.app.ui.configuracoes.ConfiguracoesRedeActivity
 import com.ibf.app.ui.graficos.LiderGraficosActivity
 import com.ibf.app.ui.main.MainActivity
+import com.ibf.app.ui.perfil.PerfilActivity
 import com.ibf.app.ui.relatorios.LiderStatusRelatoriosActivity
-import com.ibf.app.ui.relatorios.SelecionarRelatorioSheet
 import com.ibf.app.ui.shared.SelecionarPerfilSheet
 
 class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionadoListener {
