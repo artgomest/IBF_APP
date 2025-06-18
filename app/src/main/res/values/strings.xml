@@ -225,5 +225,7 @@
     <string name="perfil_ajuda">Ajuda e Suporte</string>
     <string name="perfil_info_atualizadas">Informações atualizadas com sucesso!</string>
     <string name="perfil_falha_atualizar">Falha ao atualizar informações.</string>
+    <string name="perfil_informacoes_pessoais">Informações Pessoais</string>
+    <string name="em_breve">Em breve!</string>
 
 </resources>
