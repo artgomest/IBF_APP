@@ -216,6 +216,7 @@
     <string name="falha_carregar_dados_rede">Falha ao carregar os dados da rede.</string>
 
     <string name="perfil_titulo">Meu Perfil</string>
+    <string name="perfil_informacoes_pessoais">Informações Pessoais</string>
     <string name="perfil_nome">Nome</string>
     <string name="perfil_email">E-mail</string>
     <string name="perfil_editar">EDITAR</string>
@@ -225,5 +226,6 @@
     <string name="perfil_ajuda">Ajuda e Suporte</string>
     <string name="perfil_info_atualizadas">Informações atualizadas com sucesso!</string>
     <string name="perfil_falha_atualizar">Falha ao atualizar informações.</string>
+    <string name="em_breve">Em breve!</string>
 
 </resources>

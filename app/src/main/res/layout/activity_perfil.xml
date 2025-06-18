@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/dark_background"
+    tools:context=".ui.perfil.PerfilActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:paddingHorizontal="8dp">
+        <ImageView
+            android:id="@+id/button_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:contentDescription="@string/voltar"
+            app:tint="@color/dark_text_primary" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/perfil_titulo"
+            android:textColor="@color/dark_text_primary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/DashboardCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp">
+
+                <LinearLayout style="@style/DashboardCardContent" android:gravity="start">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                        <TextView style="@style/cardTitle" android:text="@string/perfil_informacoes_pessoais" android:layout_weight="1"/>
+                        <Button android:id="@+id/button_editar_salvar" style="@style/Widget.MaterialComponents.Button.TextButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/perfil_editar"/>
+                    </LinearLayout>
+
+                    <TextView style="@style/formLabel" android:text="@string/perfil_nome" android:layout_marginTop="16dp"/>
+                    <EditText android:id="@+id/edit_text_nome_perfil" android:enabled="false" style="@style/LoginEditText" android:layout_marginBottom="8dp"/>
+
+                    <TextView style="@style/formLabel" android:text="@string/perfil_email"/>
+                    <EditText android:id="@+id/edit_text_email_perfil" android:enabled="false" style="@style/LoginEditText"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <Button android:id="@+id/button_estatisticas" android:text="@string/perfil_estatisticas" style="@style/MenuButton" />
+            <Button android:id="@+id/button_notificacoes" android:text="@string/perfil_notificacoes" style="@style/MenuButton" />
+            <Button android:id="@+id/button_ajuda" android:text="@string/perfil_ajuda" style="@style/MenuButton" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
