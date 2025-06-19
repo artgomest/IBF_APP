@@ -45,7 +45,10 @@ class PerfilActivity : AppCompatActivity() {
         }
 
         // Listeners para os botões futuros que ainda não têm função
-        findViewById<Button>(R.id.button_estatisticas).setOnClickListener { Toast.makeText(this, getString(R.string.em_breve), Toast.LENGTH_SHORT).show() }
+        findViewById<Button>(R.id.button_estatisticas).setOnClickListener {
+            startActivity(Intent(this, EstatisticasActivity::class.java))
+        }
+
         findViewById<Button>(R.id.button_notificacoes).setOnClickListener { Toast.makeText(this, getString(R.string.em_breve), Toast.LENGTH_SHORT).show() }
         findViewById<Button>(R.id.button_ajuda).setOnClickListener { Toast.makeText(this, getString(R.string.em_breve), Toast.LENGTH_SHORT).show() }
     }
