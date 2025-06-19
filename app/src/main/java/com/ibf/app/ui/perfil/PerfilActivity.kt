@@ -1,5 +1,6 @@
 package com.ibf.app.ui.perfil
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -14,7 +15,7 @@ class PerfilActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
-
+    private var redeSelecionada: String? = null
     private lateinit var nomeEditText: EditText
     private lateinit var emailEditText: EditText
     private lateinit var editarSalvarButton: Button
@@ -25,6 +26,7 @@ class PerfilActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil)
 
+        redeSelecionada = intent.getStringExtra("REDE_SELECIONADA")
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
@@ -46,7 +48,9 @@ class PerfilActivity : AppCompatActivity() {
 
         // Listeners para os botões futuros que ainda não têm função
         findViewById<Button>(R.id.button_estatisticas).setOnClickListener {
-            startActivity(Intent(this, EstatisticasActivity::class.java))
+            val intent = Intent(this, EstatisticasActivity::class.java)
+            intent.putExtra("REDE_SELECIONADA", redeSelecionada) // Passa a rede para a tela de estatísticas
+            startActivity(intent)
         }
 
         findViewById<Button>(R.id.button_notificacoes).setOnClickListener { Toast.makeText(this, getString(R.string.em_breve), Toast.LENGTH_SHORT).show() }

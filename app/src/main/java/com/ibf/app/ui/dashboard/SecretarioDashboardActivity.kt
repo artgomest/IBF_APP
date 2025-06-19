@@ -139,7 +139,11 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
             when (item.itemId) {
                 R.id.navigation_home -> true
                 R.id.navigation_profile -> {
-                    startActivity(Intent(this, PerfilActivity::class.java))
+                    val intent = Intent(this, PerfilActivity::class.java)
+                    // --- ADIÇÃO IMPORTANTE AQUI ---
+                    // Avisa a tela de perfil qual é a rede ativa
+                    intent.putExtra("REDE_SELECIONADA", redeSelecionada)
+                    startActivity(intent)
                     true
                 }
                 else -> false

@@ -31,48 +31,77 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.card.MaterialCardView
-            style="@style/DashboardCard"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp">
-            <LinearLayout style="@style/DashboardCardContent">
-                <TextView style="@style/DashboardCardTitle" android:text="@string/estatisticas_total_enviados"/>
-                <TextView
-                    android:id="@+id/text_total_enviados"
-                    android:textColor="@color/dark_accent"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="8dp"
-                    tools:text="22"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <com.google.android.material.card.MaterialCardView
-            style="@style/DashboardCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout style="@style/DashboardCardContent">
-                <TextView style="@style/DashboardCardTitle" android:text="@string/estatisticas_taxa_entrega"/>
-                <TextView
-                    android:id="@+id/text_taxa_entrega"
-                    android:textColor="@color/dark_accent"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="8dp"
-                    tools:text="87,5%"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/dark_card_background"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/estatisticas_total_enviados"
+                        android:textColor="@color/dark_text_primary"
+                        android:textSize="16sp"/>
+                    <TextView
+                        android:id="@+id/text_total_enviados"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/dark_accent"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        tools:text="22" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-    </LinearLayout>
-</ScrollView>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/dark_card_background"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/estatisticas_taxa_entrega"
+                        android:textColor="@color/dark_text_primary"
+                        android:textSize="16sp"/>
+                    <TextView
+                        android:id="@+id/text_taxa_entrega"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/dark_accent"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        tools:text="87,5%" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

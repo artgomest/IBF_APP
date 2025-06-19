@@ -150,7 +150,9 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
                 R.id.navigation_home -> true
 
                 R.id.navigation_profile -> {
-                    startActivity(Intent(this, PerfilActivity::class.java))
+                    val intent = Intent(this, PerfilActivity::class.java)
+                    intent.putExtra("REDE_SELECIONADA", redeSelecionada)
+                    startActivity(intent)
                     true
                 }
                 else -> false

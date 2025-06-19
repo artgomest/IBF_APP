@@ -9,8 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ibf.app.R
-import com.ibf.app.data.models.Relatorio
-import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -23,9 +21,19 @@ class EstatisticasActivity : AppCompatActivity() {
     private lateinit var textTotalEnviados: TextView
     private lateinit var textTaxaEntrega: TextView
 
+    private var redeSelecionada: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_estatisticas)
+
+        // Recebe a rede que foi passada pela tela de Perfil
+        redeSelecionada = intent.getStringExtra("REDE_SELECIONADA")
+        if (redeSelecionada == null) {
+            Toast.makeText(this, "Erro: Nenhuma rede especificada para as estatísticas.", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
@@ -39,45 +47,32 @@ class EstatisticasActivity : AppCompatActivity() {
 
     private fun carregarDadosEstatisticas() {
         val usuarioAtual = auth.currentUser ?: return
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val redeAtiva = redeSelecionada ?: return
 
-        // Busca os dados do usuário para saber de quais redes ele é secretário
-        firestore.collection("usuarios").document(usuarioAtual.uid).get().addOnSuccessListener { userDoc ->
-            @Suppress("UNCHECKED_CAST")
-            val funcoes = userDoc.get("funcoes") as? HashMap<String, String>
-            val redesDoSecretario = funcoes?.filterValues { it == "secretario" }?.keys ?: setOf()
+        // Busca os dados da rede ativa para saber o dia da semana
+        firestore.collection("redes").whereEqualTo("nome", redeAtiva).get().addOnSuccessListener { redesDocs ->
+            if (redesDocs.isEmpty) return@addOnSuccessListener
+            val diaDaSemana = redesDocs.documents.first().getLong("diaDaSemana")?.toInt() ?: return@addOnSuccessListener
 
-            if (redesDoSecretario.isEmpty()) {
-                Toast.makeText(this, "Você não é secretário de nenhuma rede.", Toast.LENGTH_SHORT).show()
-                return@addOnSuccessListener
-            }
+            // Busca os relatórios enviados por este secretário APENAS PARA A REDE ATIVA
+            firestore.collection("relatorios")
+                .whereEqualTo("autorUid", usuarioAtual.uid)
+                .whereEqualTo("idRede", redeAtiva) // <-- FILTRO IMPORTANTE
+                .get().addOnSuccessListener { relatoriosDocs ->
 
-            // Busca os dados de TODAS as redes para saber o dia da semana
-            firestore.collection("redes").get().addOnSuccessListener { redesDocs ->
-                val mapaRedes = redesDocs.documents.associate { it.getString("nome") to it.getLong("diaDaSemana")?.toInt() }
-
-                // Busca TODOS os relatórios enviados por este secretário
-                firestore.collection("relatorios").whereEqualTo("autorUid", usuarioAtual.uid).get().addOnSuccessListener { relatoriosDocs ->
-                    val relatoriosEnviados = relatoriosDocs.mapNotNull { doc -> doc.toObject(Relatorio::class.java) }
-
-                    // --- CÁLCULO DAS ESTATÍSTICAS ---
-
-                    // 1. Total de Relatórios Enviados
-                    val totalEnviados = relatoriosEnviados.size
+                    // 1. Total de Relatórios Enviados (para esta rede)
+                    val totalEnviados = relatoriosDocs.size()
                     textTotalEnviados.text = totalEnviados.toString()
 
-                    // 2. Taxa de Entrega
+                    // 2. Taxa de Entrega (para esta rede)
                     var totalEsperado = 0
                     val semanasParaVerificar = 8
-                    redesDoSecretario.forEach { nomeDaRede ->
-                        val diaDaSemana = mapaRedes[nomeDaRede] ?: return@forEach
-                        for (i in 0 until semanasParaVerificar) {
-                            val dataEsperadaCal = Calendar.getInstance()
-                            dataEsperadaCal.add(Calendar.WEEK_OF_YEAR, -i)
-                            dataEsperadaCal.set(Calendar.DAY_OF_WEEK, diaDaSemana)
-                            if (!dataEsperadaCal.time.after(Date())) {
-                                totalEsperado++
-                            }
+                    for (i in 0 until semanasParaVerificar) {
+                        val dataEsperadaCal = Calendar.getInstance()
+                        dataEsperadaCal.add(Calendar.WEEK_OF_YEAR, -i)
+                        dataEsperadaCal.set(Calendar.DAY_OF_WEEK, diaDaSemana)
+                        if (!dataEsperadaCal.time.after(Date())) {
+                            totalEsperado++
                         }
                     }
 
@@ -89,7 +84,6 @@ class EstatisticasActivity : AppCompatActivity() {
                     }
 
                 }.addOnFailureListener { e -> tratarFalha(e) }
-            }.addOnFailureListener { e -> tratarFalha(e) }
         }.addOnFailureListener { e -> tratarFalha(e) }
     }
 
