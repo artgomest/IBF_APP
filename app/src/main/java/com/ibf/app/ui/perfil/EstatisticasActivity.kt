@@ -30,7 +30,7 @@ class EstatisticasActivity : AppCompatActivity() {
         // Recebe a rede que foi passada pela tela de Perfil
         redeSelecionada = intent.getStringExtra("REDE_SELECIONADA")
         if (redeSelecionada == null) {
-            Toast.makeText(this, "Erro: Nenhuma rede especificada para as estatísticas.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Erro: Nenhuma rede especificada.", Toast.LENGTH_LONG).show()
             finish()
             return
         }
@@ -49,22 +49,21 @@ class EstatisticasActivity : AppCompatActivity() {
         val usuarioAtual = auth.currentUser ?: return
         val redeAtiva = redeSelecionada ?: return
 
-        // Busca os dados da rede ativa para saber o dia da semana
+        // 1. Busca os dados da rede ativa para saber o dia da semana
         firestore.collection("redes").whereEqualTo("nome", redeAtiva).get().addOnSuccessListener { redesDocs ->
             if (redesDocs.isEmpty) return@addOnSuccessListener
             val diaDaSemana = redesDocs.documents.first().getLong("diaDaSemana")?.toInt() ?: return@addOnSuccessListener
 
-            // Busca os relatórios enviados por este secretário APENAS PARA A REDE ATIVA
+            // 2. Busca os relatórios enviados por este secretário APENAS PARA A REDE ATIVA
             firestore.collection("relatorios")
                 .whereEqualTo("autorUid", usuarioAtual.uid)
-                .whereEqualTo("idRede", redeAtiva) // <-- FILTRO IMPORTANTE
+                .whereEqualTo("idRede", redeAtiva) // <-- FILTRO CRUCIAL
                 .get().addOnSuccessListener { relatoriosDocs ->
 
-                    // 1. Total de Relatórios Enviados (para esta rede)
                     val totalEnviados = relatoriosDocs.size()
                     textTotalEnviados.text = totalEnviados.toString()
 
-                    // 2. Taxa de Entrega (para esta rede)
+                    // 3. Calcula a taxa de entrega APENAS PARA A REDE ATIVA
                     var totalEsperado = 0
                     val semanasParaVerificar = 8
                     for (i in 0 until semanasParaVerificar) {

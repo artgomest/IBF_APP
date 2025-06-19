@@ -20,13 +20,12 @@
             android:padding="8dp"
             android:contentDescription="@string/voltar"
             app:tint="@color/dark_text_primary" />
-
         <TextView
             android:id="@+id/text_page_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/graficos_rede_label_placeholder"
+            android:text="@string/graficos"
             android:textColor="@color/dark_text_primary"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -48,22 +47,28 @@
                 android:padding="16dp">
 
                 <com.google.android.material.card.MaterialCardView
-                    style="@style/GraficoCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp">
-                    <LinearLayout style="@style/GraficoContent"
+                    android:layout_marginBottom="16dp"
+                    app:cardBackgroundColor="@color/dark_card_background"
+                    app:strokeColor="@color/dark_divider"
+                    app:strokeWidth="1dp"
+                    app:cardCornerRadius="8dp">
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
                         <TextView
-                            style="@style/GraficoTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/pessoas_por_culto" />
-
+                            android:text="@string/pessoas_por_culto"
+                            android:textColor="@color/dark_text_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp"/>
                         <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/chart_pessoas_por_culto"
-                            style="@style/GraficoChart"
                             android:layout_width="match_parent"
                             android:layout_height="200dp"/>
                     </LinearLayout>
@@ -72,70 +77,95 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
                     android:orientation="horizontal">
                     <com.google.android.material.card.MaterialCardView
-                        style="@style/GraficoCard"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="8dp"
-                        android:layout_weight="1">
-                        <LinearLayout style="@style/GraficoContent"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="@color/dark_card_background"
+                        app:strokeColor="@color/dark_divider"
+                        app:strokeWidth="1dp"
+                        app:cardCornerRadius="8dp">
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="16dp">
                             <TextView
-                                style="@style/GraficoTitle.Small"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/media_por_culto" />
+                                android:text="@string/media_por_culto"
+                                android:textColor="@color/dark_text_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"/>
                             <TextView
                                 android:id="@+id/text_media_valor"
-                                style="@style/GraficoValor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textColor="@color/dark_accent"
+                                android:textSize="28sp"
+                                android:textStyle="bold"
                                 tools:text="35" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
+
                     <com.google.android.material.card.MaterialCardView
-                        style="@style/GraficoCard"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="8dp"
-                        android:layout_weight="1">
-                        <LinearLayout style="@style/GraficoContent"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="@color/dark_card_background"
+                        app:strokeColor="@color/dark_divider"
+                        app:strokeWidth="1dp"
+                        app:cardCornerRadius="8dp">
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
                             <TextView
-                                style="@style/GraficoTitle.Small"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/visitantes" />
+                                android:text="@string/visitantes"
+                                android:textColor="@color/dark_text_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"/>
                             <TextView
                                 android:id="@+id/text_visitantes_valor"
-                                style="@style/GraficoValor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textColor="@color/dark_accent"
+                                android:textSize="28sp"
+                                android:textStyle="bold"
                                 tools:text="8" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
 
                 <com.google.android.material.card.MaterialCardView
-                    style="@style/GraficoCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp">
-                    <LinearLayout style="@style/GraficoContent"
+                    android:layout_marginTop="16dp"
+                    app:cardBackgroundColor="@color/dark_card_background"
+                    app:strokeColor="@color/dark_divider"
+                    app:strokeWidth="1dp"
+                    app:cardCornerRadius="8dp">
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
                         <TextView
-                            style="@style/GraficoTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/ofertas_por_culto" />
+                            android:text="@string/ofertas_por_culto"
+                            android:textColor="@color/dark_text_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp"/>
                         <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/chart_ofertas_por_culto"
-                            style="@style/GraficoChart"
                             android:layout_width="match_parent"
                             android:layout_height="200dp" />
                     </LinearLayout>
@@ -143,7 +173,5 @@
 
             </LinearLayout>
         </ScrollView>
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 </LinearLayout>
