@@ -228,4 +228,10 @@
     <string name="perfil_informacoes_pessoais">Informações Pessoais</string>
     <string name="em_breve">Em breve!</string>
 
+    <string name="estatisticas_titulo">Minhas Estatísticas</string>
+    <string name="estatisticas_total_enviados">Total de Relatórios Enviados</string>
+    <string name="estatisticas_taxa_entrega">Taxa de Entrega (últimas 8 semanas)</string>
+    <string name="estatisticas_placeholder_num">0</string>
+    <string name="estatisticas_placeholder_percent">0%</string>
+
 </resources>

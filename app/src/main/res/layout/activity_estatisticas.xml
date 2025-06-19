@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/dark_background"
+    tools:context=".ui.perfil.EstatisticasActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:paddingHorizontal="8dp">
+        <ImageView
+            android:id="@+id/button_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:contentDescription="@string/voltar"
+            app:tint="@color/dark_text_primary" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/estatisticas_titulo"
+            android:textColor="@color/dark_text_primary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/DashboardCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+            <LinearLayout style="@style/DashboardCardContent">
+                <TextView style="@style/DashboardCardTitle" android:text="@string/estatisticas_total_enviados"/>
+                <TextView
+                    android:id="@+id/text_total_enviados"
+                    android:textColor="@color/dark_accent"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    tools:text="22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/DashboardCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout style="@style/DashboardCardContent">
+                <TextView style="@style/DashboardCardTitle" android:text="@string/estatisticas_taxa_entrega"/>
+                <TextView
+                    android:id="@+id/text_taxa_entrega"
+                    android:textColor="@color/dark_accent"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    tools:text="87,5%"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</ScrollView>
