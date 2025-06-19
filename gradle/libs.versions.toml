@@ -28,6 +28,7 @@ mpandroidchart = "v3.1.0"
 # --- Firebase ---
 # O BOM é a única dependência Firebase que realmente precisa de uma versão aqui, pois ele gerencia as outras.
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
 
 # Dependências Firebase KTX (não precisam de 'version.ref' se o BOM for usado)
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx" }
