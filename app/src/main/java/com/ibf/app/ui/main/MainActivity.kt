@@ -1,13 +1,18 @@
 package com.ibf.app.ui.main
 
-import android.content.Context
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,7 +21,6 @@ import com.ibf.app.ui.dashboard.LiderDashboardActivity
 import com.ibf.app.ui.dashboard.PastorDashboardActivity
 import com.ibf.app.ui.dashboard.SecretarioDashboardActivity
 import com.ibf.app.ui.shared.SelecionarPerfilSheet
-import android.widget.TextView
 import com.ibf.app.ui.usuarios.SolicitacaoCadastroActivity
 
 class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionadoListener {
@@ -27,6 +31,14 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
     private lateinit var passwordInput: EditText
     private lateinit var loginButton: Button
     private lateinit var textCadastreSe: TextView
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                Toast.makeText(this, "Permissão para notificações concedida!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Permissão para notificações negada.", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +76,7 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
             val intent = Intent(this, SolicitacaoCadastroActivity::class.java)
             startActivity(intent)
         }
+        pedirPermissaoDeNotificacao()
     }
 
     private fun processarLogin() {
@@ -112,7 +125,7 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
     }
 
     private fun salvarRedeSelecionada(rede: String) {
-        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
         sharedPref.edit {
             putString("REDE_SELECIONADA", rede)
         }
@@ -134,6 +147,16 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
         } else {
             Toast.makeText(this, getString(R.string.papel_desconhecido, papel), Toast.LENGTH_LONG).show()
             firebaseAuth.signOut()
+        }
+    }
+    private fun pedirPermissaoDeNotificacao() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                // Se a permissão não foi concedida, lança o pedido
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
         }
     }
 }
