@@ -1,6 +1,104 @@
-import * as functions from "firebase-functions";
+import {onDocumentCreated} from "firebase-functions/v2/firestore";
+import * as admin from "firebase-admin";
+import * as logger from "firebase-functions/logger";
+import { onRequest } from "firebase-functions/https";
 
-export const helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info("A função helloWorld foi chamada!");
-  response.send("Olá do Firebase! A função de teste está funcionando.");
+// Inicializa o Firebase Admin
+admin.initializeApp();
+
+/**
+ * Função acionada sempre que um novo documento é criado na coleção 'relatorios'.
+ */
+export const notificarNovoRelatorio = onDocumentCreated(
+  "relatorios/{relatorioId}",
+  async (event) => {
+    const snapshot = event.data;
+    if (!snapshot) {
+      logger.error("Nenhum dado associado ao evento de criação do relatório.");
+      return;
+    }
+
+    const novoRelatorio = snapshot.data();
+    const autorNome = novoRelatorio.autorNome;
+    const idRede = novoRelatorio.idRede;
+
+    if (!autorNome || !idRede) {
+      logger.error("O relatório não contém autorNome ou idRede.");
+      return;
+    }
+
+    const db = admin.firestore();
+    const tokens: string[] = [];
+
+    // Busca o líder da rede e todos os pastores em paralelo
+    const liderQuery = db
+      .collection("usuarios")
+      .where(`funcoes.${idRede}`, "==", "lider")
+      .get();
+
+    const pastorQuery = db
+      .collection("usuarios")
+      .where("funcoes.geral", "==", "pastor")
+      .get();
+
+    try {
+      const [liderSnapshot, pastorSnapshot] = await Promise.all([
+        liderQuery,
+        pastorQuery,
+      ]);
+
+      liderSnapshot.forEach((doc) => {
+        const token = doc.data().fcmToken;
+        if (token) tokens.push(token);
+      });
+      pastorSnapshot.forEach((doc) => {
+        const token = doc.data().fcmToken;
+        if (token) tokens.push(token);
+      });
+
+      const tokensUnicos = [...new Set(tokens)];
+      if (tokensUnicos.length === 0) {
+        logger.info("Nenhum usuário com token encontrado para notificar.");
+        return;
+      }
+
+      const payload = {
+        notification: {
+          title: `Novo Relatório: ${idRede}`,
+          body: `O relatório da rede ${idRede} foi preenchido por ${autorNome}.`,
+          sound: "default",
+        },
+      };
+
+      logger.info("Enviando notificação para tokens:", tokensUnicos);
+      await admin.messaging().sendToDevice(tokensUnicos, payload);
+
+    } catch (error) {
+      logger.error("Erro ao buscar usuários ou enviar notificação:", error);
+    }
+  }
+);
+/**
+ * Função de teste para ser chamada manualmente via URL, agora usando a sintaxe da v2.
+ */
+export const testeEnvioManual = onRequest(async (request, response) => {
+  // IMPORTANTE: PEGUE SEU TOKEN DE TESTE NO LOGCAT E COLE AQUI DENTRO DAS ASPAS
+  const seuTokenDeTeste = "eWBFZfqARiOuv9YAA24TqY:APA91bFVVCg8gEYUADQ7NDUn9LFY7tIqwElpMMfHXzwMm58uXNeE_KtNgFUP8Vh16xw5zSDnj2ESEuUv2HVXpkqz12iBp2bodYWn3n6W-rlLgIxD9XZSsb8";
+
+  const payload = {
+    notification: {
+      title: "Teste Manual da Função",
+      body: "Se você recebeu isso, a API de Mensagens está funcionando!",
+    },
+  };
+
+  try {
+    logger.info("Tentando enviar notificação manual para:", seuTokenDeTeste);
+    await admin.messaging().sendToDevice([seuTokenDeTeste], payload);
+    logger.info("Envio manual concluído com sucesso!");
+    response.send("Notificação de teste enviada com sucesso!");
+  } catch (error) {
+    logger.error("ERRO no envio manual:", error);
+    response.status(500).send("Falha ao enviar notificação de teste.");
+  }
 });
