@@ -1,6 +1,9 @@
 package com.ibf.app.ui.main
 
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -13,10 +16,14 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.messaging.FirebaseMessaging
 import com.ibf.app.R
 import com.ibf.app.ui.dashboard.LiderDashboardActivity
@@ -28,7 +35,6 @@ import com.ibf.app.ui.usuarios.SolicitacaoCadastroActivity
 class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionadoListener {
 
     private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private lateinit var emailInput: EditText
     private lateinit var passwordInput: EditText
@@ -44,7 +50,6 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
             }
         }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -69,10 +74,13 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
             firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        // --- CORREÇÃO APLICADA AQUI ---
-                        // Garante que o token seja salvo no perfil do usuário que acabou de logar
-                        task.result?.user?.uid?.let { uid ->
-                            salvarTokenDoDispositivo(uid)
+                        val user = task.result?.user
+                        if (user != null) {
+                            // Garante que o token FCM seja salvo (boa prática manter)
+                            salvarTokenDoDispositivo(user.uid)
+                            // --- LÓGICA DA NOVA NOTIFICAÇÃO ---
+                            // Dispara a notificação de boas-vindas
+                            mostrarNotificacaoDeLogin(user.displayName)
                         }
                         processarLogin()
                     } else {
@@ -84,23 +92,48 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
             val intent = Intent(this, SolicitacaoCadastroActivity::class.java)
             startActivity(intent)
         }
+
         pedirPermissaoDeNotificacao()
     }
 
-    // --- FUNÇÃO ADICIONADA ---
+    // --- NOVA FUNÇÃO ADICIONADA ---
+    private fun mostrarNotificacaoDeLogin(nomeUsuario: String?) {
+        val channelId = "canal_login_ibf"
+        val channelName = "Notificações de Atividade da Conta"
+        val nome = nomeUsuario ?: "usuário"
+
+        // Garante que a permissão foi concedida antes de tentar criar a notificação
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            return // Se não tiver permissão, não faz nada.
+        }
+
+        // Cria o canal de notificação (para Android 8.0+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notificationBuilder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.logobranca) // Ícone para a notificação
+            .setContentTitle("Login Realizado com Sucesso")
+            .setContentText("Olá, $nome! Seja bem-vindo(a) de volta.")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true) // A notificação some ao ser tocada
+
+        // Mostra a notificação usando um ID único para não substituir outras
+        NotificationManagerCompat.from(this).notify(System.currentTimeMillis().toInt(), notificationBuilder.build())
+    }
+
     private fun salvarTokenDoDispositivo(uid: String) {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w("MainActivity", "Falha ao obter token do FCM.", task.exception)
                 return@addOnCompleteListener
             }
-
             val token = task.result
             val userDocument = firestore.collection("usuarios").document(uid)
-
-            // Usamos .set com merge=true para criar o campo se ele não existir,
-            // ou apenas atualizá-lo se já existir, sem apagar outros dados.
-            userDocument.set(mapOf("fcmToken" to token), com.google.firebase.firestore.SetOptions.merge())
+            userDocument.set(mapOf("fcmToken" to token), SetOptions.merge())
                 .addOnSuccessListener { Log.d("MainActivity", "Token FCM salvo para o usuário: $uid") }
                 .addOnFailureListener { e -> Log.e("MainActivity", "Erro ao salvar token FCM", e) }
         }
@@ -134,10 +167,6 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                     firebaseAuth.signOut()
                 }
             }
-            .addOnFailureListener { exception ->
-                Toast.makeText(this, getString(R.string.erro_buscar_dados, exception.message), Toast.LENGTH_SHORT).show()
-                Log.e("LOGIN_ERROR", "Erro ao buscar documento do usuário", exception)
-            }
     }
 
     override fun onPerfilSelecionado(rede: String, papel: String) {
@@ -150,8 +179,8 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
     }
 
     private fun fazerLogout() {
-        auth.signOut()
-        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        firebaseAuth.signOut()
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         sharedPref.edit { clear() }
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -160,10 +189,8 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
     }
 
     private fun salvarRedeSelecionada(rede: String) {
-        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
-        sharedPref.edit {
-            putString("REDE_SELECIONADA", rede)
-        }
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        sharedPref.edit { putString("REDE_SELECIONADA", rede) }
     }
 
     private fun navegarParaTelaCorreta(rede: String, papel: String?) {
@@ -185,7 +212,6 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
         }
     }
 
-    // Anotação adicionada para remover o aviso de API
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun pedirPermissaoDeNotificacao() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=

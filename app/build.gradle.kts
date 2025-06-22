@@ -47,10 +47,10 @@ dependencies {
     // não precisam mais da referência de versão aqui.
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.messaging.ktx) // <-- LINHA ADICIONADA/CORRIGIDA
 
     // Suas outras dependências
     implementation(libs.androidx.core.ktx)
-    implementation(libs.firebase.messaging.ktx)
     implementation(libs.androidx.viewpager2)
     implementation(libs.androidx.gridlayout)
     implementation(libs.androidx.swiperefreshlayout)

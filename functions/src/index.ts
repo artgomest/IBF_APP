@@ -2,17 +2,18 @@ import {onDocumentCreated} from "firebase-functions/v2/firestore";
 import * as admin from "firebase-admin";
 import * as logger from "firebase-functions/logger";
 
-// Inicializa o Firebase Admin para que nossas funções possam acessar outros serviços
+// Inicializa o Firebase Admin
 admin.initializeApp();
 
 /**
  * Função acionada sempre que um novo documento é criado na coleção 'relatorios'.
- * Esta é a nova sintaxe para a v2 do Cloud Functions.
  */
 export const notificarNovoRelatorio = onDocumentCreated(
-  "relatorios/{relatorioId}",
+  {
+    document: "relatorios/{relatorioId}",
+    region: "us-central1", // <-- ALTERAÇÃO FEITA AQUI
+  },
   async (event) => {
-    // Na v2, os dados do evento vêm dentro de 'event.data'
     const snapshot = event.data;
     if (!snapshot) {
       logger.error("Nenhum dado associado ao evento de criação do relatório.");
@@ -20,13 +21,11 @@ export const notificarNovoRelatorio = onDocumentCreated(
     }
 
     const novoRelatorio = snapshot.data();
-
-    // Extrai as informações relevantes do novo relatório
     const autorNome = novoRelatorio.autorNome;
     const idRede = novoRelatorio.idRede;
 
     if (!autorNome || !idRede) {
-      logger.error("O relatório não contém autorNome ou idRede.", novoRelatorio);
+      logger.error("O relatório não contém autorNome ou idRede.");
       return;
     }
 
@@ -53,25 +52,19 @@ export const notificarNovoRelatorio = onDocumentCreated(
       // Coleta os tokens dos usuários a serem notificados
       liderSnapshot.forEach((doc) => {
         const token = doc.data().fcmToken;
-        if (token) {
-          tokens.push(token);
-        }
+        if (token) tokens.push(token);
       });
       pastorSnapshot.forEach((doc) => {
         const token = doc.data().fcmToken;
-        if (token) {
-          tokens.push(token);
-        }
+        if (token) tokens.push(token);
       });
 
       const tokensUnicos = [...new Set(tokens)];
-
       if (tokensUnicos.length === 0) {
         logger.info("Nenhum usuário com token encontrado para notificar.");
         return;
       }
 
-      // Monta o corpo da notificação
       const payload = {
         notification: {
           title: `Novo Relatório: ${idRede}`,
@@ -80,12 +73,14 @@ export const notificarNovoRelatorio = onDocumentCreated(
         },
       };
 
-      logger.info("Enviando notificação para os tokens:", tokensUnicos);
+      logger.info("Enviando notificação para tokens:", tokensUnicos);
+      await admin.messaging().sendEachForMulticast({
+          tokens: tokensUnicos,
+          notification: payload.notification,
+      });
 
-      // Envia a notificação para todos os dispositivos encontrados
-      await admin.messaging().sendToDevice(tokensUnicos, payload);
     } catch (error) {
-      logger.error("Erro ao buscar usuários ou enviar notificação:", error);
+      logger.error("Ocorreu um erro geral ao processar as notificações:", error);
     }
   }
 );
