@@ -1,7 +1,6 @@
 package com.ibf.app.ui.main
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -18,7 +17,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import com.google.firebase.messaging.FirebaseMessaging
 import com.ibf.app.R
 import com.ibf.app.ui.dashboard.LiderDashboardActivity
@@ -98,30 +96,41 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                 return@addOnCompleteListener
             }
             val token = task.result
-            val userDocument = firestore.collection("usuarios").document(uid)
 
-            // Usamos .set com merge=true para criar o campo se ele não existir
-            userDocument.set(mapOf("fcmToken" to token), SetOptions.merge())
-                .addOnSuccessListener { Log.d("MainActivity", "Token FCM salvo para o usuário: $uid") }
-                .addOnFailureListener { e -> Log.e("MainActivity", "Erro ao salvar token FCM", e) }
+            // --- CORREÇÃO AQUI: Usando .update() para mais segurança ---
+            firestore.collection("usuarios").document(uid)
+                .update("fcmToken", token)
+                .addOnSuccessListener { Log.d("MainActivity", "Token FCM atualizado para o usuário: $uid") }
+                .addOnFailureListener { e -> Log.e("MainActivity", "Erro ao atualizar token FCM", e) }
         }
     }
 
     private fun processarLogin() {
         val user = firebaseAuth.currentUser ?: return
+
         firestore.collection("usuarios").document(user.uid).get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
-                    val nomeUsuario = document.getString("nome") ?: getString(R.string.usuario_padrao)
-                    @Suppress("UNCHECKED_CAST")
-                    val funcoes = document.get("funcoes") as? HashMap<String, String>
+
+                    Log.d("LoginDebug", "Documento do usuário encontrado: ${document.data}")
+
+                    // --- CORREÇÃO APLICADA AQUI ---
+                    // 1. Tratamos o campo como um Map<String, Any> genérico, que é mais seguro.
+                    val funcoesAnyMap = document.get("funcoes") as? Map<String, Any>
+
+                    // 2. Convertemos para o tipo exato que precisamos, garantindo a compatibilidade.
+                    val funcoes = funcoesAnyMap?.mapValues { it.value.toString() }?.let { HashMap(it) }
+
+                    Log.d("LoginDebug", "Campo 'funcoes' extraído como: $funcoes")
 
                     if (funcoes.isNullOrEmpty()) {
+                        Log.e("LoginDebug", "O campo 'funcoes' está nulo ou vazio para o usuário ${user.uid}")
                         Toast.makeText(this, getString(R.string.usuario_sem_papeis_definidos), Toast.LENGTH_LONG).show()
                         firebaseAuth.signOut()
                         return@addOnSuccessListener
                     }
 
+                    val nomeUsuario = document.getString("nome") ?: getString(R.string.usuario_padrao)
                     if (funcoes.size > 1) {
                         val bottomSheet = SelecionarPerfilSheet.newInstance(funcoes, nomeUsuario)
                         bottomSheet.show(supportFragmentManager, "SelecionarPerfilSheet")
@@ -131,9 +140,14 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                         navegarParaTelaCorreta(rede, papel)
                     }
                 } else {
+                    Log.e("LoginDebug", "Documento do usuário ${user.uid} não foi encontrado no Firestore.")
                     Toast.makeText(this, getString(R.string.dados_usuario_nao_encontrados), Toast.LENGTH_LONG).show()
                     firebaseAuth.signOut()
                 }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, getString(R.string.erro_buscar_dados, exception.message), Toast.LENGTH_SHORT).show()
+                Log.e("LOGIN_ERROR", "Erro ao buscar documento do usuário", exception)
             }
     }
 
@@ -148,7 +162,7 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
 
     private fun fazerLogout() {
         firebaseAuth.signOut() // Corrigido para usar a variável correta
-        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
         sharedPref.edit { clear() }
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -157,7 +171,7 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
     }
 
     private fun salvarRedeSelecionada(rede: String) {
-        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
         sharedPref.edit { putString("REDE_SELECIONADA", rede) }
     }
 
