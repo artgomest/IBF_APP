@@ -183,7 +183,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
                     Log.d("SecretarioDashboard", "Total de relatórios enviados encontrados para UID ${usuarioAtual.uid} e rede $redeAtiva: ${relatoriosEnviados.size}")
 
                     val statusFinal = mutableListOf<StatusRelatorio>()
-                    val semanasParaVerificar = 8
+                    val semanasParaVerificar = 20
 
                     for (i in 0 until semanasParaVerificar) {
                         val dataEsperadaCal = Calendar.getInstance()

@@ -119,7 +119,7 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
                 .get().addOnSuccessListener { relatoriosDocs ->
                     val relatoriosEnviados = relatoriosDocs.mapNotNull { doc -> doc.toObject(Relatorio::class.java).apply { id = doc.id } }
                     val statusFinal = mutableListOf<StatusRelatorio>()
-                    val semanasParaVerificar = 8
+                    val semanasParaVerificar = 20
 
                     for (i in 0 until semanasParaVerificar) {
                         val dataEsperadaCal = Calendar.getInstance()
