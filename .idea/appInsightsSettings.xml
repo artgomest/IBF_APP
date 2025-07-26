@@ -10,9 +10,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.ibf.app" />
-                  <option name="mobileSdkAppId" value="1:249353148206:android:c1b50671f014a6d225ccbf" />
-                  <option name="projectId" value="ibfapp-2" />
-                  <option name="projectNumber" value="249353148206" />
+                  <option name="mobileSdkAppId" value="1:858803281672:android:f2e8907c8ccb628832d6bd" />
+                  <option name="projectId" value="ibfapp-c4078" />
+                  <option name="projectNumber" value="858803281672" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
