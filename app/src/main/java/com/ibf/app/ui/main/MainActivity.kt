@@ -1,6 +1,7 @@
 package com.ibf.app.ui.main
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -17,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.messaging.FirebaseMessaging
 import com.ibf.app.R
 import com.ibf.app.ui.dashboard.LiderDashboardActivity
@@ -28,7 +30,6 @@ import com.ibf.app.ui.usuarios.SolicitacaoCadastroActivity
 class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionadoListener {
 
     private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private lateinit var emailInput: EditText
     private lateinit var passwordInput: EditText
@@ -44,7 +45,23 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
             }
         }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    override fun onStart() {
+        super.onStart()
+        // --- CORREÇÃO 1: VERIFICAÇÃO DE SESSÃO ATIVA ---
+        val currentUser = firebaseAuth.currentUser
+        if (currentUser != null) {
+            // Se há um utilizador logado, tenta navegar para o seu último perfil guardado.
+            val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+            val redeSalva = sharedPref.getString("REDE_SELECIONADA", null)
+            val papelSalvo = sharedPref.getString("PAPEL_SELECIONADO", null)
+
+            if (redeSalva != null && papelSalvo != null) {
+                navegarParaTelaCorreta(redeSalva, papelSalvo)
+            }
+            // Se não houver perfil guardado, o utilizador permanecerá na tela de login.
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -69,8 +86,6 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
             firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        // --- CORREÇÃO APLICADA AQUI ---
-                        // Garante que o token seja salvo no perfil do usuário que acabou de logar
                         task.result?.user?.uid?.let { uid ->
                             salvarTokenDoDispositivo(uid)
                         }
@@ -84,24 +99,22 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
             val intent = Intent(this, SolicitacaoCadastroActivity::class.java)
             startActivity(intent)
         }
-        pedirPermissaoDeNotificacao()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            pedirPermissaoDeNotificacao()
+        }
     }
 
-    // --- FUNÇÃO ADICIONADA ---
     private fun salvarTokenDoDispositivo(uid: String) {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w("MainActivity", "Falha ao obter token do FCM.", task.exception)
                 return@addOnCompleteListener
             }
-
             val token = task.result
             val userDocument = firestore.collection("usuarios").document(uid)
-
-            // Usamos .set com merge=true para criar o campo se ele não existir,
-            // ou apenas atualizá-lo se já existir, sem apagar outros dados.
-            userDocument.set(mapOf("fcmToken" to token), com.google.firebase.firestore.SetOptions.merge())
-                .addOnSuccessListener { Log.d("MainActivity", "Token FCM salvo para o usuário: $uid") }
+            userDocument.set(mapOf("fcmToken" to token), SetOptions.merge())
+                .addOnSuccessListener { Log.d("MainActivity", "Token FCM salvo para o utilizador: $uid") }
                 .addOnFailureListener { e -> Log.e("MainActivity", "Erro ao salvar token FCM", e) }
         }
     }
@@ -126,7 +139,7 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                         bottomSheet.show(supportFragmentManager, "SelecionarPerfilSheet")
                     } else {
                         val (rede, papel) = funcoes.entries.first()
-                        salvarRedeSelecionada(rede)
+                        salvarPerfilSelecionado(rede, papel)
                         navegarParaTelaCorreta(rede, papel)
                     }
                 } else {
@@ -134,14 +147,10 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                     firebaseAuth.signOut()
                 }
             }
-            .addOnFailureListener { exception ->
-                Toast.makeText(this, getString(R.string.erro_buscar_dados, exception.message), Toast.LENGTH_SHORT).show()
-                Log.e("LOGIN_ERROR", "Erro ao buscar documento do usuário", exception)
-            }
     }
 
     override fun onPerfilSelecionado(rede: String, papel: String) {
-        salvarRedeSelecionada(rede)
+        salvarPerfilSelecionado(rede, papel)
         navegarParaTelaCorreta(rede, papel)
     }
 
@@ -150,8 +159,8 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
     }
 
     private fun fazerLogout() {
-        auth.signOut()
-        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        firebaseAuth.signOut()
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         sharedPref.edit { clear() }
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -159,10 +168,12 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
         finish()
     }
 
-    private fun salvarRedeSelecionada(rede: String) {
-        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
+    // --- CORREÇÃO 3: Função unificada para guardar ambos os dados ---
+    private fun salvarPerfilSelecionado(rede: String, papel: String) {
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         sharedPref.edit {
             putString("REDE_SELECIONADA", rede)
+            putString("PAPEL_SELECIONADO", papel)
         }
     }
 
@@ -185,7 +196,6 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
         }
     }
 
-    // Anotação adicionada para remover o aviso de API
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun pedirPermissaoDeNotificacao() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
