@@ -3,7 +3,6 @@ package com.ibf.app.ui.relatorios
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -95,42 +94,41 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
 
     @SuppressLint("NotifyDataSetChanged")
     private fun carregarStatusDosRelatorios() {
-        val redeAtiva = redeSelecionada ?: run {
-            Log.e("LiderRelatorios", "redeSelecionada é nula em carregarStatusDosRelatorios()")
-            swipeRefreshLayout.isRefreshing = false
-            return
-        }
+        val usuarioAtual = auth.currentUser ?: return
+        val redeAtiva = redeSelecionada ?: return
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
+        // --- CORREÇÃO APLICADA AQUI ---
+        // 1. Definimos a nossa data de início
+        val dataInicio = Calendar.getInstance().apply {
+            set(2025, Calendar.JULY, 1, 0, 0, 0)
+        }.time
+
         firestore.collection("redes").whereEqualTo("nome", redeAtiva).get().addOnSuccessListener { redesDocs ->
-            if (redesDocs.isEmpty) {
-                Log.e("FirestoreError", "Nenhuma rede encontrada com o nome: $redeAtiva")
-                listaDeStatus.clear()
-                relatorioAdapter.notifyDataSetChanged()
-                return@addOnSuccessListener
-            }
-            val diaDaSemana = redesDocs.documents.first().getLong("diaDaSemana")?.toInt() ?: run {
-                Log.e("FirestoreError", "Dia da semana não encontrado para a rede: $redeAtiva")
-                return@addOnSuccessListener
-            }
+            if (redesDocs.isEmpty) { return@addOnSuccessListener }
+            val diaDaSemana = redesDocs.documents.first().getLong("diaDaSemana")?.toInt() ?: return@addOnSuccessListener
 
             firestore.collection("relatorios")
+                .whereEqualTo("autorUid", usuarioAtual.uid)
                 .whereEqualTo("idRede", redeAtiva)
                 .get().addOnSuccessListener { relatoriosDocs ->
                     val relatoriosEnviados = relatoriosDocs.mapNotNull { doc -> doc.toObject(Relatorio::class.java).apply { id = doc.id } }
                     val statusFinal = mutableListOf<StatusRelatorio>()
-                    val semanasParaVerificar = 20
+                    val semanasParaVerificar = 8
 
                     for (i in 0 until semanasParaVerificar) {
                         val dataEsperadaCal = Calendar.getInstance()
                         dataEsperadaCal.add(Calendar.WEEK_OF_YEAR, -i)
                         dataEsperadaCal.set(Calendar.DAY_OF_WEEK, diaDaSemana)
 
-                        if (dataEsperadaCal.time.after(Date())) continue
+                        // 2. Adicionamos a condição para ignorar datas anteriores a Julho
+                        if (dataEsperadaCal.time.before(dataInicio) || dataEsperadaCal.time.after(Date())) {
+                            continue
+                        }
 
                         val dataEsperadaStr = sdf.format(dataEsperadaCal.time)
-
                         val relatorioEncontrado = relatoriosEnviados.find { it.dataReuniao == dataEsperadaStr }
+
                         if (relatorioEncontrado != null) {
                             statusFinal.add(StatusRelatorio.Enviado(relatorioEncontrado))
                         } else {
@@ -139,17 +137,20 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
                     }
 
                     listaDeStatus.clear()
-                    listaDeStatus.addAll(statusFinal.sortedByDescending {
-                        when(it) {
-                            is StatusRelatorio.Enviado -> sdf.parse(it.relatorio.dataReuniao)
-                            is StatusRelatorio.Faltante -> sdf.parse(it.dataEsperada)
+                    val sortedList = statusFinal.sortedByDescending {
+                        try {
+                            when(it) {
+                                is StatusRelatorio.Enviado -> sdf.parse(it.relatorio.dataReuniao)
+                                is StatusRelatorio.Faltante -> sdf.parse(it.dataEsperada)
+                            }
+                        } catch (e: Exception) {
+                            Date(0)
                         }
-                    })
+                    }
+                    listaDeStatus.addAll(sortedList)
                     relatorioAdapter.notifyDataSetChanged()
-                    swipeRefreshLayout.isRefreshing = false
-                }.addOnFailureListener { e -> Log.e("FirestoreError", "Falha ao buscar relatorios", e) }
-                swipeRefreshLayout.isRefreshing = false
-        }.addOnFailureListener { e -> Log.e("FirestoreError", "Falha ao buscar redes", e) }
+                }
+        }
     }
 
     // --- CORREÇÃO AQUI: onitemClick para o líder ---
