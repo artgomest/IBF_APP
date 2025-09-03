@@ -233,5 +233,7 @@
     <string name="estatisticas_taxa_entrega">Taxa de Entrega (últimas 8 semanas)</string>
     <string name="estatisticas_placeholder_num">0</string>
     <string name="estatisticas_placeholder_percent">0%</string>
+    <string name="adicionar_novo_membro">Adicionar novo membro</string>
+    <string name="ver_agenda_de_discipulados">Ver agenda de discipulados</string>
 
 </resources>
