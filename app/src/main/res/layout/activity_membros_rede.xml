@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
+        <!-- Cabeçalho com Botão de Voltar e Calendário -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -45,10 +45,10 @@
                 android:layout_centerVertical="true"
                 android:padding="8dp"
                 android:contentDescription="Ver agenda de discipulados"
-                app:tint="@color/dark_text_primary"
-                tools:ignore="HardcodedText" />
+                app:tint="@color/dark_text_primary" />
         </RelativeLayout>
 
+        <!-- Lista de Membros -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_membros"
             android:layout_width="match_parent"
@@ -58,15 +58,16 @@
 
     </LinearLayout>
 
+    <!-- Botão Flutuante para Adicionar Membro -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_adicionar_membro"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:layout_gravity="end|bottom"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add_user"
         android:contentDescription="Adicionar novo membro"
         app:tint="@color/white"
-        app:backgroundTint="@color/dark_accent"
-        tools:ignore="HardcodedText" />
+        app:backgroundTint="@color/dark_accent" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
