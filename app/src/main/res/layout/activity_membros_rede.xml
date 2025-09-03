@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -44,7 +45,8 @@
                 android:layout_centerVertical="true"
                 android:padding="8dp"
                 android:contentDescription="Ver agenda de discipulados"
-                app:tint="@color/dark_text_primary" />
+                app:tint="@color/dark_text_primary"
+                tools:ignore="HardcodedText" />
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -59,12 +61,12 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_adicionar_membro"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
+        android:layout_height="wrap_content" android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add_user"
         android:contentDescription="Adicionar novo membro"
         app:tint="@color/white"
-        app:backgroundTint="@color/dark_accent" />
+        app:backgroundTint="@color/dark_accent"
+        tools:ignore="HardcodedText" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
