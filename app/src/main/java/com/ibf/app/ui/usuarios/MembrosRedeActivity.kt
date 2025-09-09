@@ -78,10 +78,12 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
                 for (document in documents) {
                     val uid = document.id
                     val nome = document.getString("nome") ?: "Nome Desconhecido"
+                    val dataNascimento = document.getString("dataNascimento")
+                    val statusAprovacao = document.getString("statusAprovacao") ?: "pendente"
                     val funcoes = document.get("funcoes") as? HashMap<String, String>
                     val papelNaRede = funcoes?.get(redeSelecionada)
                     if (papelNaRede != null) {
-                        usuariosDaRede.add(UsuarioRede(uid, nome, papelNaRede))
+                        usuariosDaRede.add(UsuarioRede(uid, nome, papelNaRede, statusAprovacao, dataNascimento))
                     }
                 }
                 adapter.atualizarLista(usuariosDaRede.sortedBy { it.nome })

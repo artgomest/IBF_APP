@@ -32,8 +32,7 @@ class UsuarioRedeAdapter(
     override fun onBindViewHolder(holder: UsuarioViewHolder, position: Int) {
         val usuario = listaUsuarios[position]
         holder.nome.text = usuario.nome
-        val papelFormatado = usuario.papel.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
-        holder.papel.text = holder.itemView.context.getString(R.string.papel_usuario_label_format, papelFormatado)
+        holder.dataNascimento.text = usuario.dataNascimento ?: "Não informada"
 
         holder.itemView.setOnClickListener {
             listener.onItemClick(usuario)
@@ -48,6 +47,6 @@ class UsuarioRedeAdapter(
 
     class UsuarioViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nome: TextView = itemView.findViewById(R.id.text_nome_usuario)
-        val papel: TextView = itemView.findViewById(R.id.text_papel_usuario)
+        val dataNascimento: TextView = itemView.findViewById(R.id.text_data_nascimento_usuario)
     }
 }
