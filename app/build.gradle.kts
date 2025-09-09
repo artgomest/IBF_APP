@@ -4,6 +4,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services") // Importante para o Firebase
+    jacoco
 }
 
 android {
@@ -21,6 +22,9 @@ android {
     }
 
     buildTypes {
+        getByName("debug") {
+            enableUnitTestCoverage = true
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -65,4 +69,37 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+}
+
+tasks.create<JacocoReport>("jacocoTestReport") {
+    group = "Reporting"
+    description = "Generate Jacoco test coverage report"
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+
+    val fileFilter = listOf(
+        "**/R.class",
+        "**/R$*.class",
+        "**/BuildConfig.*",
+        "**/Manifest*.*",
+        "**/*Test*.*",
+        "android/**/*.*"
+    )
+
+    val debugTree = fileTree("${buildDir}/tmp/kotlin-classes/debug") {
+        exclude(fileFilter)
+    }
+
+    val mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories.setFrom(files(mainSrc))
+    classDirectories.setFrom(files(debugTree))
+    executionData.setFrom(
+        fileTree(buildDir) {
+            include("outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec")
+        }
+    )
 }
