@@ -42,6 +42,7 @@
         <activity android:name=".ui.usuarios.SolicitacaoCadastroActivity" />
         <activity android:name=".ui.usuarios.DetalhesUsuarioActivity" />
         <activity android:name=".ui.perfil.PerfilActivity" />
+        <activity android:name=".ui.usuarios.FichaMembroActivity" />
 
         <service
             android:name=".services.MyFirebaseMessagingService"
