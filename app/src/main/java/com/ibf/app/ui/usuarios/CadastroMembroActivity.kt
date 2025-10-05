@@ -47,12 +47,21 @@ class CadastroMembroActivity : AppCompatActivity() {
     private lateinit var buttonBack: ImageView
 
     private val calendar = Calendar.getInstance()
+    private var redeSelecionada: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cadastro_membro)
 
         firestore = FirebaseFirestore.getInstance()
+        redeSelecionada = intent.getStringExtra("REDE_SELECIONADA")
+
+        if (redeSelecionada == null) {
+            Toast.makeText(this, "Erro: Rede não especificada.", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
+
         initializeViews()
         setupSpinner()
         setupListeners()
@@ -252,7 +261,7 @@ class CadastroMembroActivity : AppCompatActivity() {
             "escolaridade" to escolaridade,
             "nomePai" to nomePai,
             "nomeMae" to nomeMae,
-            "funcoes" to hashMapOf<String, String>() // Inicia sem papéis definidos
+            "funcoes" to hashMapOf(redeSelecionada!! to "Membro")
         )
 
         // Adiciona o novo membro à coleção 'usuarios'

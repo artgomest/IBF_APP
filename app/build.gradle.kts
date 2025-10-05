@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.firebase.messaging.ktx) // <-- LINHA ADICIONADA/CORRIGIDA
 
     // Suas outras dependências
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.20")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.viewpager2)
     implementation(libs.androidx.gridlayout)
