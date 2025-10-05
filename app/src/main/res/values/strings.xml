@@ -237,4 +237,79 @@
     <string name="ver_agenda_de_discipulados">Ver agenda de discipulados</string>
     <string name="membros_da_rede">Membros</string>
 
+    <string-array name="niveis_escolaridade">
+        <item>Selecione o Nível de Escolaridade</item>
+        <item>Ensino Fundamental Incompleto</item>
+        <item>Ensino Fundamental Completo</item>
+        <item>Ensino Médio Incompleto</item>
+        <item>Ensino Médio Completo</item>
+        <item>Ensino Superior Incompleto</item>
+        <item>Ensino Superior Completo</item>
+        <item>Pós-graduação</item>
+        <item>Mestrado</item>
+        <item>Doutorado</item>
+        <item>Outro</item>
+    </string-array>
+
+    <!-- Cadastro de Membro -->
+    <string name="cadastro_membro_titulo">Cadastrar Novo Membro</string>
+    <string name="cadastro_membro_botao_cadastrar">Cadastrar Membro</string>
+
+    <!-- Seções do Formulário -->
+    <string name="form_secao_dados_pessoais">Dados Pessoais</string>
+    <string name="form_secao_documentos">Identificação / Documentos</string>
+    <string name="form_secao_endereco_contato">Endereço &amp; Contato</string>
+    <string name="form_secao_escolaridade">Escolaridade / Formação</string>
+    <string name="form_secao_filiacao">Filiação</string>
+
+    <!-- Campos do Formulário - Dicas (Hints) -->
+    <string name="form_hint_email">Email</string>
+    <string name="form_hint_nome_completo">Nome Completo</string>
+    <string name="form_hint_data_nascimento">Data de Nascimento</string>
+    <string name="form_hint_naturalidade">Natural de (Estado/Cidade)</string>
+    <string name="form_hint_rg">RG</string>
+    <string name="form_hint_orgao_expedidor">Órgão Expedidor</string>
+    <string name="form_hint_cpf">CPF</string>
+    <string name="form_hint_nome_conjuge">Nome do Cônjuge</string>
+    <string name="form_hint_endereco">Endereço (Rua)</string>
+    <string name="form_hint_numero">Número</string>
+    <string name="form_hint_bairro">Bairro</string>
+    <string name="form_hint_cidade">Cidade</string>
+    <string name="form_hint_cep">CEP</string>
+    <string name="form_hint_celular">Telefone Celular</string>
+    <string name="form_hint_fixo">Telefone Fixo (Opcional)</string>
+    <string name="form_hint_escolaridade_outro">Especificar</string>
+    <string name="form_hint_nome_pai">Nome do Pai</string>
+    <string name="form_hint_nome_mae">Nome da Mãe</string>
+
+    <!-- Rótulos e Opções -->
+    <string name="form_label_sexo">Sexo</string>
+    <string name="form_opcao_masculino">Masculino</string>
+    <string name="form_opcao_feminino">Feminino</string>
+    <string name="form_label_estado_civil">Estado Civil</string>
+    <string name="form_opcao_solteiro">Solteiro(a)</string>
+    <string name="form_opcao_casado">Casado(a)</string>
+    <string name="form_opcao_divorciado">Divorciado(a)</string>
+    <string name="form_opcao_viuvo">Viúvo(a)</string>
+    <string name="form_label_nivel_escolaridade">Nível de Escolaridade</string>
+    <string name="form_opcao_escolaridade_outro">Outro</string>
+
+    <!-- Mensagens de Validação e Feedback -->
+    <string name="erro_rede_nao_especificada_cadastro">Erro: Rede não especificada.</string>
+    <string name="erro_validacao_nome_obrigatorio">Nome é obrigatório</string>
+    <string name="erro_validacao_email_obrigatorio">Email é obrigatório</string>
+    <string name="erro_validacao_email_invalido">E-mail inválido</string>
+    <string name="erro_validacao_data_nascimento_obrigatoria">Data de nascimento é obrigatória</string>
+    <string name="erro_validacao_cpf_obrigatorio">CPF é obrigatório</string>
+    <string name="erro_validacao_celular_obrigatorio">Celular é obrigatório</string>
+    <string name="erro_validacao_endereco_obrigatorio">Endereço é obrigatório</string>
+    <string name="erro_validacao_cidade_obrigatoria">Cidade é obrigatória</string>
+    <string name="erro_validacao_selecione_sexo">Selecione o sexo</string>
+    <string name="erro_validacao_selecione_estado_civil">Selecione o estado civil</string>
+    <string name="erro_validacao_selecione_escolaridade">Selecione o nível de escolaridade</string>
+    <string name="erro_validacao_corrija_erros">Por favor, corrija os erros indicados.</string>
+    <string name="sucesso_membro_cadastrado">Membro \'%1$s\' cadastrado com sucesso!</string>
+    <string name="erro_cadastrar_membro">Erro ao cadastrar membro: %s</string>
+    <string name="papel_membro">Membro</string>
+
 </resources>

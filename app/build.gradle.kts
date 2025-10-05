@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.firebase.messaging.ktx) // <-- LINHA ADICIONADA/CORRIGIDA
 
     // Suas outras dependências
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.20")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.viewpager2)
     implementation(libs.androidx.gridlayout)
@@ -59,6 +60,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
     implementation(libs.mpandroidchart)
+    implementation("com.redmadrobot:input-mask-android:7.2.4") // Para máscaras de entrada
 
 
     // Dependências de teste
