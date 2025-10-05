@@ -1,0 +1,212 @@
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    alias(libs.plugins.android.application)\r\n    kotlin(\"android\") version \"2.1.0\"\r\n    alias(libs.plugins.google.gms.google.services)\r\n\r\n}\r\n\r\nandroid {\r\n    namespace = \"com.ibf.app\"\r\n    compileSdk = 35\r\n\r\n    defaultConfig {\r\n        applicationId = \"com.ibf.app\"\r\n        minSdk = 24\r\n        targetSdk = 35\r\n        versionCode = 1\r\n        versionName = \"1.0\"\r\n\r\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            isMinifyEnabled = false\r\n            proguardFiles(\r\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\r\n                \"proguard-rules.pro\"\r\n            )\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility = JavaVersion.VERSION_1_8\r\n        targetCompatibility = JavaVersion.VERSION_1_8\r\n    }\r\n    kotlinOptions {\r\n        jvmTarget = \"1.8\"\r\n    }\r\n    buildFeatures {\r\n        viewBinding = true\r\n    }\r\n}\r\n\r\ndependencies {\r\n\r\n    implementation(platform(libs.firebase.bom))\r\n    implementation(libs.firebase.auth.ktx)\r\n    implementation(libs.firebase.firestore.ktx)\r\n    implementation(libs.firebase.messaging.ktx)\r\n\r\n    implementation(libs.androidx.core.ktx)\r\n    implementation(libs.androidx.appcompat)\r\n    implementation(libs.material)\r\n    implementation(libs.androidx.constraintlayout)\r\n    implementation(libs.androidx.activity)\r\n    implementation(libs.androidx.viewpager2)\r\n    implementation(libs.androidx.gridlayout)\r\n    implementation(libs.androidx.swiperefreshlayout)\r\n\r\n    implementation(libs.mpandroidchart)\r\n\r\n    testImplementation(libs.junit)\r\n    androidTestImplementation(libs.androidx.junit)\r\n    androidTestImplementation(libs.androidx.espresso.core)\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	(revision aab3717e4670cadd8c26c44bdac9021a56531ea4)
++++ b/app/build.gradle.kts	(date 1759685008780)
+@@ -1,8 +1,7 @@
+ plugins {
+     alias(libs.plugins.android.application)
+-    kotlin("android") version "2.1.0"
++    alias(libs.plugins.kotlin.android)
+     alias(libs.plugins.google.gms.google.services)
+-
+ }
+ 
+ android {
+@@ -28,33 +27,35 @@
+             )
+         }
+     }
++
+     compileOptions {
+         sourceCompatibility = JavaVersion.VERSION_1_8
+         targetCompatibility = JavaVersion.VERSION_1_8
+     }
++
+     kotlinOptions {
+         jvmTarget = "1.8"
+     }
++
+     buildFeatures {
+         viewBinding = true
+     }
+ }
+ 
+ dependencies {
+-
+-    implementation(platform(libs.firebase.bom))
+-    implementation(libs.firebase.auth.ktx)
+-    implementation(libs.firebase.firestore.ktx)
+-    implementation(libs.firebase.messaging.ktx)
+-
+-    implementation(libs.androidx.core.ktx)
+-    implementation(libs.androidx.appcompat)
++    implementation(libs.androidxCoreKtx)
++    implementation(libs.androidxAppcompat)
+     implementation(libs.material)
+-    implementation(libs.androidx.constraintlayout)
+-    implementation(libs.androidx.activity)
+-    implementation(libs.androidx.viewpager2)
+-    implementation(libs.androidx.gridlayout)
+-    implementation(libs.androidx.swiperefreshlayout)
++    implementation(libs.androidxConstraintlayout)
++    implementation(libs.androidxActivityKtx)
++    implementation(libs.androidxViewpager2)
++    implementation(libs.androidxGridlayout)
++    implementation(libs.androidxSwiperefreshlayout)
++
++    implementation(platform(libs.firebaseBom))
++    implementation(libs.firebaseAuthKtx)
++    implementation(libs.firebaseFirestoreKtx)
++    implementation(libs.firebaseMessagingKtx)
+ 
+     implementation(libs.mpandroidchart)
+ 
+@@ -62,4 +63,3 @@
+     androidTestImplementation(libs.androidx.junit)
+     androidTestImplementation(libs.androidx.espresso.core)
+ }
+-
+Index: build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\r\nplugins {\r\n    alias(libs.plugins.android.application) apply false\r\n    kotlin(\"android\") version \"2.1.0\"\r\n    alias(libs.plugins.google.gms.google.services) apply false\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build.gradle.kts b/build.gradle.kts
+--- a/build.gradle.kts	(revision aab3717e4670cadd8c26c44bdac9021a56531ea4)
++++ b/build.gradle.kts	(date 1759685120428)
+@@ -1,7 +1,12 @@
+-
+ plugins {
+-    alias(libs.plugins.android.application) apply false
+-    kotlin("android") version "2.1.0"
+-    alias(libs.plugins.google.gms.google.services) apply false
++    alias(libs.plugins.androidApplication)
++    alias(libs.plugins.kotlinAndroid)
++    alias(libs.plugins.googleServices)
+ }
+ 
++allprojects {
++    repositories {
++        google()
++        mavenCentral()
++    }
++}
+\ No newline at end of file
+Index: gradle/libs.versions.toml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[versions]\r\n# --- CORREÇÃO APLICADA AQUI ---\r\n# Alterado de \"8.10.1\" para uma versão estável e compatível.\r\nagp = \"8.10.1\"\r\nkotlin = \"2.1.0\"\r\ngoogleGmsGoogleServices = \"4.4.2\"\r\nfirebaseBom = \"33.15.0\"\r\n\r\n# Versões das bibliotecas AndroidX\r\ncoreKtx = \"1.16.0\"\r\njunit = \"4.13.2\"\r\njunitVersion = \"1.2.1\"\r\nespressoCore = \"3.6.1\"\r\nappcompat = \"1.7.1\"\r\nmaterial = \"1.12.0\"\r\nactivity = \"1.10.1\"\r\nconstraintlayout = \"2.2.1\"\r\ngridlayout = \"1.1.0\"\r\nswiperefreshlayout = \"1.1.0\"\r\nviewpager2 = \"1.1.0\"\r\n\r\n# Versões de outras bibliotecas\r\nmpandroidchart = \"v3.1.0\"\r\n\r\n[libraries]\r\n# --- Firebase ---\r\nfirebase-bom = { group = \"com.google.firebase\", name = \"firebase-bom\", version.ref = \"firebaseBom\" }\r\nfirebase-messaging-ktx = { group = \"com.google.firebase\", name = \"firebase-messaging-ktx\" }\r\nfirebase-analytics-ktx = { group = \"com.google.firebase\", name = \"firebase-analytics-ktx\" }\r\nfirebase-auth-ktx = { group = \"com.google.firebase\", name = \"firebase-auth-ktx\" }\r\nfirebase-firestore-ktx = { group = \"com.google.firebase\", name = \"firebase-firestore-ktx\" }\r\nandroidx-viewpager2 = { group = \"androidx.viewpager2\", name = \"viewpager2\", version.ref = \"viewpager2\" }\r\n\r\n# --- AndroidX ---\r\nandroidx-core-ktx = { group = \"androidx.core\", name = \"core-ktx\", version.ref = \"coreKtx\" }\r\nandroidx-gridlayout = { group = \"androidx.gridlayout\", name = \"gridlayout\", version.ref = \"gridlayout\" }\r\nandroidx-swiperefreshlayout = { group = \"androidx.swiperefreshlayout\", name = \"swiperefreshlayout\", version.ref = \"swiperefreshlayout\" }\r\nandroidx-appcompat = { group = \"androidx.appcompat\", name = \"appcompat\", version.ref = \"appcompat\" }\r\nandroidx-activity = { group = \"androidx.activity\", name = \"activity\", version.ref = \"activity\" }\r\nandroidx-constraintlayout = { group = \"androidx.constraintlayout\", name = \"constraintlayout\", version.ref = \"constraintlayout\" }\r\n\r\n# --- Testes ---\r\njunit = { group = \"junit\", name = \"junit\", version.ref = \"junit\" }\r\nandroidx-junit = { group = \"androidx.test.ext\", name = \"junit\", version.ref = \"junitVersion\" }\r\nandroidx-espresso-core = { group = \"androidx.test.espresso\", name = \"espresso-core\", version.ref = \"espressoCore\" }\r\n\r\n# --- Material Design ---\r\nmaterial = { group = \"com.google.android.material\", name = \"material\", version.ref = \"material\" }\r\n\r\n# --- Outras bibliotecas ---\r\nmpandroidchart = { group = \"com.github.PhilJay\", name = \"MPAndroidChart\", version.ref = \"mpandroidchart\" }\r\n\r\n[plugins]\r\nandroid-application = { id = \"com.android.application\", version.ref = \"agp\" }\r\nkotlin-android = { id = \"org.jetbrains.kotlin.android\", version.ref = \"kotlin\" }\r\ngoogle-gms-google-services = { id = \"com.google.gms.google-services\", version.ref = \"googleGmsGoogleServices\" }\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/gradle/libs.versions.toml b/gradle/libs.versions.toml
+--- a/gradle/libs.versions.toml	(revision aab3717e4670cadd8c26c44bdac9021a56531ea4)
++++ b/gradle/libs.versions.toml	(date 1759685096256)
+@@ -1,56 +1,31 @@
+ [versions]
+-# --- CORREÇÃO APLICADA AQUI ---
+-# Alterado de "8.10.1" para uma versão estável e compatível.
+-agp = "8.10.1"
++androidGradlePlugin = "8.3.0"
+ kotlin = "2.1.0"
+-googleGmsGoogleServices = "4.4.2"
+-firebaseBom = "33.15.0"
+-
+-# Versões das bibliotecas AndroidX
+-coreKtx = "1.16.0"
+-junit = "4.13.2"
+-junitVersion = "1.2.1"
+-espressoCore = "3.6.1"
+-appcompat = "1.7.1"
+-material = "1.12.0"
+-activity = "1.10.1"
+-constraintlayout = "2.2.1"
+-gridlayout = "1.1.0"
+-swiperefreshlayout = "1.1.0"
+-viewpager2 = "1.1.0"
+-
+-# Versões de outras bibliotecas
+-mpandroidchart = "v3.1.0"
+-
+-[libraries]
+-# --- Firebase ---
+-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+-firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
+-firebase-analytics-ktx = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+-firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx" }
+-firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx" }
+-androidx-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
+-
+-# --- AndroidX ---
+-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+-androidx-gridlayout = { group = "androidx.gridlayout", name = "gridlayout", version.ref = "gridlayout" }
+-androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
+-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+-androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+-androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+-
+-# --- Testes ---
+-junit = { group = "junit", name = "junit", version.ref = "junit" }
+-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+-
+-# --- Material Design ---
+-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+-
+-# --- Outras bibliotecas ---
+-mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version.ref = "mpandroidchart" }
++googleServices = "4.4.0"
++firebaseBom = "32.7.4"
+ 
+ [plugins]
+-android-application = { id = "com.android.application", version.ref = "agp" }
+-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+-google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
++androidApplication = { id = "com.android.application", version = "8.3.0" }
++kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "2.1.0" }
++googleServices = { id = "com.google.gms.google-services", version = "4.4.0" }
++
++[libraries]
++firebaseBom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
++firebaseAuthKtx = { group = "com.google.firebase", name = "firebase-auth-ktx" }
++firebaseFirestoreKtx = { group = "com.google.firebase", name = "firebase-firestore-ktx" }
++firebaseMessagingKtx = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
++
++androidxCoreKtx = { group = "androidx.core", name = "core-ktx", version = "1.12.0" }
++androidxAppcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
++material = { group = "com.google.android.material", name = "material", version = "1.12.0" }
++androidxConstraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version = "2.1.4" }
++androidxActivityKtx = { group = "androidx.activity", name = "activity-ktx", version = "1.8.2" }
++androidxViewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version = "1.0.0" }
++androidxGridlayout = { group = "androidx.gridlayout", name = "gridlayout", version = "1.0.0" }
++androidxSwiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version = "1.1.0" }
++
++mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version = "v3.1.0" }
++
++junit = { group = "junit", name = "junit", version = "4.13.2" }
++androidxJunit = { group = "androidx.test.ext", name = "junit", version = "1.1.5" }
++androidxEspressoCore = { group = "androidx.test.espresso", name = "espresso-core", version = "3.5.1" }
+Index: gradle.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># Project-wide Gradle settings.\r\n# IDE (e.g. Android Studio) users:\r\n# Gradle settings configured through the IDE *will override*\r\n# any settings specified in this file.\r\n# For more details on how to configure your build environment visit\r\n# http://www.gradle.org/docs/current/userguide/build_environment.html\r\n# Specifies the JVM arguments used for the daemon process.\r\n# The setting is particularly useful for tweaking memory settings.\r\norg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8\r\n# When configured, Gradle will run in incubating parallel mode.\r\n# This option should only be used with decoupled projects. For more details, visit\r\n# https://developer.android.com/r/tools/gradle-multi-project-decoupled-projects\r\n# org.gradle.parallel=true\r\n# AndroidX package structure to make it clearer which packages are bundled with the\r\n# Android operating system, and which are packaged with your app's APK\r\n# https://developer.android.com/topic/libraries/support-library/androidx-rn\r\nandroid.useAndroidX=true\r\n# Kotlin code style for this project: \"official\" or \"obsolete\":\r\nkotlin.code.style=official\r\n# Enables namespacing of each library's R class so that its R class includes only the\r\n# resources declared in the library itself and none from the library's dependencies,\r\n# thereby reducing the size of the R class for that library\r\nandroid.nonTransitiveRClass=true\r\nrg.gradle.java.home=C\\:\\\\IBF
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/gradle.properties b/gradle.properties
+--- a/gradle.properties	(revision aab3717e4670cadd8c26c44bdac9021a56531ea4)
++++ b/gradle.properties	(date 1759684698586)
+@@ -21,4 +21,3 @@
+ # resources declared in the library itself and none from the library's dependencies,
+ # thereby reducing the size of the R class for that library
+ android.nonTransitiveRClass=true
+-rg.gradle.java.home=C\:\\IBF
+\ No newline at end of file
