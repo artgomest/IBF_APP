@@ -1,9 +1,8 @@
-// build.gradle.kts (App:)
-
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.gms.google-services") // Importante para o Firebase
+    alias(libs.plugins.android.application)
+    kotlin("android") version "2.1.0"
+    alias(libs.plugins.google.gms.google.services)
+
 }
 
 android {
@@ -30,39 +29,37 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "1.8"
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
 dependencies {
-    // Importar o Firebase BOM primeiro para gerenciar as versões
-    // SEMPRE use 'platform()' ao importar o BOM
-    implementation(platform(libs.firebase.bom))
 
-    // As dependências individuais do Firebase, agora gerenciadas pelo BOM,
-    // não precisam mais da referência de versão aqui.
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.firestore.ktx)
-    implementation(libs.firebase.messaging.ktx) // <-- LINHA ADICIONADA/CORRIGIDA
+    implementation(libs.firebase.messaging.ktx)
 
-    // Suas outras dependências
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.activity)
     implementation(libs.androidx.viewpager2)
     implementation(libs.androidx.gridlayout)
     implementation(libs.androidx.swiperefreshlayout)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.material)
+
     implementation(libs.mpandroidchart)
 
-
-    // Dependências de teste
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
+

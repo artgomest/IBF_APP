@@ -10,4 +10,9 @@
     <string name="adicionar_novo_membro">Adicionar novo membro</string>
     <string name="ver_agenda_de_discipulados">Ver agenda de discipulados</string>
     <string name="membros_da_rede">Membros</string>
+    <string name="editar_dados_do_membro">Editar dados do membro</string>
+    <string name="salvar_altera_es">Salvar alterações</string>
+    <string name="ficha_do_membro">Ficha de membro</string>
+    <string name="nome_completo">Nome Completo</string>
+    <string name="data_de_nascimento">Data de nascimento</string>
 </resources>

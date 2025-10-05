@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="Theme.IBFAPP" parent="Theme.Material3.Dark.NoActionBar">
         <item name="colorPrimary">@color/dark_accent</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/dark_accent</item>
         <item name="colorOnSecondary">@color/black</item>
-        <item name="android:statusBarColor" tools:targetApi="21">@color/dark_background</item>
+        <item name="android:statusBarColor">@color/dark_background</item>
         <item name="android:windowBackground">@color/dark_background</item>
     </style>
 

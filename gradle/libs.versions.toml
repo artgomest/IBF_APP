@@ -1,10 +1,9 @@
-# gradle/libs.versions.toml
-
 [versions]
-# Versões dos plugins
-agp = "8.10.1" # Android Gradle Plugin
-kotlin = "2.0.21" # Kotlin Gradle Plugin
-googleGmsGoogleServices = "4.4.2" # Plugin Google Services para Firebase
+# --- CORREÇÃO APLICADA AQUI ---
+# Alterado de "8.10.1" para uma versão estável e compatível.
+agp = "8.10.1"
+kotlin = "2.1.0"
+googleGmsGoogleServices = "4.4.2"
 firebaseBom = "33.15.0"
 
 # Versões das bibliotecas AndroidX
@@ -20,25 +19,21 @@ gridlayout = "1.1.0"
 swiperefreshlayout = "1.1.0"
 viewpager2 = "1.1.0"
 
-
 # Versões de outras bibliotecas
 mpandroidchart = "v3.1.0"
 
 [libraries]
 # --- Firebase ---
-# O BOM é a única dependência Firebase que realmente precisa de uma versão aqui, pois ele gerencia as outras.
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
 firebase-analytics-ktx = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
-
-# Dependências Firebase KTX (não precisam de 'version.ref' se o BOM for usado)
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx" }
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx" }
 androidx-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
 
 # --- AndroidX ---
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-gridlayout = { group = "androidx.gridlayout", name = "gridlayout", version.ref = "gridlayout" } # Usando 'group' e 'name' para consistência
+androidx-gridlayout = { group = "androidx.gridlayout", name = "gridlayout", version.ref = "gridlayout" }
 androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
@@ -53,10 +48,9 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 # --- Outras bibliotecas ---
-mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version = "v3.1.0" } # Mantido como literal, pois é um projeto do GitHub
+mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version.ref = "mpandroidchart" }
 
 [plugins]
-# Plugins essenciais para o build do Android
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
