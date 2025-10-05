@@ -237,4 +237,18 @@
     <string name="ver_agenda_de_discipulados">Ver agenda de discipulados</string>
     <string name="membros_da_rede">Membros</string>
 
+    <string-array name="niveis_escolaridade">
+        <item>Selecione o Nível de Escolaridade</item>
+        <item>Ensino Fundamental Incompleto</item>
+        <item>Ensino Fundamental Completo</item>
+        <item>Ensino Médio Incompleto</item>
+        <item>Ensino Médio Completo</item>
+        <item>Ensino Superior Incompleto</item>
+        <item>Ensino Superior Completo</item>
+        <item>Pós-graduação</item>
+        <item>Mestrado</item>
+        <item>Doutorado</item>
+        <item>Outro</item>
+    </string-array>
+
 </resources>

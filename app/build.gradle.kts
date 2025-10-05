@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
     implementation(libs.mpandroidchart)
+    implementation("com.redmadrobot:input-mask-android:7.2.4") // Para máscaras de entrada
 
 
     // Dependências de teste
