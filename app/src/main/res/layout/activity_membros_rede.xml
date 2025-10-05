@@ -18,15 +18,17 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:paddingHorizontal="8dp">
+
             <ImageView
                 android:id="@+id/button_back"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_arrow_back"
                 android:layout_centerVertical="true"
-                android:padding="8dp"
                 android:contentDescription="@string/voltar"
+                android:padding="8dp"
+                android:src="@drawable/ic_arrow_back"
                 app:tint="@color/dark_text_primary" />
+
             <TextView
                 android:id="@+id/text_page_title"
                 android:layout_width="wrap_content"
@@ -35,27 +37,35 @@
                 android:text="@string/membros"
                 android:textColor="@color/dark_text_primary"
                 android:textSize="22sp"
-                android:textStyle="bold"
-                tools:ignore="RelativeOverlap" />
+                android:textStyle="bold" />
+
             <ImageView
                 android:id="@+id/button_ver_agenda"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_calendar"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:padding="8dp"
                 android:contentDescription="@string/ver_agenda_de_discipulados"
+                android:padding="8dp"
+                android:src="@drawable/ic_calendar"
                 app:tint="@color/dark_text_primary" />
         </RelativeLayout>
 
-        <!-- Lista de Membros -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_membros"
+        <!-- Wrapper para a funcionalidade "Puxar para Atualizar" -->
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="8dp"
-            tools:listitem="@layout/item_usuario_rede"/>
+            android:layout_height="match_parent">
+
+            <!-- Lista de Membros -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_membros"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                tools:listitem="@layout/item_usuario_rede" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 
@@ -67,8 +77,8 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add_user"
-        android:contentDescription="@string/adicionar_novo_membro"
+        android:contentDescription="@string/adicionar_novo_usuario_content_description"
         app:tint="@color/white"
-        app:backgroundTint="@color/dark_accent" />
+        app:backgroundTint="@color/dark_text_secondary" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

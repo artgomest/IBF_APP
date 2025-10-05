@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ibf.app.R
@@ -19,6 +20,7 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
 
     private lateinit var firestore: FirebaseFirestore
     private lateinit var adapter: UsuarioRedeAdapter
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private val listaUsuarios = mutableListOf<UsuarioRede>()
 
     private var redeSelecionada: String? = null
@@ -40,9 +42,11 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
 
         findViewById<ImageView>(R.id.button_back).setOnClickListener { finish() }
         findViewById<TextView>(R.id.text_page_title).text = "Membros da $redeSelecionada"
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
 
         setupRecyclerView()
         configurarBotoes()
+        setupSwipeToRefresh()
     }
 
     override fun onResume() {
@@ -59,8 +63,8 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
 
     private fun configurarBotoes() {
         findViewById<FloatingActionButton>(R.id.fab_adicionar_membro).setOnClickListener {
-            // CORREÇÃO: Aponta para a nova tela de cadastro de membro
             val intent = Intent(this, CadastroMembroActivity::class.java)
+            intent.putExtra("REDE_SELECIONADA", redeSelecionada)
             startActivity(intent)
         }
 
@@ -69,34 +73,51 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
         }
     }
 
+    private fun setupSwipeToRefresh() {
+        swipeRefreshLayout.setOnRefreshListener {
+            Log.d("MembrosRedeActivity", "Refresh acionado.")
+            carregarMembrosDaRede()
+        }
+    }
+
     private fun carregarMembrosDaRede() {
+        if (redeSelecionada == null) {
+            swipeRefreshLayout.isRefreshing = false
+            return
+        }
+
         firestore.collection("usuarios")
-            .whereEqualTo("funcoes.$redeSelecionada", "membro") // Exemplo, pode precisar de ajuste
+            .whereGreaterThan(com.google.firebase.firestore.FieldPath.of("funcoes", redeSelecionada!!), "")
             .get()
             .addOnSuccessListener { documents ->
                 val usuariosDaRede = mutableListOf<UsuarioRede>()
                 for (document in documents) {
                     val uid = document.id
                     val nome = document.getString("nome") ?: "Nome Desconhecido"
+
+                    @Suppress("UNCHECKED_CAST")
                     val funcoes = document.get("funcoes") as? HashMap<String, String>
                     val papelNaRede = funcoes?.get(redeSelecionada)
+
                     if (papelNaRede != null) {
                         usuariosDaRede.add(UsuarioRede(uid, nome, papelNaRede))
                     }
                 }
                 adapter.atualizarLista(usuariosDaRede.sortedBy { it.nome })
+                swipeRefreshLayout.isRefreshing = false // Para a animação de refresh
             }
             .addOnFailureListener { e ->
                 Log.e("MembrosRedeActivity", "Falha ao carregar membros: ${e.message}", e)
+                Toast.makeText(this, "Erro ao carregar membros.", Toast.LENGTH_SHORT).show()
+                swipeRefreshLayout.isRefreshing = false // Para a animação de refresh também em caso de erro
             }
     }
 
     override fun onItemClick(usuario: UsuarioRede) {
-        // Ação para abrir a "ficha" do membro
-        Toast.makeText(this, "Abrindo ficha de ${usuario.nome}", Toast.LENGTH_SHORT).show()
-        // No futuro:
-        // val intent = Intent(this, FichaMembroActivity::class.java)
-        // intent.putExtra("MEMBRO_ID", usuario.uid)
-        // startActivity(intent)
+        // Ação para abrir a "ficha" do membro, passando o seu ID
+        val intent = Intent(this, FichaMembroActivity::class.java)
+        intent.putExtra("MEMBRO_ID", usuario.uid)
+        startActivity(intent)
     }
 }
+

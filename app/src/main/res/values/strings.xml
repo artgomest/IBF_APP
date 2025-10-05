@@ -235,5 +235,6 @@
     <string name="estatisticas_placeholder_percent">0%</string>
     <string name="adicionar_novo_membro">Adicionar novo membro</string>
     <string name="ver_agenda_de_discipulados">Ver agenda de discipulados</string>
+    <string name="membros_da_rede">Membros</string>
 
 </resources>
