@@ -2,8 +2,8 @@
 
 [versions]
 # Versões dos plugins
-agp = "8.10.1" # Android Gradle Plugin
-kotlin = "2.0.21" # Kotlin Gradle Plugin
+agp = "8.4.0" # Android Gradle Plugin
+kotlin = "1.9.22" # Kotlin Gradle Plugin
 googleGmsGoogleServices = "4.4.2" # Plugin Google Services para Firebase
 firebaseBom = "33.15.0"
 

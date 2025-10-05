@@ -4,9 +4,9 @@ plugins {
     // Esses plugins são declarados aqui para serem utilizados por módulos como 'app'.
     // O 'apply false' indica que eles apenas se tornam disponíveis, mas não são
     // aplicados diretamente a este projeto raiz. Cada módulo os aplicará individualmente.
-    id("com.android.application") version "8.10.1" apply false
-    id("org.jetbrains.kotlin.android") version "2.0.21" apply false
-    id("com.google.gms.google-services") version "4.4.2" apply false
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.google.gms.google.services) apply false
     // Adicione quaisquer outros plugins que você gerencia via libs.versions.toml aqui.
 }
 
