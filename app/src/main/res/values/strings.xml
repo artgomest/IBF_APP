@@ -237,20 +237,6 @@
     <string name="ver_agenda_de_discipulados">Ver agenda de discipulados</string>
     <string name="membros_da_rede">Membros</string>
 
-    <string-array name="niveis_escolaridade">
-        <item>Selecione o Nível de Escolaridade</item>
-        <item>Ensino Fundamental Incompleto</item>
-        <item>Ensino Fundamental Completo</item>
-        <item>Ensino Médio Incompleto</item>
-        <item>Ensino Médio Completo</item>
-        <item>Ensino Superior Incompleto</item>
-        <item>Ensino Superior Completo</item>
-        <item>Pós-graduação</item>
-        <item>Mestrado</item>
-        <item>Doutorado</item>
-        <item>Outro</item>
-    </string-array>
-
     <!-- Cadastro de Membro -->
     <string name="cadastro_membro_titulo">Cadastrar Novo Membro</string>
     <string name="cadastro_membro_botao_cadastrar">Cadastrar Membro</string>
@@ -311,5 +297,19 @@
     <string name="sucesso_membro_cadastrado">Membro \'%1$s\' cadastrado com sucesso!</string>
     <string name="erro_cadastrar_membro">Erro ao cadastrar membro: %s</string>
     <string name="papel_membro">Membro</string>
+
+    <string-array name="niveis_escolaridade">
+        <item>Selecione o Nível de Escolaridade</item>
+        <item>Ensino Fundamental Incompleto</item>
+        <item>Ensino Fundamental Completo</item>
+        <item>Ensino Médio Incompleto</item>
+        <item>Ensino Médio Completo</item>
+        <item>Ensino Superior Incompleto</item>
+        <item>Ensino Superior Completo</item>
+        <item>Pós-graduação</item>
+        <item>Mestrado</item>
+        <item>Doutorado</item>
+        <item>@string/form_opcao_escolaridade_outro</item>
+    </string-array>
 
 </resources>

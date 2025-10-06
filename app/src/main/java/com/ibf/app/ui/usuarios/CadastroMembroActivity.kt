@@ -68,7 +68,6 @@ class CadastroMembroActivity : AppCompatActivity() {
     }
 
     private fun initializeViews() {
-        // ... (as inicializações permanecem as mesmas)
         editTextEmail = findViewById(R.id.edit_text_email)
         editTextNome = findViewById(R.id.edit_text_nome_membro)
         radioGroupSexo = findViewById(R.id.radio_group_sexo)
@@ -180,7 +179,7 @@ class CadastroMembroActivity : AppCompatActivity() {
             isValid = false
         }
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(editTextEmail.text.toString().trim()).matches()) {
+        if (editTextEmail.text.toString().trim().isNotEmpty() && !Patterns.EMAIL_ADDRESS.matcher(editTextEmail.text.toString().trim()).matches()) {
             editTextEmail.error = getString(R.string.erro_validacao_email_invalido)
             isValid = false
         }
