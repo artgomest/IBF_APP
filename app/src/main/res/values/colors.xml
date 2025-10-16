@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- New Light Theme Colors -->
+    <color name="light_background">#D6CDBE</color>
+    <color name="light_text_and_buttons">#090C11</color>
+    <color name="light_primary">#D6CDBE</color>
+    <color name="light_secondary">#090C11</color>
+    <color name="light_text_primary">#090C11</color>
+    <color name="light_text_secondary">#494949</color> <!-- A slightly lighter shade for secondary text -->
+    <color name="light_card_background">#FFFFFF</color> <!-- White for cards to stand out -->
+    <color name="light_divider">#E0E0E0</color>
+
+    <!-- Standard Colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="dark_background">#121212</color>
-    <color name="dark_card_background">#1E1E1E</color>
-    <color name="dark_text_primary">#FFFFFF</color>
-    <color name="dark_text_secondary">#B3B3B3</color>
-    <color name="dark_accent">#1DB954</color>
+
+    <!-- Status Colors (Kept from original) -->
     <color name="status_green">#4CAF50</color>
     <color name="status_red">#F44336</color>
-    <color name="design_default_color_primary">#737373</color>
-    <color name="design_default_color_secondary">#03DAC5</color>
-    <color name="dark_divider">#1FFFFFFF</color>
     <color name="status_green_dark_theme">#2E7D32</color>
     <color name="status_red_dark_theme">#C62828</color>
-    <color name="bottom_nav_selected">#1DB954</color>
-    <color name="bottom_nav_unselected">#B3B3B3</color>
+
+    <!-- Bottom Nav Colors (to be updated if needed) -->
+    <color name="bottom_nav_selected">@color/light_secondary</color>
+    <color name="bottom_nav_unselected">@color/light_text_secondary</color>
 </resources>
