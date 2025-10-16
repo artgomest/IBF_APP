@@ -1,19 +1,17 @@
-// build.gradle.kts (App:)
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.gms.google-services") // Importante para o Firebase
+    id("com.google.gms.google-services")
 }
 
 android {
     namespace = "com.ibf.app"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.ibf.app"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -30,41 +28,38 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "1.8"
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
 dependencies {
-    // Importar o Firebase BOM primeiro para gerenciar as versões
-    // SEMPRE use 'platform()' ao importar o BOM
-    implementation(platform(libs.firebase.bom))
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.appcompat:appcompat:1.6.1")
 
-    // As dependências individuais do Firebase, agora gerenciadas pelo BOM,
-    // não precisam mais da referência de versão aqui.
-    implementation(libs.firebase.auth.ktx)
-    implementation(libs.firebase.firestore.ktx)
-    implementation(libs.firebase.messaging.ktx) // <-- LINHA ADICIONADA/CORRIGIDA
+    // --- CORREÇÃO APLICADA AQUI ---
+    // Atualizado para a versão 1.12.0 para corresponder às ferramentas de compilação
+    // e resolver o erro de 'mergeDebugResources'.
+    implementation("com.google.android.material:material:1.12.0")
 
-    // Suas outras dependências
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.22")
-    implementation("com.redmadrobot:input-mask-android:7.2.4")
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.viewpager2)
-    implementation(libs.androidx.gridlayout)
-    implementation(libs.androidx.swiperefreshlayout)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.material)
-    implementation(libs.mpandroidchart)
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation("com.google.firebase:firebase-firestore-ktx:24.11.1")
+    implementation("com.google.firebase:firebase-firestore:24.11.1")
+    implementation("com.google.firebase:firebase-messaging:23.4.1")
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
-
-    // Dependências de teste
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
+
