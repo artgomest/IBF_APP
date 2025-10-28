@@ -236,6 +236,14 @@
     <string name="adicionar_novo_membro">Adicionar novo membro</string>
     <string name="ver_agenda_de_discipulados">Ver agenda de discipulados</string>
     <string name="membros_da_rede">Membros</string>
+    <string name="buscar_membro_hint">Buscar membros por nome ou papel</string>
+    <string name="total_membros_resumo_placeholder">Mostrando 0 de 0 membros</string>
+    <string name="total_membros_resumo">Mostrando %1$d de %2$d membros</string>
+    <string name="nenhum_membro_cadastrado">Ainda não há membros cadastrados nesta rede.</string>
+    <string name="nenhum_membro_encontrado_busca">Nenhum membro corresponde à busca atual.</string>
+    <string name="cadastrar_primeiro_membro">Cadastrar membro</string>
+    <string name="limpar_filtro">Limpar filtro</string>
+    <string name="empty_state_icon_content_description">Ilustração indicando lista de membros vazia</string>
 
     <!-- Cadastro de Membro -->
     <string name="cadastro_membro_titulo">Cadastrar Novo Membro</string>

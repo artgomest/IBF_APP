@@ -51,19 +51,114 @@
                 app:tint="@color/dark_text_primary" />
         </RelativeLayout>
 
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            app:cardBackgroundColor="@color/dark_surface_elevated"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/dark_surface_border"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout_buscar_membro"
+                    style="@style/Widget.Material3.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/buscar_membro_hint"
+                    app:boxBackgroundColor="@color/dark_surface_container"
+                    app:boxStrokeColor="@color/dark_surface_border"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text_buscar_membro"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionSearch"
+                        android:inputType="text"
+                        android:textColor="@color/dark_text_primary"
+                        android:textColorHint="@color/dark_text_secondary" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/text_total_membros"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/total_membros_resumo_placeholder"
+                    android:textColor="@color/dark_text_secondary"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
         <!-- Wrapper para a funcionalidade "Puxar para Atualizar" -->
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-            <!-- Lista de Membros -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_membros"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="8dp"
-                tools:listitem="@layout/item_usuario_rede" />
+                android:layout_height="match_parent">
+
+                <!-- Lista de Membros -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_membros"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    tools:listitem="@layout/item_usuario_rede" />
+
+                <LinearLayout
+                    android:id="@+id/layout_empty_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="32dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:layout_marginBottom="16dp"
+                        android:contentDescription="@string/empty_state_icon_content_description"
+                        android:src="@drawable/ic_membros"
+                        app:tint="@color/dark_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/text_empty_state_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/nenhum_membro_cadastrado"
+                        android:textColor="@color/dark_text_secondary"
+                        android:textSize="16sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_empty_state_action"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/cadastrar_primeiro_membro" />
+
+                </LinearLayout>
+
+            </FrameLayout>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
