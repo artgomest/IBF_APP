@@ -15,14 +15,13 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
 import com.ibf.app.R
+import com.ibf.app.data.repository.UsuarioRepository
 
 class CadastroUsuarioActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var firestore: FirebaseFirestore
+    private val repository = UsuarioRepository()
 
     private lateinit var textRedeCadastro: TextView
     private lateinit var editTextNome: TextInputEditText
@@ -39,7 +38,6 @@ class CadastroUsuarioActivity : AppCompatActivity() {
         setContentView(R.layout.activity_cadastro_usuario)
 
         auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
 
         findViewById<TextView>(R.id.text_page_title).text = getString(R.string.cadastro_de_usuario)
         findViewById<ImageView>(R.id.button_back).setOnClickListener { finish() }
@@ -157,7 +155,7 @@ class CadastroUsuarioActivity : AppCompatActivity() {
         val userData = hashMapOf(
             "nome" to nome, "email" to email, "funcoes" to funcoesMap, "redes" to listOf(rede)
         )
-        firestore.collection("usuarios").document(newUser.uid).set(userData)
+        repository.salvarNovoUsuario(newUser.uid, userData)
             .addOnSuccessListener {
                 Toast.makeText(this, getString(R.string.usuario_cadastrado_sucesso, nome, papel, rede), Toast.LENGTH_LONG).show()
                 finish()
@@ -170,7 +168,7 @@ class CadastroUsuarioActivity : AppCompatActivity() {
     }
 
     private fun buscarUsuarioExistenteParaAtualizarFuncao(email: String, nomeFormulario: String, novoPapel: String, novaRede: String) {
-        firestore.collection("usuarios").whereEqualTo("email", email).limit(1).get()
+        repository.buscarUsuarioPorEmail(email)
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
                     val doc = querySnapshot.documents.first()
@@ -207,10 +205,7 @@ class CadastroUsuarioActivity : AppCompatActivity() {
     }
 
     private fun adicionarFuncaoAUsuarioExistente(uid: String, novoPapel: String, novaRede: String, nome: String) {
-        val updates = hashMapOf<String, Any>(
-            "funcoes.$novaRede" to novoPapel, "redes" to FieldValue.arrayUnion(novaRede)
-        )
-        firestore.collection("usuarios").document(uid).update(updates)
+        repository.adicionarFuncao(uid, novaRede, novoPapel)
             .addOnSuccessListener {
                 Toast.makeText(this, getString(R.string.funcao_adicionada_sucesso, novoPapel, novaRede, nome), Toast.LENGTH_LONG).show()
                 finish()

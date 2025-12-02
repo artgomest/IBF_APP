@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.IBFAPP" parent="Theme.Material3.Dark.NoActionBar">
-        <item name="colorPrimary">@color/dark_accent</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/dark_accent</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <item name="android:statusBarColor">@color/dark_background</item>
-        <item name="android:windowBackground">@color/dark_background</item>
+    <style name="Theme.IBFAPP" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/app_icon</item>
+        <item name="colorOnPrimary">@color/app_button_text</item>
+        <item name="colorSecondary">@color/app_icon</item>
+        <item name="colorOnSecondary">@color/app_button_text</item>
+        <item name="android:statusBarColor">@color/app_background</item>
+        <item name="android:windowBackground">@color/app_background</item>
+        <item name="colorOnBackground">@color/app_text</item>
     </style>
 
     <style name="DashboardCard" parent="Widget.Material3.CardView.Elevated">
-        <item name="cardBackgroundColor">@color/dark_card_background</item>
+        <item name="cardBackgroundColor">@color/app_card_background</item>
         <item name="cardCornerRadius">16dp</item>
         <item name="cardElevation">0dp</item>
         <item name="android:clickable">true</item>
@@ -29,7 +30,7 @@
     <style name="DashboardCardTitle" parent="Widget.AppCompat.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/dark_text_primary</item>
+        <item name="android:textColor">@color/app_text</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -40,8 +41,8 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="cardCornerRadius">8dp</item>
         <item name="cardElevation">0dp</item>
-        <item name="cardBackgroundColor">@color/dark_card_background</item>
-        <item name="strokeColor">@color/dark_divider</item>
+        <item name="cardBackgroundColor">@color/app_card_background</item>
+        <item name="strokeColor">@color/app_divider</item>
         <item name="strokeWidth">1dp</item>
     </style>
 
@@ -57,7 +58,7 @@
     <style name="GraficoTitle" parent="Widget.AppCompat.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/dark_text_primary</item>
+        <item name="android:textColor">@color/app_text</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_marginBottom">8dp</item>
@@ -70,7 +71,7 @@
     <style name="GraficoValor">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/dark_accent</item>
+        <item name="android:textColor">@color/app_icon</item>
         <item name="android:textSize">28sp</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -79,7 +80,7 @@
     <style name="formLabel" parent="Widget.AppCompat.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/dark_text_secondary</item>
+        <item name="android:textColor">@color/app_text</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_marginBottom">4dp</item>
@@ -89,7 +90,7 @@
     <style name="formEditText" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/dark_text_primary</item>
+        <item name="android:textColor">@color/app_text</item>
         <item name="android:layout_marginBottom">16dp</item>
     </style>
 
@@ -99,8 +100,8 @@
         <item name="android:padding">12dp</item>
         <item name="android:layout_marginBottom">16dp</item>
         <item name="android:background">@drawable/edit_text_background</item>
-        <item name="android:textColor">@color/dark_text_primary</item>
-        <item name="android:textColorHint">@color/dark_text_secondary</item>
+        <item name="android:textColor">@color/app_text</item>
+        <item name="android:textColorHint">@color/app_text</item> <!-- Using app_text for hint too, maybe with alpha if possible, but keeping simple -->
     </style>
 
 </resources>

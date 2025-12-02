@@ -10,9 +10,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ibf.app.R
+import com.ibf.app.data.repository.RelatorioRepository
 import com.ibf.app.util.MoneyTextWatcher
 import java.text.DecimalFormat
 import java.text.NumberFormat
@@ -24,7 +24,7 @@ import java.util.Locale
 class FormularioRedeActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var firestore: FirebaseFirestore
+    private val repository = RelatorioRepository()
 
     private var relatorioId: String? = null
     private var redeSelecionada: String? = null
@@ -47,7 +47,6 @@ class FormularioRedeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_formulario_rede)
 
         auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
 
         editTextNome = findViewById(R.id.formNome)
         editTextRede = findViewById(R.id.formRede)
@@ -93,7 +92,7 @@ class FormularioRedeActivity : AppCompatActivity() {
             buttonEnviar.text = getString(R.string.form_button_enviar)
             // --- NOVO CÓDIGO: PREENCHER NOME DO USUÁRIO ---
             auth.currentUser?.uid?.let { uid ->
-                firestore.collection("usuarios").document(uid).get()
+                FirebaseFirestore.getInstance().collection("usuarios").document(uid).get() // Mantendo aqui por enquanto ou mover para UsuarioRepository
                     .addOnSuccessListener { document ->
                         val nomeUsuario = document.getString("nome")
                         if (!nomeUsuario.isNullOrEmpty()) {
@@ -147,7 +146,7 @@ class FormularioRedeActivity : AppCompatActivity() {
     }
 
     private fun carregarRelatorioExistente(id: String) {
-        firestore.collection("relatorios").document(id).get()
+        repository.carregarRelatorio(id)
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     editTextNome.setText(document.getString("autorNome") ?: "")
@@ -174,8 +173,6 @@ class FormularioRedeActivity : AppCompatActivity() {
     }
 
     private fun salvarRelatorio(relatorioIdParaSalvar: String?, relatorioDataMap: Map<String, Any>) {
-        val collectionRef = firestore.collection("relatorios")
-
         val dataFinalReuniao: String = dataPendente ?: SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
 
         val autorUid = auth.currentUser?.uid ?: ""
@@ -187,25 +184,20 @@ class FormularioRedeActivity : AppCompatActivity() {
             put("autorNome", autorNome)
             put("idRede", idRedeDoRelatorio)
             put("dataReuniao", dataFinalReuniao)
-            put("timestamp", FieldValue.serverTimestamp())
+            // Timestamp adicionado no Repository
         }
 
-        val saveTask = if (relatorioIdParaSalvar != null) {
-            collectionRef.document(relatorioIdParaSalvar).update(finalRelatorioData)
-        } else {
-            collectionRef.add(finalRelatorioData)
-        }
+        repository.salvarRelatorio(relatorioIdParaSalvar, finalRelatorioData)
+            .addOnSuccessListener { taskResult ->
+                val savedDocId: String = when (taskResult) {
+                    is DocumentReference -> taskResult.id
+                    else -> relatorioIdParaSalvar ?: "ID_DESCONHECIDO_UPDATE"
+                }
 
-        saveTask.addOnSuccessListener { taskResult ->
-            val savedDocId: String = when (taskResult) {
-                is DocumentReference -> taskResult.id
-                else -> relatorioIdParaSalvar ?: "ID_DESCONHECIDO_UPDATE"
+                Toast.makeText(this, getString(R.string.relatorio_salvo_sucesso, savedDocId), Toast.LENGTH_SHORT).show()
+                Log.d("FormularioRede", "Relatório salvo: ID ${savedDocId}, Dados: $finalRelatorioData")
+                finish()
             }
-
-            Toast.makeText(this, getString(R.string.relatorio_salvo_sucesso, savedDocId), Toast.LENGTH_SHORT).show()
-            Log.d("FormularioRede", "Relatório salvo: ID ${savedDocId}, Dados: $finalRelatorioData")
-            finish()
-        }
             .addOnFailureListener { e ->
                 Toast.makeText(this, getString(R.string.erro_salvar_relatorio, e.message), Toast.LENGTH_LONG).show()
                 Log.e("FormularioRede", "Erro ao salvar relatório", e)

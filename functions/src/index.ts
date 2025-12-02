@@ -8,8 +8,46 @@ admin.initializeApp();
 const db = admin.firestore();
 
 // =================================================================================
-// SUA FUNÇÃO ORIGINAL (INTACTA)
+// HELPERS
 // =================================================================================
+
+/**
+ * Envia notificações multicast para uma lista de tokens.
+ * @param tokens Lista de tokens FCM.
+ * @param title Título da notificação.
+ * @param body Corpo da notificação.
+ * @param data Dados opcionais para a notificação.
+ */
+async function enviarNotificacao(tokens: string[], title: string, body: string, data?: { [key: string]: string }) {
+  const tokensUnicos = [...new Set(tokens)].filter(Boolean);
+  if (tokensUnicos.length === 0) {
+    logger.info("Nenhum token válido para enviar notificação.");
+    return;
+  }
+
+  const message: admin.messaging.MulticastMessage = {
+    tokens: tokensUnicos,
+    notification: {
+      title,
+      body,
+    },
+    data,
+    android: { priority: "high", notification: { sound: "default" } },
+    apns: { payload: { aps: { sound: "default", contentAvailable: true } }, headers: { "apns-priority": "10" } },
+  };
+
+  try {
+    const response = await admin.messaging().sendEachForMulticast(message);
+    logger.info(`Notificação enviada. Sucesso: ${response.successCount}, Falhas: ${response.failureCount}`);
+  } catch (error) {
+    logger.error("Erro ao enviar notificação:", error);
+  }
+}
+
+// =================================================================================
+// FUNÇÕES
+// =================================================================================
+
 export const notificarNovoRelatorio = onDocumentCreated(
   "relatorios/{relatorioId}",
   async (event) => {
@@ -25,44 +63,25 @@ export const notificarNovoRelatorio = onDocumentCreated(
       logger.error("O relatório não contém autorNome ou idRede.", novoRelatorio);
       return;
     }
-    const tokens: string[] = [];
+
     try {
       const liderSnapshot = await db.collection("usuarios").where(`funcoes.${idRede}`, "==", "lider").get();
       const pastorSnapshot = await db.collection("usuarios").where("funcoes.geral", "==", "pastor").get();
-      liderSnapshot.forEach((doc) => {
-        const token = doc.data().fcmToken;
-        if (token) tokens.push(token);
-      });
-      pastorSnapshot.forEach((doc) => {
-        const token = doc.data().fcmToken;
-        if (token) tokens.push(token);
-      });
-      const tokensUnicos = [...new Set(tokens)];
-      if (tokensUnicos.length === 0) {
-        logger.info(`Nenhum token encontrado para notificar na rede ${idRede}.`);
-        return;
-      }
-      const message: admin.messaging.MulticastMessage = {
-        tokens: tokensUnicos,
-        notification: {
-          title: `Novo Relatório: ${idRede}`,
-          body: `O relatório da rede ${idRede} foi preenchido por ${autorNome}.`,
-        },
-        android: { priority: "high", notification: { sound: "default" } },
-        apns: { payload: { aps: { sound: "default", contentAvailable: true } }, headers: { "apns-priority": "10" } },
-      };
-      logger.info("Enviando notificação para os tokens:", tokensUnicos);
-      const response = await admin.messaging().sendEachForMulticast(message);
-      logger.info("Resultado do envio:", response);
+
+      const tokens: string[] = [];
+      liderSnapshot.forEach((doc) => tokens.push(doc.data().fcmToken));
+      pastorSnapshot.forEach((doc) => tokens.push(doc.data().fcmToken));
+
+      await enviarNotificacao(
+        tokens,
+        `Novo Relatório: ${idRede}`,
+        `O relatório da rede ${idRede} foi preenchido por ${autorNome}.`
+      );
     } catch (error) {
       logger.error("Erro ao buscar usuários ou enviar notificação:", error);
     }
   }
 );
-
-// =================================================================================
-// NOVAS FUNÇÕES PARA LEMBRETES
-// =================================================================================
 
 /**
  * [AGENDADA 1 - Roda todo dia 00:01]
@@ -114,35 +133,15 @@ export const lembreteDiaDaReuniao = onSchedule(
     for (const redeDoc of redesDeHoje.docs) {
       const nomeRede = redeDoc.id;
       const secretariosSnapshot = await db.collection("usuarios").where(`funcoes.${nomeRede}`, "==", "secretario").get();
-      const tokens = secretariosSnapshot.docs.map(doc => doc.data().fcmToken).filter(Boolean);
-      if (tokens.length > 0) {
-          // --- CORREÇÃO APLICADA AQUI ---
-          const payload = {
-            notification: {
-              title: `Lembrete: Reunião da ${nomeRede}`,
-              body: `Olá! A reunião da sua rede é hoje. Não se esqueça de preencher o relatório ao final. 😉`,
-            },
-            // Adicionando configuração de alta prioridade para Android e iOS
-            android: {
-              priority: "high" as const,
-              notification: {
-                sound: "default",
-              },
-            },
-            apns: {
-              payload: {
-                aps: {
-                  sound: "default",
-                },
-              },
-              headers: {
-                "apns-priority": "10",
-              },
-            },
-          };
+      const tokens = secretariosSnapshot.docs.map(doc => doc.data().fcmToken);
 
-          logger.info(`[LEMBRETE HOJE] Enviando notificação de ALTA PRIORIDADE para secretários da ${nomeRede}.`);
-        await admin.messaging().sendEachForMulticast({ tokens, notification: payload.notification });
+      if (tokens.length > 0) {
+        logger.info(`[LEMBRETE HOJE] Enviando notificação de ALTA PRIORIDADE para secretários da ${nomeRede}.`);
+        await enviarNotificacao(
+          tokens,
+          `Lembrete: Reunião da ${nomeRede}`,
+          `Olá! A reunião da sua rede é hoje. Não se esqueça de preencher o relatório ao final. 😉`
+        );
         logger.info(`Lembrete de reunião enviado para secretários da ${nomeRede}.`);
       }
     }
@@ -172,13 +171,14 @@ export const lembreteDePendencia = onSchedule(
     for (const doc of pendentesSnapshot.docs) {
       const nomeRede = doc.data().idRede;
       const secretariosSnapshot = await db.collection("usuarios").where(`funcoes.${nomeRede}`, "==", "secretario").get();
-      const tokens = secretariosSnapshot.docs.map(sDoc => sDoc.data().fcmToken).filter(Boolean);
+      const tokens = secretariosSnapshot.docs.map(sDoc => sDoc.data().fcmToken);
+
       if (tokens.length > 0) {
-        const payload = { notification: {
-          title: "Atenção: Relatório Pendente!",
-          body: `O relatório da ${nomeRede} de ontem ainda não foi preenchido. Por favor, envie o mais rápido possível.`,
-        }};
-        await admin.messaging().sendEachForMulticast({ tokens, notification: payload.notification });
+        await enviarNotificacao(
+          tokens,
+          "Atenção: Relatório Pendente!",
+          `O relatório da ${nomeRede} de ontem ainda não foi preenchido. Por favor, envie o mais rápido possível.`
+        );
         logger.info(`Notificação de pendência enviada para ${nomeRede}.`);
       }
     }
@@ -198,18 +198,14 @@ export const marcarRelatorioComoEntregue = onDocumentCreated(
 
     const novoRelatorio = snapshot.data();
     const idRede = novoRelatorio.idRede;
-    const dataReuniao = novoRelatorio.dataReuniao; 
-    
+    const dataReuniao = novoRelatorio.dataReuniao;
+
     const docIdControle = `${dataReuniao.replace(/\//g, "-")}_${idRede}`;
     const controleRef = db.collection("controleRelatorios").doc(docIdControle);
     await controleRef.update({ status: "entregue" });
     logger.info(`Status do relatório ${docIdControle} atualizado para 'entregue'.`);
   }
 );
-
-// =================================================================================
-// NOVA FUNÇÃO DE LEMBRETE PARA O DIA DA REUNIÃO
-// =================================================================================
 
 /**
  * [NOVA FUNÇÃO AGENDADA - Roda todo dia às 09:00]
@@ -251,24 +247,18 @@ export const lembreteReuniaoHoje = onSchedule(
           .collection("usuarios")
           .where(`funcoes.${nomeRede}`, "==", "secretario")
           .get();
-        
-        const tokens = secretariosSnapshot.docs
-            .map(doc => doc.data().fcmToken)
-            .filter(Boolean); // Filtra quaisquer tokens nulos ou vazios
+
+        const tokens = secretariosSnapshot.docs.map(doc => doc.data().fcmToken);
 
         if (tokens.length > 0) {
-          const payload = {
-            notification: {
-              title: `Lembrete: Reunião da ${nomeRede}`,
-              body: `Olá! A reunião da sua rede é hoje. Não se esqueça de preencher o relatório ao final.`,
-              sound: "default",
-            },
-          };
-
           logger.info(`[LEMBRETE HOJE] Enviando notificação para secretários da ${nomeRede}.`);
-          await admin.messaging().sendEachForMulticast({ tokens, notification: payload.notification });
+          await enviarNotificacao(
+            tokens,
+            `Lembrete: Reunião da ${nomeRede}`,
+            `Olá! A reunião da sua rede é hoje. Não se esqueça de preencher o relatório ao final.`
+          );
         } else {
-            logger.warn(`[LEMBRETE HOJE] Nenhum secretário com token encontrado para a ${nomeRede}.`);
+          logger.warn(`[LEMBRETE HOJE] Nenhum secretário com token encontrado para a ${nomeRede}.`);
         }
       }
     } catch (error) {

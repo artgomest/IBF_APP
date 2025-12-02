@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Semantic Colors (Dark Mode) -->
+    <color name="app_background">#181818</color>
+    <color name="app_text">#FFFFFF</color>
+    <color name="app_icon">#1F1F1F</color>
+    <color name="app_card_background">#181818</color>
+    <color name="app_button_text">#FFFFFF</color>
+    <color name="app_divider">#1FFFFFFF</color> <!-- 12% opacity white for divider -->
+    
+    <!-- Status Colors (Can adjust for dark mode if needed, keeping standard for now) -->
+    <color name="status_green">#4CAF50</color>
+    <color name="status_red">#F44336</color>
+</resources>
