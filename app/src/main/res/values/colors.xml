@@ -23,4 +23,15 @@
     <!-- Bottom Nav Colors (to be updated if needed) -->
     <color name="bottom_nav_selected">@color/light_secondary</color>
     <color name="bottom_nav_unselected">@color/light_text_secondary</color>
+
+    <!-- Dark Theme Palette -->
+    <color name="dark_background">#090C11</color>
+    <color name="dark_card_background">#11151E</color>
+    <color name="dark_surface_container">#141A26</color>
+    <color name="dark_surface_elevated">#171F2C</color>
+    <color name="dark_surface_border">#1E2636</color>
+    <color name="dark_text_primary">#F5F6FA</color>
+    <color name="dark_text_secondary">#A3ADC2</color>
+    <color name="dark_divider">#1E2636</color>
+    <color name="dark_accent">#4C7DFF</color>
 </resources>
