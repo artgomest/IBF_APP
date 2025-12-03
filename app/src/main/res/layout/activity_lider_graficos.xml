@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/dark_background"
+    android:background="@color/semantic_background"
     tools:context=".ui.graficos.LiderGraficosActivity">
 
     <RelativeLayout
@@ -21,14 +21,14 @@
             android:layout_centerVertical="true"
             android:padding="8dp"
             android:contentDescription="@string/voltar"
-            app:tint="@color/dark_text_primary" />
+            app:tint="@color/semantic_text_primary" />
         <TextView
             android:id="@+id/text_page_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/graficos"
-            android:textColor="@color/dark_text_primary"
+            android:textColor="@color/semantic_text_primary"
             android:textSize="22sp"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -52,8 +52,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    app:cardBackgroundColor="@color/dark_card_background"
-                    app:strokeColor="@color/dark_divider"
+                    app:cardBackgroundColor="@color/semantic_card_background"
+                    app:strokeColor="@color/semantic_divider"
                     app:strokeWidth="1dp"
                     app:cardCornerRadius="8dp">
                     <LinearLayout
@@ -65,7 +65,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/pessoas_por_culto"
-                            android:textColor="@color/dark_text_primary"
+                            android:textColor="@color/semantic_text_primary"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             android:layout_marginBottom="8dp"/>
@@ -85,8 +85,8 @@
                         android:layout_height="match_parent"
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
-                        app:cardBackgroundColor="@color/dark_card_background"
-                        app:strokeColor="@color/dark_divider"
+                        app:cardBackgroundColor="@color/semantic_card_background"
+                        app:strokeColor="@color/semantic_divider"
                         app:strokeWidth="1dp"
                         app:cardCornerRadius="8dp">
                         <LinearLayout
@@ -98,14 +98,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/media_por_culto"
-                                android:textColor="@color/dark_text_primary"
+                                android:textColor="@color/semantic_text_primary"
                                 android:textSize="16sp"
                                 android:textStyle="bold"/>
                             <TextView
                                 android:id="@+id/text_media_valor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/dark_accent"
+                                android:textColor="@color/semantic_accent"
                                 android:textSize="28sp"
                                 android:textStyle="bold"
                                 tools:text="35" />
@@ -117,8 +117,8 @@
                         android:layout_height="match_parent"
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
-                        app:cardBackgroundColor="@color/dark_card_background"
-                        app:strokeColor="@color/dark_divider"
+                        app:cardBackgroundColor="@color/semantic_card_background"
+                        app:strokeColor="@color/semantic_divider"
                         app:strokeWidth="1dp"
                         app:cardCornerRadius="8dp">
                         <LinearLayout
@@ -130,14 +130,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/visitantes"
-                                android:textColor="@color/dark_text_primary"
+                                android:textColor="@color/semantic_text_primary"
                                 android:textSize="16sp"
                                 android:textStyle="bold"/>
                             <TextView
                                 android:id="@+id/text_visitantes_valor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/dark_accent"
+                                android:textColor="@color/semantic_accent"
                                 android:textSize="28sp"
                                 android:textStyle="bold"
                                 tools:text="8" />
@@ -149,8 +149,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    app:cardBackgroundColor="@color/dark_card_background"
-                    app:strokeColor="@color/dark_divider"
+                    app:cardBackgroundColor="@color/semantic_card_background"
+                    app:strokeColor="@color/semantic_divider"
                     app:strokeWidth="1dp"
                     app:cardCornerRadius="8dp">
                     <LinearLayout
@@ -162,7 +162,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/ofertas_por_culto"
-                            android:textColor="@color/dark_text_primary"
+                            android:textColor="@color/semantic_text_primary"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             android:layout_marginBottom="8dp"/>

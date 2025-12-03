@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="semantic_background">@color/dark_background</color>
+    <color name="semantic_text_primary">@color/dark_text_primary</color>
+    <color name="semantic_text_secondary">@color/dark_text_secondary</color>
+    <color name="semantic_card_background">@color/dark_card_background</color>
+    <color name="semantic_input_background">@color/dark_card_background</color>
+    <color name="semantic_icon_tint">@color/dark_text_primary</color>
+    <color name="semantic_stroke">@color/dark_text_secondary</color>
+    <color name="semantic_accent">@color/dark_accent</color>
+    <color name="semantic_divider">@color/dark_divider</color>
+</resources>

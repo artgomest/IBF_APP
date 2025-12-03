@@ -24,4 +24,15 @@
     <color name="status_red_dark_theme">#C62828</color>
     <color name="bottom_nav_selected">#1DB954</color>
     <color name="bottom_nav_unselected">#B3B3B3</color>
+
+    <!-- Semantic Colors (Day) -->
+    <color name="semantic_background">@color/light_background</color>
+    <color name="semantic_text_primary">@color/light_text_icons</color>
+    <color name="semantic_text_secondary">#404040</color>
+    <color name="semantic_card_background">@color/white</color>
+    <color name="semantic_input_background">@color/white</color>
+    <color name="semantic_icon_tint">@color/light_text_icons</color>
+    <color name="semantic_stroke">@color/light_text_icons</color>
+    <color name="semantic_accent">@color/dark_accent</color>
+    <color name="semantic_divider">#1A000000</color>
 </resources>

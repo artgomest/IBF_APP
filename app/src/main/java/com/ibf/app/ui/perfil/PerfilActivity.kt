@@ -1,12 +1,14 @@
 package com.ibf.app.ui.perfil
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ibf.app.R
@@ -55,6 +57,16 @@ class PerfilActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.button_notificacoes).setOnClickListener { Toast.makeText(this, getString(R.string.em_breve), Toast.LENGTH_SHORT).show() }
         findViewById<Button>(R.id.button_ajuda).setOnClickListener { Toast.makeText(this, getString(R.string.em_breve), Toast.LENGTH_SHORT).show() }
+
+        findViewById<Button>(R.id.button_alternar_tema).setOnClickListener {
+            val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            val newMode = if (currentNightMode == Configuration.UI_MODE_NIGHT_NO) {
+                AppCompatDelegate.MODE_NIGHT_YES
+            } else {
+                AppCompatDelegate.MODE_NIGHT_NO
+            }
+            AppCompatDelegate.setDefaultNightMode(newMode)
+        }
     }
 
     private fun carregarDadosUsuario() {

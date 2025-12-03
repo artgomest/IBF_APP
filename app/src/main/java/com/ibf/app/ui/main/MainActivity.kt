@@ -1,6 +1,7 @@
 package com.ibf.app.ui.main
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -44,11 +45,12 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
             }
         }
 
+    // Login Automático RESTAURADO
     override fun onStart() {
         super.onStart()
         val currentUser = firebaseAuth.currentUser
         if (currentUser != null) {
-            val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
+            val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
             val redeSalva = sharedPref.getString("REDE_SELECIONADA", null)
             val papelSalvo = sharedPref.getString("PAPEL_SELECIONADO", null)
 
@@ -64,6 +66,8 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
 
         firebaseAuth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
+
+        // O "Kill Switch" foi removido daqui. O app volta ao comportamento normal.
 
         emailInput = findViewById(R.id.editTextEmailAddress)
         passwordInput = findViewById(R.id.editTextPassword)
@@ -118,17 +122,15 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
     private fun processarLogin() {
         val user = firebaseAuth.currentUser ?: return
 
-        // CORREÇÃO CRÍTICA: Lendo o documento
         firestore.collection("usuarios").document(user.uid).get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
                     val nomeUsuario = document.getString("nome") ?: getString(R.string.usuario_padrao)
 
-                    // 1. LER: Pega os dados como um Map genérico (seguro para qualquer implementação do Android)
+                    // LER: Pega os dados como um Map genérico (Mantemos essa proteção)
                     val dadosDoBanco = document.get("funcoes") as? Map<*, *>
 
-                    // 2. CONVERTER: Cria um NOVO HashMap explícito e copia apenas Strings
-                    // Isso garante que o objeto final seja 100% compatível com Serializable e com o resto do app
+                    // CONVERTER: Cria um NOVO HashMap explícito
                     val funcoes = HashMap<String, String>()
                     dadosDoBanco?.forEach { (key, value) ->
                         if (key is String && value is String) {
@@ -145,7 +147,6 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                     }
 
                     if (funcoes.size > 1) {
-                        // Agora 'funcoes' é um java.util.HashMap real, que funciona no putSerializable
                         val bottomSheet = SelecionarPerfilSheet.newInstance(funcoes, nomeUsuario)
                         bottomSheet.show(supportFragmentManager, "SelecionarPerfilSheet")
                     } else {
@@ -175,7 +176,7 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
 
     private fun fazerLogout() {
         firebaseAuth.signOut()
-        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         sharedPref.edit { clear() }
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -184,11 +185,11 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
     }
 
     private fun salvarPerfilSelecionado(rede: String, papel: String) {
-        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         sharedPref.edit {
             putString("REDE_SELECIONADA", rede)
             putString("PAPEL_SELECIONADO", papel)
-        }
+        }.apply() // Adicionei .apply() para garantir que salva imediatamente
     }
 
     private fun navegarParaTelaCorreta(rede: String, papel: String?) {

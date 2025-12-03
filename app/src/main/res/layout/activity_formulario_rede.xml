@@ -7,7 +7,7 @@
     android:paddingTop="?attr/actionBarSize"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/dark_background"
+    android:background="@color/semantic_background"
     tools:context=".ui.relatorios.FormularioRedeActivity">
 
     <RelativeLayout
@@ -21,7 +21,7 @@
             android:layout_centerVertical="true"
             android:padding="8dp"
             android:contentDescription="@string/voltar"
-            app:tint="@color/dark_text_primary" />
+            app:tint="@color/semantic_text_primary" />
 
         <TextView
             android:id="@+id/text_page_title"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/form_title"
-            android:textColor="@color/dark_text_primary"
+            android:textColor="@color/semantic_text_primary"
             android:textSize="22sp"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -50,7 +50,7 @@
                 android:text="@string/form_data_reuniao_placeholder"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/dark_text_primary"
+                android:textColor="@color/semantic_text_primary"
                 android:layout_marginBottom="16dp"/>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -58,13 +58,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/form_nome"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:textColorHint="@color/semantic_text_secondary"
+                app:hintTextColor="@color/semantic_text_secondary"
+                app:boxStrokeColor="@color/semantic_stroke">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/formNome"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:textColor="@color/dark_text_primary"/>
+                    android:textColor="@color/semantic_text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -72,14 +75,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/form_rede"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:textColorHint="@color/semantic_text_secondary"
+                app:hintTextColor="@color/semantic_text_secondary"
+                app:boxStrokeColor="@color/semantic_stroke">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/formRede"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:focusable="false"
-                    android:textColor="@color/dark_text_primary"/>
+                    android:textColor="@color/semantic_text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -87,7 +93,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/form_descricao_culto"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:textColorHint="@color/semantic_text_secondary"
+                app:hintTextColor="@color/semantic_text_secondary"
+                app:boxStrokeColor="@color/semantic_stroke">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/formDescricao"
                     android:layout_width="match_parent"
@@ -95,7 +104,7 @@
                     android:inputType="textMultiLine"
                     android:lines="4"
                     android:gravity="top|start"
-                    android:textColor="@color/dark_text_primary"/>
+                    android:textColor="@color/semantic_text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -103,13 +112,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/form_total_pessoas"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:textColorHint="@color/semantic_text_secondary"
+                app:hintTextColor="@color/semantic_text_secondary"
+                app:boxStrokeColor="@color/semantic_stroke">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/formPessoas"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:textColor="@color/dark_text_primary"/>
+                    android:textColor="@color/semantic_text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -117,13 +129,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/form_total_visitantes"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:textColorHint="@color/semantic_text_secondary"
+                app:hintTextColor="@color/semantic_text_secondary"
+                app:boxStrokeColor="@color/semantic_stroke">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/formVisitantes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:textColor="@color/dark_text_primary"/>
+                    android:textColor="@color/semantic_text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -131,13 +146,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/form_valor_oferta"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:textColorHint="@color/semantic_text_secondary"
+                app:hintTextColor="@color/semantic_text_secondary"
+                app:boxStrokeColor="@color/semantic_stroke">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/formOferta"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
-                    android:textColor="@color/dark_text_primary"/>
+                    android:textColor="@color/semantic_text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -145,7 +163,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/form_comentarios"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="24dp"
+                android:textColorHint="@color/semantic_text_secondary"
+                app:hintTextColor="@color/semantic_text_secondary"
+                app:boxStrokeColor="@color/semantic_stroke">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/formComentarios"
                     android:layout_width="match_parent"
@@ -153,7 +174,7 @@
                     android:inputType="textMultiLine"
                     android:lines="3"
                     android:gravity="top|start"
-                    android:textColor="@color/dark_text_primary"/>
+                    android:textColor="@color/semantic_text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button

@@ -1,0 +1,271 @@
+Index: app/src/main/java/com/ibf/app/ui/main/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.ibf.app.ui.main\r\n\r\nimport android.content.Context\r\nimport android.content.Intent\r\nimport android.os.Bundle\r\nimport android.util.Log\r\nimport android.widget.Button\r\nimport android.widget.EditText\r\nimport android.widget.Toast\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport androidx.core.content.edit\r\nimport com.google.firebase.auth.FirebaseAuth\r\nimport com.google.firebase.firestore.FirebaseFirestore\r\nimport com.ibf.app.R\r\nimport com.ibf.app.ui.dashboard.LiderDashboardActivity\r\nimport com.ibf.app.ui.dashboard.PastorDashboardActivity\r\nimport com.ibf.app.ui.dashboard.SecretarioDashboardActivity\r\nimport com.ibf.app.ui.shared.SelecionarPerfilSheet\r\n\r\nclass MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionadoListener {\r\n\r\n    private lateinit var firebaseAuth: FirebaseAuth\r\n    private lateinit var firestore: FirebaseFirestore\r\n    private lateinit var emailInput: EditText\r\n    private lateinit var passwordInput: EditText\r\n    private lateinit var loginButton: Button\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(R.layout.activity_main)\r\n\r\n        firebaseAuth = FirebaseAuth.getInstance()\r\n        firestore = FirebaseFirestore.getInstance()\r\n\r\n        emailInput = findViewById(R.id.editTextEmailAddress)\r\n        passwordInput = findViewById(R.id.editTextPassword)\r\n        loginButton = findViewById(R.id.buttonLogin)\r\n\r\n        loginButton.setOnClickListener {\r\n            val email = emailInput.text.toString().trim()\r\n            val password = passwordInput.text.toString().trim()\r\n\r\n            if (email.isEmpty() || password.isEmpty()) {\r\n                Toast.makeText(this, getString(R.string.preencher_todos_campos), Toast.LENGTH_SHORT).show()\r\n                return@setOnClickListener\r\n            }\r\n\r\n            firebaseAuth.signInWithEmailAndPassword(email, password)\r\n                .addOnCompleteListener(this) { task ->\r\n                    if (task.isSuccessful) {\r\n                        processarLogin()\r\n                    } else {\r\n                        Toast.makeText(this, getString(R.string.falha_login_credenciais), Toast.LENGTH_SHORT).show()\r\n                    }\r\n                }\r\n        }\r\n    }\r\n\r\n    private fun processarLogin() {\r\n        val user = firebaseAuth.currentUser ?: return\r\n\r\n        firestore.collection(\"usuarios\").document(user.uid).get()\r\n            .addOnSuccessListener { document ->\r\n                if (document != null && document.exists()) {\r\n                    val nomeUsuario = document.getString(\"nome\") ?: getString(R.string.usuario_padrao)\r\n                    @Suppress(\"UNCHECKED_CAST\")\r\n                    val funcoes = document.get(\"funcoes\") as? HashMap<String, String>\r\n\r\n                    if (funcoes.isNullOrEmpty()) {\r\n                        Toast.makeText(this, getString(R.string.usuario_sem_papeis_definidos), Toast.LENGTH_LONG).show()\r\n                        firebaseAuth.signOut()\r\n                        return@addOnSuccessListener\r\n                    }\r\n\r\n                    if (funcoes.size > 1) {\r\n                        val bottomSheet = SelecionarPerfilSheet.newInstance(funcoes, nomeUsuario)\r\n                        bottomSheet.show(supportFragmentManager, \"SelecionarPerfilSheet\")\r\n                    } else {\r\n                        val (rede, papel) = funcoes.entries.first()\r\n                        salvarRedeSelecionada(rede)\r\n                        navegarParaTelaCorreta(rede, papel)\r\n                    }\r\n                } else {\r\n                    Toast.makeText(this, getString(R.string.dados_usuario_nao_encontrados), Toast.LENGTH_LONG).show()\r\n                    firebaseAuth.signOut()\r\n                }\r\n            }\r\n            .addOnFailureListener { exception ->\r\n                Toast.makeText(this, getString(R.string.erro_buscar_dados, exception.message), Toast.LENGTH_SHORT).show()\r\n                Log.e(\"LOGIN_ERROR\", \"Erro ao buscar documento do usuário\", exception)\r\n            }\r\n    }\r\n\r\n    override fun onPerfilSelecionado(rede: String, papel: String) {\r\n        Toast.makeText(this, getString(R.string.entrando_como_papel_rede, papel, rede), Toast.LENGTH_SHORT).show()\r\n        salvarRedeSelecionada(rede)\r\n        navegarParaTelaCorreta(rede, papel)\r\n    }\r\n\r\n    override fun onLogoutSelecionado() {\r\n        // Na tela de login, o logout não faz nada\r\n    }\r\n\r\n    private fun salvarRedeSelecionada(rede: String) {\r\n        val sharedPref = getSharedPreferences(\"app_prefs\", Context.MODE_PRIVATE)\r\n        sharedPref.edit {\r\n            putString(\"REDE_SELECIONADA\", rede)\r\n        }\r\n    }\r\n\r\n    private fun navegarParaTelaCorreta(rede: String, papel: String?) {\r\n        val intent = when (papel) {\r\n            \"pastor\" -> Intent(this, PastorDashboardActivity::class.java)\r\n            \"lider\" -> Intent(this, LiderDashboardActivity::class.java)\r\n            \"secretario\" -> Intent(this, SecretarioDashboardActivity::class.java)\r\n            else -> null\r\n        }\r\n\r\n        if (intent != null) {\r\n            intent.putExtra(\"REDE_SELECIONADA\", rede)\r\n            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK\r\n            startActivity(intent)\r\n            finish()\r\n        } else {\r\n            Toast.makeText(this, getString(R.string.papel_desconhecido, papel), Toast.LENGTH_LONG).show()\r\n            firebaseAuth.signOut()\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ibf/app/ui/main/MainActivity.kt b/app/src/main/java/com/ibf/app/ui/main/MainActivity.kt
+--- a/app/src/main/java/com/ibf/app/ui/main/MainActivity.kt	(revision 30c6e77b874ee3a95649429a7e851429c7285985)
++++ b/app/src/main/java/com/ibf/app/ui/main/MainActivity.kt	(date 1764738058171)
+@@ -1,21 +1,31 @@
+ package com.ibf.app.ui.main
+ 
++import android.Manifest
+ import android.content.Context
+ import android.content.Intent
++import android.content.pm.PackageManager
++import android.os.Build
+ import android.os.Bundle
+ import android.util.Log
+ import android.widget.Button
+ import android.widget.EditText
++import android.widget.TextView
+ import android.widget.Toast
++import androidx.activity.result.contract.ActivityResultContracts
++import androidx.annotation.RequiresApi
+ import androidx.appcompat.app.AppCompatActivity
++import androidx.core.content.ContextCompat
+ import androidx.core.content.edit
+ import com.google.firebase.auth.FirebaseAuth
+ import com.google.firebase.firestore.FirebaseFirestore
++import com.google.firebase.firestore.SetOptions
++import com.google.firebase.messaging.FirebaseMessaging
+ import com.ibf.app.R
+ import com.ibf.app.ui.dashboard.LiderDashboardActivity
+ import com.ibf.app.ui.dashboard.PastorDashboardActivity
+ import com.ibf.app.ui.dashboard.SecretarioDashboardActivity
+ import com.ibf.app.ui.shared.SelecionarPerfilSheet
++import com.ibf.app.ui.usuarios.SolicitacaoCadastroActivity
+ 
+ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionadoListener {
+ 
+@@ -24,17 +34,52 @@
+     private lateinit var emailInput: EditText
+     private lateinit var passwordInput: EditText
+     private lateinit var loginButton: Button
++    private lateinit var textCadastreSe: TextView
++
++    private val requestPermissionLauncher =
++        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
++            if (isGranted) {
++                Toast.makeText(this, "Permissão para notificações concedida!", Toast.LENGTH_SHORT).show()
++            } else {
++                Toast.makeText(this, "Permissão para notificações negada.", Toast.LENGTH_SHORT).show()
++            }
++        }
++
++    /*
++    override fun onStart() {
++        super.onStart()
++        // --- CORREÇÃO 1: VERIFICAÇÃO DE SESSÃO ATIVA ---
++        val currentUser = firebaseAuth.currentUser
++        if (currentUser != null) {
++            // Se há um utilizador logado, tenta navegar para o seu último perfil guardado.
++            val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
++            val redeSalva = sharedPref.getString("REDE_SELECIONADA", null)
++            val papelSalvo = sharedPref.getString("PAPEL_SELECIONADO", null)
++
++            if (redeSalva != null && papelSalvo != null) {
++                navegarParaTelaCorreta(redeSalva, papelSalvo)
++            }
++            // Se não houver perfil guardado, o utilizador permanecerá na tela de login.
++        }
++    }
++    */
+ 
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         setContentView(R.layout.activity_main)
+ 
+         firebaseAuth = FirebaseAuth.getInstance()
++
++        // --- KILL SWITCH: Forçar logout e limpeza de preferências ---
++        firebaseAuth.signOut()
++        getSharedPreferences("app_prefs", Context.MODE_PRIVATE).edit().clear().apply()
++
+         firestore = FirebaseFirestore.getInstance()
+ 
+         emailInput = findViewById(R.id.editTextEmailAddress)
+         passwordInput = findViewById(R.id.editTextPassword)
+         loginButton = findViewById(R.id.buttonLogin)
++        textCadastreSe = findViewById(R.id.textcadastreSe)
+ 
+         loginButton.setOnClickListener {
+             val email = emailInput.text.toString().trim()
+@@ -48,17 +93,41 @@
+             firebaseAuth.signInWithEmailAndPassword(email, password)
+                 .addOnCompleteListener(this) { task ->
+                     if (task.isSuccessful) {
++                        task.result?.user?.uid?.let { uid ->
++                            salvarTokenDoDispositivo(uid)
++                        }
+                         processarLogin()
+                     } else {
+                         Toast.makeText(this, getString(R.string.falha_login_credenciais), Toast.LENGTH_SHORT).show()
+                     }
+                 }
+         }
++        textCadastreSe.setOnClickListener {
++            val intent = Intent(this, SolicitacaoCadastroActivity::class.java)
++            startActivity(intent)
++        }
++
++        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
++            pedirPermissaoDeNotificacao()
++        }
++    }
++
++    private fun salvarTokenDoDispositivo(uid: String) {
++        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
++            if (!task.isSuccessful) {
++                Log.w("MainActivity", "Falha ao obter token do FCM.", task.exception)
++                return@addOnCompleteListener
++            }
++            val token = task.result
++            val userDocument = firestore.collection("usuarios").document(uid)
++            userDocument.set(mapOf("fcmToken" to token), SetOptions.merge())
++                .addOnSuccessListener { Log.d("MainActivity", "Token FCM salvo para o utilizador: $uid") }
++                .addOnFailureListener { e -> Log.e("MainActivity", "Erro ao salvar token FCM", e) }
++        }
+     }
+ 
+     private fun processarLogin() {
+         val user = firebaseAuth.currentUser ?: return
+-
+         firestore.collection("usuarios").document(user.uid).get()
+             .addOnSuccessListener { document ->
+                 if (document != null && document.exists()) {
+@@ -77,7 +146,7 @@
+                         bottomSheet.show(supportFragmentManager, "SelecionarPerfilSheet")
+                     } else {
+                         val (rede, papel) = funcoes.entries.first()
+-                        salvarRedeSelecionada(rede)
++                        salvarPerfilSelecionado(rede, papel)
+                         navegarParaTelaCorreta(rede, papel)
+                     }
+                 } else {
+@@ -85,26 +154,33 @@
+                     firebaseAuth.signOut()
+                 }
+             }
+-            .addOnFailureListener { exception ->
+-                Toast.makeText(this, getString(R.string.erro_buscar_dados, exception.message), Toast.LENGTH_SHORT).show()
+-                Log.e("LOGIN_ERROR", "Erro ao buscar documento do usuário", exception)
+-            }
+     }
+ 
+     override fun onPerfilSelecionado(rede: String, papel: String) {
+-        Toast.makeText(this, getString(R.string.entrando_como_papel_rede, papel, rede), Toast.LENGTH_SHORT).show()
+-        salvarRedeSelecionada(rede)
++        salvarPerfilSelecionado(rede, papel)
+         navegarParaTelaCorreta(rede, papel)
+     }
+ 
+     override fun onLogoutSelecionado() {
+-        // Na tela de login, o logout não faz nada
++        fazerLogout()
+     }
+ 
+-    private fun salvarRedeSelecionada(rede: String) {
++    private fun fazerLogout() {
++        firebaseAuth.signOut()
++        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
++        sharedPref.edit { clear() }
++        val intent = Intent(this, MainActivity::class.java)
++        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
++        startActivity(intent)
++        finish()
++    }
++
++    // --- CORREÇÃO 3: Função unificada para guardar ambos os dados ---
++    private fun salvarPerfilSelecionado(rede: String, papel: String) {
+         val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+         sharedPref.edit {
+             putString("REDE_SELECIONADA", rede)
++            putString("PAPEL_SELECIONADO", papel)
+         }
+     }
+ 
+@@ -126,4 +202,13 @@
+             firebaseAuth.signOut()
+         }
+     }
++
++    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
++    private fun pedirPermissaoDeNotificacao() {
++        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
++            PackageManager.PERMISSION_GRANTED
++        ) {
++            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
++        }
++    }
+ }
+\ No newline at end of file
+Index: settings.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Top-level build file where you can add configuration options common to all sub-projects/modules.\r\npluginManagement {\r\n    repositories {\r\n        google { // Repositório Maven do Google para plugins\r\n            content {\r\n                includeGroupByRegex(\"com\\\\.android.*\")\r\n                includeGroupByRegex(\"com\\\\.google.*\")\r\n                includeGroupByRegex(\"androidx.*\")\r\n            }\r\n        }\r\n        mavenCentral()\r\n        gradlePluginPortal()\r\n    }\r\n}\r\ndependencyResolutionManagement {\r\n    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)\r\n        repositories {\r\n            google() // <--- CORREÇÃO AQUI: Adiciona o repositório Google explicitamente\r\n            mavenCentral()\r\n            maven { url = uri(\"https://jitpack.io\") } // Para MPAndroidChart, por exemplo\r\n        }\r\n}\r\n\r\nrootProject.name = \"IBF APP\"\r\ninclude(\":app\")\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/settings.gradle.kts b/settings.gradle.kts
+--- a/settings.gradle.kts	(revision 30c6e77b874ee3a95649429a7e851429c7285985)
++++ b/settings.gradle.kts	(date 1764737490211)
+@@ -1,13 +1,7 @@
+ // Top-level build file where you can add configuration options common to all sub-projects/modules.
+ pluginManagement {
+     repositories {
+-        google { // Repositório Maven do Google para plugins
+-            content {
+-                includeGroupByRegex("com\\.android.*")
+-                includeGroupByRegex("com\\.google.*")
+-                includeGroupByRegex("androidx.*")
+-            }
+-        }
++        google()
+         mavenCentral()
+         gradlePluginPortal()
+     }
+@@ -15,7 +9,7 @@
+ dependencyResolutionManagement {
+     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+         repositories {
+-            google() // <--- CORREÇÃO AQUI: Adiciona o repositório Google explicitamente
++            google()
+             mavenCentral()
+             maven { url = uri("https://jitpack.io") } // Para MPAndroidChart, por exemplo
+         }
+Index: .idea/deploymentTargetSelector.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"deploymentTargetSelector\">\r\n    <selectionStates>\r\n      <SelectionState runConfigName=\"app\">\r\n        <option name=\"selectionMode\" value=\"DROPDOWN\" />\r\n        <DropdownSelection timestamp=\"2025-06-15T18:07:46.518648900Z\">\r\n          <Target type=\"DEFAULT_BOOT\">\r\n            <handle>\r\n              <DeviceId pluginId=\"PhysicalDevice\" identifier=\"serial=RQCW40608ZD\" />\r\n            </handle>\r\n          </Target>\r\n        </DropdownSelection>\r\n        <DialogSelection>\r\n          <targets>\r\n            <Target type=\"DEFAULT_BOOT\">\r\n              <handle>\r\n                <DeviceId pluginId=\"PhysicalDevice\" identifier=\"serial=RQCW40608ZD\" />\r\n              </handle>\r\n            </Target>\r\n          </targets>\r\n        </DialogSelection>\r\n      </SelectionState>\r\n      <SelectionState runConfigName=\"LiderStatusRelatoriosActivity\">\r\n        <option name=\"selectionMode\" value=\"DROPDOWN\" />\r\n      </SelectionState>\r\n    </selectionStates>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/deploymentTargetSelector.xml b/.idea/deploymentTargetSelector.xml
+--- a/.idea/deploymentTargetSelector.xml	(revision 30c6e77b874ee3a95649429a7e851429c7285985)
++++ b/.idea/deploymentTargetSelector.xml	(date 1764737607758)
+@@ -4,10 +4,10 @@
+     <selectionStates>
+       <SelectionState runConfigName="app">
+         <option name="selectionMode" value="DROPDOWN" />
+-        <DropdownSelection timestamp="2025-06-15T18:07:46.518648900Z">
++        <DropdownSelection timestamp="2025-06-27T02:29:01.108470Z">
+           <Target type="DEFAULT_BOOT">
+             <handle>
+-              <DeviceId pluginId="PhysicalDevice" identifier="serial=RQCW40608ZD" />
++              <DeviceId pluginId="Default" identifier="serial=192.168.1.5:37425;connection=5cc14fee" />
+             </handle>
+           </Target>
+         </DropdownSelection>
+@@ -20,9 +20,6 @@
+             </Target>
+           </targets>
+         </DialogSelection>
+-      </SelectionState>
+-      <SelectionState runConfigName="LiderStatusRelatoriosActivity">
+-        <option name="selectionMode" value="DROPDOWN" />
+       </SelectionState>
+     </selectionStates>
+   </component>

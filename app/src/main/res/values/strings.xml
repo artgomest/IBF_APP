@@ -241,5 +241,7 @@
     <string name="ficha_do_membro">Ficha de membro</string>
     <string name="nome_completo">Nome Completo</string>
     <string name="data_de_nascimento">Data de nascimento</string>
+    
+    <string name="alternar_tema">Alternar Tema</string>
 
 </resources>
