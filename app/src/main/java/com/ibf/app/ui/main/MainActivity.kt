@@ -1,7 +1,6 @@
 package com.ibf.app.ui.main
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -47,19 +46,14 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
 
     override fun onStart() {
         super.onStart()
-        // --- CORREÇÃO 1: VERIFICAÇÃO DE SESSÃO ATIVA ---
         val currentUser = firebaseAuth.currentUser
         if (currentUser != null) {
-            // Se há um utilizador logado, tenta navegar para o seu último perfil guardado.
-            val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+            val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
             val redeSalva = sharedPref.getString("REDE_SELECIONADA", null)
             val papelSalvo = sharedPref.getString("PAPEL_SELECIONADO", null)
 
             if (redeSalva != null && papelSalvo != null) {
                 navegarParaTelaCorreta(redeSalva, papelSalvo)
-            } else {
-                // Se não houver perfil guardado mas o usuário estiver logado, buscamos os dados novamente
-                processarLogin()
             }
         }
     }
@@ -123,29 +117,35 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
 
     private fun processarLogin() {
         val user = firebaseAuth.currentUser ?: return
+
+        // CORREÇÃO CRÍTICA: Lendo o documento
         firestore.collection("usuarios").document(user.uid).get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
                     val nomeUsuario = document.getString("nome") ?: getString(R.string.usuario_padrao)
-                    
-                    // Correção de Cast e tratamento seguro do mapa de funções
-                    val funcoesRaw = document.get("funcoes") as? Map<String, String>
 
-                    if (funcoesRaw.isNullOrEmpty()) {
+                    // 1. LER: Pega os dados como um Map genérico (seguro para qualquer implementação do Android)
+                    val dadosDoBanco = document.get("funcoes") as? Map<*, *>
+
+                    // 2. CONVERTER: Cria um NOVO HashMap explícito e copia apenas Strings
+                    // Isso garante que o objeto final seja 100% compatível com Serializable e com o resto do app
+                    val funcoes = HashMap<String, String>()
+                    dadosDoBanco?.forEach { (key, value) ->
+                        if (key is String && value is String) {
+                            funcoes[key] = value
+                        }
+                    }
+
+                    Log.d("DEBUG_LOGIN", "Map convertido com sucesso: $funcoes")
+
+                    if (funcoes.isEmpty()) {
                         Toast.makeText(this, getString(R.string.usuario_sem_papeis_definidos), Toast.LENGTH_LONG).show()
                         firebaseAuth.signOut()
                         return@addOnSuccessListener
                     }
 
-                    // Converter para HashMap<String, String> explicitamente
-                    val funcoes = HashMap<String, String>()
-                    for ((key, value) in funcoesRaw) {
-                        if (key is String && value != null) {
-                            funcoes[key] = value.toString()
-                        }
-                    }
-
                     if (funcoes.size > 1) {
+                        // Agora 'funcoes' é um java.util.HashMap real, que funciona no putSerializable
                         val bottomSheet = SelecionarPerfilSheet.newInstance(funcoes, nomeUsuario)
                         bottomSheet.show(supportFragmentManager, "SelecionarPerfilSheet")
                     } else {
@@ -159,8 +159,8 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                 }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Erro ao recuperar dados do usuário: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
-                firebaseAuth.signOut()
+                Log.e("DEBUG_LOGIN", "Erro ao buscar usuário: ${e.message}")
+                Toast.makeText(this, "Erro de conexão: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -175,7 +175,7 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
 
     private fun fazerLogout() {
         firebaseAuth.signOut()
-        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
         sharedPref.edit { clear() }
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -183,9 +183,8 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
         finish()
     }
 
-    // --- CORREÇÃO 3: Função unificada para guardar ambos os dados ---
     private fun salvarPerfilSelecionado(rede: String, papel: String) {
-        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
         sharedPref.edit {
             putString("REDE_SELECIONADA", rede)
             putString("PAPEL_SELECIONADO", papel)
@@ -193,12 +192,10 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
     }
 
     private fun navegarParaTelaCorreta(rede: String, papel: String?) {
-        val papelNormalizado = papel?.trim()?.lowercase()
-
-        val intent = when (papelNormalizado) {
+        val intent = when (papel) {
             "pastor" -> Intent(this, PastorDashboardActivity::class.java)
-            "lider", "líder" -> Intent(this, LiderDashboardActivity::class.java)
-            "secretario", "secretário" -> Intent(this, SecretarioDashboardActivity::class.java)
+            "lider" -> Intent(this, LiderDashboardActivity::class.java)
+            "secretario" -> Intent(this, SecretarioDashboardActivity::class.java)
             else -> null
         }
 
