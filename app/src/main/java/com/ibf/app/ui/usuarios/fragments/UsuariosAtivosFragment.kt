@@ -1,5 +1,4 @@
 // Em app/src/main/java/com/ibf/app/ui/usuarios/fragments/UsuariosAtivosFragment.kt
-// (Substitua o arquivo inteiro)
 
 package com.ibf.app.ui.usuarios.fragments
 
@@ -54,9 +53,8 @@ class UsuariosAtivosFragment : Fragment(), UsuarioRedeAdapter.OnItemClickListene
     // onResume para atualizar a lista quando voltar da tela de detalhes
     override fun onResume() {
         super.onResume()
-        if (adapter.itemCount > 0) { // Só recarrega se a lista já foi populada antes
-            carregarUsuariosDaRede()
-        }
+        // Recarrega sempre para garantir dados frescos
+        carregarUsuariosDaRede()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -75,13 +73,19 @@ class UsuariosAtivosFragment : Fragment(), UsuarioRedeAdapter.OnItemClickListene
         swipeRefreshLayout.setOnRefreshListener {
             carregarUsuariosDaRede()
         }
-
-        carregarUsuariosDaRede()
+        
+        // A chamada inicial já será feita pelo onResume
     }
 
     private fun carregarUsuariosDaRede() {
+        // Evita chamadas múltiplas desnecessárias ou se a view não estiver pronta
+        if (redeId == null) { 
+            Log.e("UsuariosAtivosFragment", "ID da Rede não fornecido.")
+            swipeRefreshLayout.isRefreshing = false
+            return 
+        }
+
         swipeRefreshLayout.isRefreshing = true
-        if (redeId == null) { Log.e("UsuariosAtivosFragment", "ID da Rede não fornecido."); swipeRefreshLayout.isRefreshing = false; return }
 
         firestore.collection("usuarios")
             .whereArrayContains("redes", redeId!!)
@@ -91,9 +95,11 @@ class UsuariosAtivosFragment : Fragment(), UsuarioRedeAdapter.OnItemClickListene
                 for (document in documents) {
                     val uid = document.id
                     val nome = document.getString("nome") ?: "Nome Desconhecido"
-                    @Suppress("UNCHECKED_CAST")
-                    val funcoes = document.get("funcoes") as? HashMap<String, String>
-                    val papelNaRede = funcoes?.get(redeId)
+                    
+                    // Correção de Cast Seguro
+                    val funcoesRaw = document.get("funcoes") as? Map<*, *>
+                    val papelNaRede = funcoesRaw?.get(redeId)?.toString()
+
                     if (papelNaRede != null) {
                         usuariosDaRede.add(UsuarioRede(uid, nome, papelNaRede))
                     }

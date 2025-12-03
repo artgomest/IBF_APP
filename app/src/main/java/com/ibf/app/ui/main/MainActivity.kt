@@ -57,8 +57,10 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
 
             if (redeSalva != null && papelSalvo != null) {
                 navegarParaTelaCorreta(redeSalva, papelSalvo)
+            } else {
+                // Se não houver perfil guardado mas o usuário estiver logado, buscamos os dados novamente
+                processarLogin()
             }
-            // Se não houver perfil guardado, o utilizador permanecerá na tela de login.
         }
     }
 
@@ -125,13 +127,22 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
                     val nomeUsuario = document.getString("nome") ?: getString(R.string.usuario_padrao)
-                    @Suppress("UNCHECKED_CAST")
-                    val funcoes = document.get("funcoes") as? HashMap<String, String>
+                    
+                    // Correção de Cast e tratamento seguro do mapa de funções
+                    val funcoesRaw = document.get("funcoes") as? Map<String, String>
 
-                    if (funcoes.isNullOrEmpty()) {
+                    if (funcoesRaw.isNullOrEmpty()) {
                         Toast.makeText(this, getString(R.string.usuario_sem_papeis_definidos), Toast.LENGTH_LONG).show()
                         firebaseAuth.signOut()
                         return@addOnSuccessListener
+                    }
+
+                    // Converter para HashMap<String, String> explicitamente
+                    val funcoes = HashMap<String, String>()
+                    for ((key, value) in funcoesRaw) {
+                        if (key is String && value != null) {
+                            funcoes[key] = value.toString()
+                        }
                     }
 
                     if (funcoes.size > 1) {
@@ -146,6 +157,10 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                     Toast.makeText(this, getString(R.string.dados_usuario_nao_encontrados), Toast.LENGTH_LONG).show()
                     firebaseAuth.signOut()
                 }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Erro ao recuperar dados do usuário: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
+                firebaseAuth.signOut()
             }
     }
 
@@ -178,10 +193,12 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
     }
 
     private fun navegarParaTelaCorreta(rede: String, papel: String?) {
-        val intent = when (papel) {
+        val papelNormalizado = papel?.trim()?.lowercase()
+
+        val intent = when (papelNormalizado) {
             "pastor" -> Intent(this, PastorDashboardActivity::class.java)
-            "lider" -> Intent(this, LiderDashboardActivity::class.java)
-            "secretario" -> Intent(this, SecretarioDashboardActivity::class.java)
+            "lider", "líder" -> Intent(this, LiderDashboardActivity::class.java)
+            "secretario", "secretário" -> Intent(this, SecretarioDashboardActivity::class.java)
             else -> null
         }
 

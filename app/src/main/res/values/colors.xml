@@ -2,7 +2,15 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="dark_background">#121212</color>
+    
+    <!-- Light Mode Colors -->
+    <color name="light_background">#E3D8C5</color>
+    <color name="light_text_icons">#0C0D12</color>
+    
+    <!-- Dark Mode Colors -->
+    <color name="dark_background">#181818</color>
+    <color name="dark_text">#FFFFFFFF</color>
+    <color name="dark_icons">#1F1F1F</color>
     <color name="dark_card_background">#1E1E1E</color>
     <color name="dark_text_primary">#FFFFFF</color>
     <color name="dark_text_secondary">#B3B3B3</color>

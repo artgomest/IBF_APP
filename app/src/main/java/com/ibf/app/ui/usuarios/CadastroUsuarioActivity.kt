@@ -1,5 +1,6 @@
 package com.ibf.app.ui.usuarios
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -18,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ibf.app.R
+import com.ibf.app.ui.main.MainActivity
 
 class CadastroUsuarioActivity : AppCompatActivity() {
 
@@ -138,6 +140,8 @@ class CadastroUsuarioActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     task.result?.user?.let { newUser ->
                         salvarDadosNovoUsuarioNoFirestore(newUser, nome, email, papel, rede)
+                        // O Firebase Auth loga automaticamente o novo usuário.
+                        // Como não temos Cloud Functions ainda, a solução paliativa é deslogar e pedir login.
                         tempAuth.signOut()
                     }
                 } else {
@@ -159,11 +163,17 @@ class CadastroUsuarioActivity : AppCompatActivity() {
         )
         firestore.collection("usuarios").document(newUser.uid).set(userData)
             .addOnSuccessListener {
-                Toast.makeText(this, getString(R.string.usuario_cadastrado_sucesso, nome, papel, rede), Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Usuário criado! Por segurança, faça login novamente.", Toast.LENGTH_LONG).show()
+                
+                // Redireciona para a tela de Login, pois a sessão do criador foi perdida
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
                 finish()
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, getString(R.string.falha_salvar_dados_firestore, e.message), Toast.LENGTH_SHORT).show()
+                // Tenta deletar o usuário criado se falhar o firestore, para não ficar inconsistente
                 newUser.delete()
                 buttonCadastrarUsuario.isEnabled = true
             }
@@ -174,9 +184,17 @@ class CadastroUsuarioActivity : AppCompatActivity() {
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
                     val doc = querySnapshot.documents.first()
-                    @Suppress("UNCHECKED_CAST")
-                    val funcoes = doc.get("funcoes") as? HashMap<String, String>
-                    if (funcoes != null && funcoes.containsKey(novaRede)) {
+                    
+                    // Uso de cast seguro
+                    val funcoesRaw = doc.get("funcoes") as? Map<*, *>
+                    val funcoes = mutableMapOf<String, String>()
+                    if (funcoesRaw != null) {
+                        for ((k, v) in funcoesRaw) {
+                            if (k is String && v != null) funcoes[k] = v.toString()
+                        }
+                    }
+
+                    if (funcoes.containsKey(novaRede)) {
                         Toast.makeText(this, "Este usuário já possui um papel nesta rede.", Toast.LENGTH_LONG).show()
                         buttonCadastrarUsuario.isEnabled = true
                     } else {
