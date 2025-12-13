@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_background"
+    android:fillViewport="true"
+    tools:context=".ui.agenda.AgendarReuniaoActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="24dp"
+            android:text="Agendar Discipulado"
+            android:textColor="@color/dark_text_primary"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- Seleção de Membro -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="Membro"
+            app:boxBackgroundColor="@color/dark_surface"
+            app:boxStrokeColor="@color/dark_primary"
+            app:hintTextColor="@color/dark_text_secondary">
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteMembro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textColor="@color/dark_text_primary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Data -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Data e Hora"
+            android:textColor="@color/dark_text_secondary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_data"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="Data"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:textColor="@color/dark_primary"
+                app:strokeColor="@color/dark_primary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_hora"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="Hora"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:textColor="@color/dark_primary"
+                app:strokeColor="@color/dark_primary" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_data_selecionada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="Nenhuma data selecionada"
+            android:textColor="@color/dark_text_primary"
+            android:textStyle="bold" />
+
+        <!-- Local -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="Local"
+            app:boxBackgroundColor="@color/dark_surface"
+            app:boxStrokeColor="@color/dark_primary"
+            app:hintTextColor="@color/dark_text_secondary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_local"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark_text_primary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Observações -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:hint="Observações (Opcional)"
+            app:boxBackgroundColor="@color/dark_surface"
+            app:boxStrokeColor="@color/dark_primary"
+            app:hintTextColor="@color/dark_text_secondary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_observacoes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:gravity="top|start"
+                android:textColor="@color/dark_text_primary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Actions -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_salvar_reuniao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:padding="12dp"
+            android:text="Agendar Discipulado"
+            android:backgroundTint="@color/dark_primary"
+            android:textColor="@color/white"
+            app:cornerRadius="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_convidar_whatsapp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="Convidar via WhatsApp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:textColor="#25D366"
+            app:strokeColor="#25D366"
+            app:icon="@drawable/ic_share"
+            app:iconTint="#25D366"
+            app:cornerRadius="8dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</ScrollView>

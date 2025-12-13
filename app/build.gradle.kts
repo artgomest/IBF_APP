@@ -45,6 +45,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.firestore.ktx)
+    implementation("com.google.firebase:firebase-storage-ktx")
     implementation(libs.firebase.messaging.ktx)
 
     implementation(libs.androidx.core.ktx)

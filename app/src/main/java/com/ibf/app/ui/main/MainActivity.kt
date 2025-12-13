@@ -161,7 +161,7 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
     private fun fazerLogout() {
         firebaseAuth.signOut()
         val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        sharedPref.edit { clear() }
+        sharedPref.edit().clear().apply()
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
@@ -171,10 +171,10 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
     // --- CORREÇÃO 3: Função unificada para guardar ambos os dados ---
     private fun salvarPerfilSelecionado(rede: String, papel: String) {
         val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        sharedPref.edit {
-            putString("REDE_SELECIONADA", rede)
-            putString("PAPEL_SELECIONADO", papel)
-        }
+        sharedPref.edit()
+            .putString("REDE_SELECIONADA", rede)
+            .putString("PAPEL_SELECIONADO", papel)
+            .apply()
     }
 
     private fun navegarParaTelaCorreta(rede: String, papel: String?) {

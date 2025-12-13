@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Membros | IBF</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Background Animation -->
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+    </div>
+
+    <div class="container">
+
+        <!-- AUTH LOGIN / SIGNUP -->
+        <div id="auth-container" class="glass-card">
+            <div class="logo-area">
+                <h1>IBF <span class="highlight">App</span></h1>
+                <p>Área de Membros</p>
+            </div>
+
+            <form id="auth-form">
+                <div class="input-group">
+                    <label for="login-cpf">Digite seu CPF</label>
+                    <input type="number" id="login-cpf" placeholder="Apenas números (11 dígitos)" required>
+                </div>
+
+                <button type="submit" class="btn-primary">Acessar Ficha</button>
+                <p class="auth-helper">Apenas membros cadastrados pelo líder podem acessar.</p>
+            </form>
+        </div>
+
+        <!-- MEMBER FORM -->
+        <div id="form-container" class="glass-card hidden">
+            <header>
+                <div class="logo-area" style="margin-bottom: 0; text-align: left;">
+                    <h1>Ficha de <span class="highlight">Membro</span></h1>
+                </div>
+                <button id="btn-logout" class="btn-text">Sair</button>
+            </header>
+
+            <form id="member-form">
+
+                <!-- CPF Readonly (Visual Confirmation) -->
+                <div class="input-group">
+                    <label>CPF do Membro:</label>
+                    <input type="text" id="cpf" class="disabled-input" disabled>
+                </div>
+
+                <!-- SECTION 1: PERSONAL DATA -->
+                <section>
+                    <h3>Dados Pessoais</h3>
+                    <div class="input-group">
+                        <label for="nome">Nome Completo</label>
+                        <input type="text" id="nome" required>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="dataNascimento">Data de Nascimento</label>
+                            <input type="date" id="dataNascimento" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="sexo">Sexo</label>
+                            <select id="sexo">
+                                <option value="Masculino">Masculino</option>
+                                <option value="Feminino">Feminino</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="rg">RG</label>
+                            <input type="text" id="rg">
+                        </div>
+                        <div class="input-group">
+                            <label for="orgaoExpeditor">Órgão Expeditor</label>
+                            <input type="text" id="orgaoExpeditor">
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="cpf">CPF</label>
+                            <input type="text" id="cpf">
+                        </div>
+                        <div class="input-group">
+                            <label for="escolaridade">Escolaridade</label>
+                            <select id="escolaridade">
+                                <option value="Ensino Fundamental">Ensino Fundamental</option>
+                                <option value="Ensino Médio">Ensino Médio</option>
+                                <option value="Ensino Superior">Ensino Superior</option>
+                                <option value="Pós-Graduação">Pós-Graduação</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="naturalidade">Naturalidade (Cidade/Estado)</label>
+                        <input type="text" id="naturalidade">
+                    </div>
+                </section>
+
+                <!-- SECTION 2: CONTACT & ADDRESS -->
+                <section>
+                    <h3>Contato e Endereço</h3>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="celular">Celular (WhatsApp)</label>
+                            <input type="tel" id="celular">
+                        </div>
+                        <div class="input-group">
+                            <label for="telefoneFixo">Telefone Fixo</label>
+                            <input type="tel" id="telefoneFixo">
+                        </div>
+                    </div>
+
+                    <div class="grid-3">
+                        <div class="input-group">
+                            <label for="cep">CEP</label>
+                            <input type="text" id="cep">
+                        </div>
+                        <div class="input-group">
+                            <label for="cidade">Cidade</label>
+                            <input type="text" id="cidade">
+                        </div>
+                        <div class="input-group">
+                            <label for="bairro">Bairro</label>
+                            <input type="text" id="bairro">
+                        </div>
+                    </div>
+
+                    <div class="grid-2" style="grid-template-columns: 3fr 1fr;">
+                        <div class="input-group">
+                            <label for="rua">Logradouro (Rua, Av...)</label>
+                            <input type="text" id="rua">
+                        </div>
+                        <div class="input-group">
+                            <label for="numero">Número</label>
+                            <input type="text" id="numero">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 3: FAMILY DATA -->
+                <section>
+                    <h3>Dados Familiares</h3>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="estadoCivil">Estado Civil</label>
+                            <select id="estadoCivil">
+                                <option value="Solteiro(a)">Solteiro(a)</option>
+                                <option value="Casado(a)">Casado(a)</option>
+                                <option value="Viúvo(a)">Viúvo(a)</option>
+                                <option value="Divorciado(a)">Divorciado(a)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="dataCasamento">Data Casamento</label>
+                            <input type="date" id="dataCasamento">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="conjuge">Nome do Cônjuge</label>
+                        <input type="text" id="conjuge">
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="pai">Nome do Pai</label>
+                            <input type="text" id="pai">
+                        </div>
+                        <div class="input-group">
+                            <label for="mae">Nome da Mãe</label>
+                            <input type="text" id="mae">
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="temFilhos">
+                        <label for="temFilhos">Possui Filhos?</label>
+                    </div>
+
+                    <div class="input-group" id="group-filhos" style="display: none;">
+                        <label for="filhosDetalhes">Nome e Data de Nascimento dos Filhos</label>
+                        <textarea id="filhosDetalhes" rows="3"
+                            placeholder="Ex: João (10/05/2015), Maria (20/12/2018)"></textarea>
+                    </div>
+                </section>
+
+                <!-- SECTION 4: ECCLESIASTICAL DATA -->
+                <section>
+                    <h3>Dados Eclesiásticos</h3>
+
+                    <div class="grid-2">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="batizado">
+                            <label for="batizado">É Batizado?</label>
+                        </div>
+                        <div class="input-group">
+                            <label for="dataBatismo">Data do Batismo</label>
+                            <input type="date" id="dataBatismo">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="igrejaBatismo">Igreja onde foi Batizado</label>
+                        <input type="text" id="igrejaBatismo">
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="tipoMembro">Tipo de Vínculo</label>
+                            <select id="tipoMembro">
+                                <option value="Membro">Membro</option>
+                                <option value="Congregado">Congregado</option>
+                                <option value="Visitante">Visitante</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="aceitoPor">Aceito Por</label>
+                            <select id="aceitoPor">
+                                <option value="Aclamação">Aclamação</option>
+                                <option value="Batismo">Batismo</option>
+                                <option value="Carta de Transferência">Carta de Transferência</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="igrejaAnterior">Igreja Anterior</label>
+                            <input type="text" id="igrejaAnterior">
+                        </div>
+                        <div class="input-group">
+                            <label for="pastorAnterior">Pastor Anterior</label>
+                            <input type="text" id="pastorAnterior">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="cargosExercidos">Cargos já exercidos</label>
+                        <input type="text" id="cargosExercidos">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="talentosMinisterios">Talentos / Ministérios</label>
+                        <input type="text" id="talentosMinisterios" placeholder="Ex: Música, Dança, Ensino...">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="desejaFuncao">Deseja exercer alguma função?</label>
+                        <input type="text" id="desejaFuncao">
+                    </div>
+
+                </section>
+
+                <div id="feedback-msg" class="feedback"></div>
+                <button type="submit" id="btn-save" class="btn-primary">Salvar Alterações</button>
+
+            </form>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/app.js"></script>
+
+</body>
+
+</html>

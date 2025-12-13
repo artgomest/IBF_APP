@@ -12,8 +12,7 @@ class CadastroMembroActivity : AppCompatActivity() {
 
     private lateinit var firestore: FirebaseFirestore
     private lateinit var editTextNome: TextInputEditText
-
-    // Declare outras EditTexts para os novos campos aqui
+    private lateinit var editTextCpf: TextInputEditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,37 +20,64 @@ class CadastroMembroActivity : AppCompatActivity() {
 
         firestore = FirebaseFirestore.getInstance()
         editTextNome = findViewById(R.id.edit_text_nome_membro)
-        // ... inicialize suas outras EditTexts aqui
+        editTextCpf = findViewById(R.id.edit_text_cpf_membro)
 
         findViewById<Button>(R.id.button_cadastrar_membro).setOnClickListener {
             cadastrarNovoMembro()
         }
+        
+        findViewById<android.view.View>(R.id.button_back).setOnClickListener { finish() }
     }
 
     private fun cadastrarNovoMembro() {
         val nome = editTextNome.text.toString().trim()
+        val cpf = editTextCpf.text.toString().trim()
 
         if (nome.isEmpty()) {
             Toast.makeText(this, "O nome é obrigatório.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Crie um mapa com todos os dados do membro
+        if (cpf.isEmpty() || cpf.length != 11) {
+            Toast.makeText(this, "Informe um CPF válido (11 dígitos, apenas números).", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Verificar se CPF já existe
+        findViewById<Button>(R.id.button_cadastrar_membro).isEnabled = false
+        firestore.collection("usuarios")
+            .whereEqualTo("cpf", cpf)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    Toast.makeText(this, "Este CPF já está cadastrado!", Toast.LENGTH_LONG).show()
+                    findViewById<Button>(R.id.button_cadastrar_membro).isEnabled = true
+                } else {
+                    salvarMembroNoFirestore(nome, cpf)
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Erro ao verificar CPF: ${e.message}", Toast.LENGTH_SHORT).show()
+                findViewById<Button>(R.id.button_cadastrar_membro).isEnabled = true
+            }
+    }
+
+    private fun salvarMembroNoFirestore(nome: String, cpf: String) {
         val novoMembro = hashMapOf(
             "nome" to nome,
-            // Adicione os outros campos aqui
-            "funcoes" to hashMapOf<String, String>() // Inicia sem papéis definidos
+            "cpf" to cpf,
+            "funcoes" to hashMapOf<String, String>()
         )
 
-        // Adiciona o novo membro à coleção 'usuarios'
         firestore.collection("usuarios")
             .add(novoMembro)
             .addOnSuccessListener {
-                Toast.makeText(this, "Membro '$nome' cadastrado com sucesso!", Toast.LENGTH_SHORT).show()
-                finish() // Volta para a tela anterior
+                Toast.makeText(this, "Membro cadastrado com sucesso!", Toast.LENGTH_SHORT).show()
+                finish()
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Erro ao cadastrar membro: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Erro ao salvar: ${e.message}", Toast.LENGTH_SHORT).show()
+                findViewById<Button>(R.id.button_cadastrar_membro).isEnabled = true
             }
     }
 }

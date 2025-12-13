@@ -69,7 +69,9 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
         }
 
         findViewById<ImageView>(R.id.button_ver_agenda).setOnClickListener {
-            Toast.makeText(this, "Tela de agenda de discipulados em breve!", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, com.ibf.app.ui.agenda.AgendaActivity::class.java)
+            intent.putExtra("REDE_SELECIONADA", redeSelecionada)
+            startActivity(intent)
         }
     }
 
