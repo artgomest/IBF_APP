@@ -52,7 +52,7 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@drawable/ic_calendar"
-                app:tint="@color/dark_primary"
+                app:tint="@color/dark_accent"
                 android:layout_marginEnd="8dp"/>
 
             <TextView
@@ -64,7 +64,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="4dp">
