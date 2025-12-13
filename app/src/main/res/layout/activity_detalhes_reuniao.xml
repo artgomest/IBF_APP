@@ -135,7 +135,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Tirar Foto"
-            app:icon="@drawable/ic_photo_camera_black_24dp"
+            android:backgroundTint="@color/dark_card_background"
+            app:icon="@drawable/ic_mic"
+            android:backgroundTint="@color/status_red_dark_theme"
+            app:icon="@drawable/ic_camera"
             android:layout_marginBottom="12dp"/>
 
         <ImageView
@@ -143,7 +146,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
-            android:background="@color/dark_surface"
+            android:background="@color/dark_card_background"
             android:src="@drawable/ic_image_placeholder"
             android:contentDescription="Foto da reunião" 
             android:layout_marginBottom="24dp"/>

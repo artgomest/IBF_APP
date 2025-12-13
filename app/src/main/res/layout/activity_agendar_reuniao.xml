@@ -31,9 +31,10 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:hint="Membro"
-            app:boxBackgroundColor="@color/dark_surface"
-            app:boxStrokeColor="@color/dark_primary"
-            app:hintTextColor="@color/dark_text_secondary">
+            app:boxBackgroundColor="@color/dark_card_background"
+            app:boxStrokeColor="@color/dark_accent"
+            app:hintTextColor="@color/dark_accent"
+            android:backgroundTint="@color/dark_accent">
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteMembro"
@@ -113,9 +114,10 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:hint="Observações (Opcional)"
-            app:boxBackgroundColor="@color/dark_surface"
-            app:boxStrokeColor="@color/dark_primary"
-            app:hintTextColor="@color/dark_text_secondary">
+            app:boxBackgroundColor="@color/dark_card_background"
+            app:boxStrokeColor="@color/dark_accent"
+            app:hintTextColor="@color/dark_accent"
+            android:backgroundTint="@color/dark_accent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_observacoes"
