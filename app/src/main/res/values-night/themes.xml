@@ -1,9 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <!-- The main theme in values/themes.xml now handles DayNight switching using semantic colors. -->
-    <!-- We can keep this empty or use it for specific night-mode only overrides if needed. -->
-    <style name="Base.Theme.IBFAPP" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <style name="Theme.IBFAPP" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/dark_text_primary</item>
+        <item name="colorOnPrimary">@color/dark_background</item>
+        <item name="colorSecondary">@color/dark_text_primary</item>
+        <item name="colorOnSecondary">@color/dark_background</item>
+        <item name="android:statusBarColor">@color/dark_background</item>
+        <item name="android:windowBackground">@color/dark_background</item>
+        <item name="colorSurface">@color/dark_background</item>
+        <item name="colorOnSurface">@color/dark_text_primary</item>
     </style>
 </resources>

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/dark_background"
+    android:background="@color/semantic_background"
     tools:context=".ui.perfil.PerfilActivity">
 
     <RelativeLayout
@@ -22,13 +22,13 @@
             android:layout_centerVertical="true"
             android:padding="8dp"
             android:contentDescription="@string/voltar"
-            app:tint="@color/dark_text_primary" />
+            app:tint="@color/semantic_text_primary" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/perfil_titulo"
-            android:textColor="@color/dark_text_primary"
+            android:textColor="@color/semantic_text_primary"
             android:textSize="22sp"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -47,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                app:cardBackgroundColor="@color/dark_card_background"
+                app:cardBackgroundColor="@color/semantic_card_background"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp">
                 <LinearLayout
@@ -56,25 +56,26 @@
                     android:orientation="vertical"
                     android:padding="16dp">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
-                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="@string/perfil_informacoes_pessoais" android:textColor="@color/dark_text_primary" android:textSize="18sp"/>
+                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="@string/perfil_informacoes_pessoais" android:textColor="@color/semantic_text_primary" android:textSize="18sp"/>
                         <Button android:id="@+id/button_editar_salvar" style="@style/Widget.Material3.Button.TextButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/perfil_editar" android:textSize="13sp"/>
                     </LinearLayout>
-                    <TextView android:text="@string/perfil_nome" android:textColor="@color/dark_text_secondary" android:layout_marginTop="16dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <TextView android:text="@string/perfil_nome" android:textColor="@color/semantic_text_secondary" android:layout_marginTop="16dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
                     <EditText android:id="@+id/edit_text_nome_perfil"
                         android:autofillHints=""
-                        android:enabled="false" android:background="@drawable/edit_text_background" android:textColor="@color/dark_text_primary" android:padding="12dp" android:minHeight="48dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp"
+                        android:enabled="false" android:background="@drawable/edit_text_background" android:textColor="@color/semantic_text_primary" android:padding="12dp" android:minHeight="48dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp"
                         tools:ignore="LabelFor,TextFields" />
-                    <TextView android:text="@string/perfil_email" android:textColor="@color/dark_text_secondary" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <TextView android:text="@string/perfil_email" android:textColor="@color/semantic_text_secondary" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
                     <EditText android:id="@+id/edit_text_email_perfil"
                         android:autofillHints=""
-                        android:enabled="false" android:background="@drawable/edit_text_background" android:textColor="@color/dark_text_primary" android:padding="12dp" android:minHeight="48dp" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:enabled="false" android:background="@drawable/edit_text_background" android:textColor="@color/semantic_text_primary" android:padding="12dp" android:minHeight="48dp" android:layout_width="match_parent" android:layout_height="wrap_content"
                         tools:ignore="LabelFor,TextFields" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <Button android:id="@+id/button_estatisticas" android:text="@string/perfil_estatisticas" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:padding="12dp" android:textColor="@color/dark_text_secondary" app:strokeColor="@color/dark_card_background" android:textSize="18sp"/>
-            <Button android:id="@+id/button_notificacoes" android:text="@string/perfil_notificacoes" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:padding="12dp" android:textColor="@color/dark_text_secondary" app:strokeColor="@color/dark_card_background" android:textSize="18sp"/>
-            <Button android:id="@+id/button_ajuda" android:text="@string/perfil_ajuda" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:padding="12dp" android:textColor="@color/dark_text_secondary" app:strokeColor="@color/dark_card_background" android:textSize="18sp"/>
+            <Button android:id="@+id/button_estatisticas" android:text="@string/perfil_estatisticas" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:padding="12dp" android:textColor="@color/semantic_text_secondary" app:strokeColor="@color/semantic_stroke" android:textSize="18sp"/>
+            <Button android:id="@+id/button_notificacoes" android:text="@string/perfil_notificacoes" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:padding="12dp" android:textColor="@color/semantic_text_secondary" app:strokeColor="@color/semantic_stroke" android:textSize="18sp"/>
+            <Button android:id="@+id/button_ajuda" android:text="@string/perfil_ajuda" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:padding="12dp" android:textColor="@color/semantic_text_secondary" app:strokeColor="@color/semantic_stroke" android:textSize="18sp"/>
+            <Button android:id="@+id/button_alternar_tema" android:text="@string/alternar_tema" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:padding="12dp" android:textColor="@color/semantic_text_secondary" app:strokeColor="@color/semantic_stroke" android:textSize="18sp"/>
 
         </LinearLayout>
     </ScrollView>

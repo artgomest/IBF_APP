@@ -45,12 +45,11 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
             }
         }
 
+    // Login Automático RESTAURADO
     override fun onStart() {
         super.onStart()
-        // --- CORREÇÃO 1: VERIFICAÇÃO DE SESSÃO ATIVA ---
         val currentUser = firebaseAuth.currentUser
         if (currentUser != null) {
-            // Se há um utilizador logado, tenta navegar para o seu último perfil guardado.
             val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
             val redeSalva = sharedPref.getString("REDE_SELECIONADA", null)
             val papelSalvo = sharedPref.getString("PAPEL_SELECIONADO", null)
@@ -58,7 +57,6 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
             if (redeSalva != null && papelSalvo != null) {
                 navegarParaTelaCorreta(redeSalva, papelSalvo)
             }
-            // Se não houver perfil guardado, o utilizador permanecerá na tela de login.
         }
     }
 
@@ -68,6 +66,8 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
 
         firebaseAuth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
+
+        // O "Kill Switch" foi removido daqui. O app volta ao comportamento normal.
 
         emailInput = findViewById(R.id.editTextEmailAddress)
         passwordInput = findViewById(R.id.editTextPassword)
@@ -121,14 +121,26 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
 
     private fun processarLogin() {
         val user = firebaseAuth.currentUser ?: return
+
         firestore.collection("usuarios").document(user.uid).get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
                     val nomeUsuario = document.getString("nome") ?: getString(R.string.usuario_padrao)
-                    @Suppress("UNCHECKED_CAST")
-                    val funcoes = document.get("funcoes") as? HashMap<String, String>
 
-                    if (funcoes.isNullOrEmpty()) {
+                    // LER: Pega os dados como um Map genérico (Mantemos essa proteção)
+                    val dadosDoBanco = document.get("funcoes") as? Map<*, *>
+
+                    // CONVERTER: Cria um NOVO HashMap explícito
+                    val funcoes = HashMap<String, String>()
+                    dadosDoBanco?.forEach { (key, value) ->
+                        if (key is String && value is String) {
+                            funcoes[key] = value
+                        }
+                    }
+
+                    Log.d("DEBUG_LOGIN", "Map convertido com sucesso: $funcoes")
+
+                    if (funcoes.isEmpty()) {
                         Toast.makeText(this, getString(R.string.usuario_sem_papeis_definidos), Toast.LENGTH_LONG).show()
                         firebaseAuth.signOut()
                         return@addOnSuccessListener
@@ -146,6 +158,10 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                     Toast.makeText(this, getString(R.string.dados_usuario_nao_encontrados), Toast.LENGTH_LONG).show()
                     firebaseAuth.signOut()
                 }
+            }
+            .addOnFailureListener { e ->
+                Log.e("DEBUG_LOGIN", "Erro ao buscar usuário: ${e.message}")
+                Toast.makeText(this, "Erro de conexão: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -168,7 +184,6 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
         finish()
     }
 
-    // --- CORREÇÃO 3: Função unificada para guardar ambos os dados ---
     private fun salvarPerfilSelecionado(rede: String, papel: String) {
         val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         sharedPref.edit()

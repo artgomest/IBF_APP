@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:paddingTop="?attr/actionBarSize"
     android:orientation="vertical"
-    android:background="@color/dark_background"
+    android:background="@color/semantic_background"
     tools:context=".ui.dashboard.LiderDashboardActivity">
 
     <RelativeLayout
@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ola_nome_placeholder"
-            android:textColor="@color/dark_text_primary"
+            android:textColor="@color/semantic_text_primary"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_centerVertical="true"
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:text="@string/rede_dashboard_label"
         android:textSize="16sp"
-        android:textColor="@color/dark_text_secondary"
+        android:textColor="@color/semantic_text_secondary"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"/>
 
@@ -76,10 +76,10 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_margin="8dp"
-                app:cardBackgroundColor="@color/dark_card_background"
+                app:cardBackgroundColor="@color/semantic_card_background"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
-                app:strokeColor="@color/dark_divider"
+                app:strokeColor="@color/semantic_divider"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -95,14 +95,14 @@
                         android:layout_height="48dp"
                         android:contentDescription="@string/icon_reports_content_description"
                         android:src="@drawable/ic_reports"
-                        app:tint="@color/dark_text_primary" />
+                        app:tint="@color/semantic_text_primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="@string/relatorios"
-                        android:textColor="@color/dark_text_primary"
+                        android:textColor="@color/semantic_text_primary"
                         android:textSize="18sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -116,10 +116,10 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_margin="8dp"
-                app:cardBackgroundColor="@color/dark_card_background"
+                app:cardBackgroundColor="@color/semantic_card_background"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
-                app:strokeColor="@color/dark_divider"
+                app:strokeColor="@color/semantic_divider"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -135,14 +135,14 @@
                         android:layout_height="48dp"
                         android:contentDescription="@string/icon_graficos_content_description"
                         android:src="@drawable/ic_graficos"
-                        app:tint="@color/dark_text_primary" />
+                        app:tint="@color/semantic_text_primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="@string/graficos"
-                        android:textColor="@color/dark_text_primary"
+                        android:textColor="@color/semantic_text_primary"
                         android:textSize="18sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -156,10 +156,10 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_margin="8dp"
-                app:cardBackgroundColor="@color/dark_card_background"
+                app:cardBackgroundColor="@color/semantic_card_background"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
-                app:strokeColor="@color/dark_divider"
+                app:strokeColor="@color/semantic_divider"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -175,14 +175,14 @@
                         android:layout_height="48dp"
                         android:contentDescription="@string/icon_membros_content_description"
                         android:src="@drawable/ic_membros"
-                        app:tint="@color/dark_text_primary" />
+                        app:tint="@color/semantic_text_primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="@string/membros"
-                        android:textColor="@color/dark_text_primary"
+                        android:textColor="@color/semantic_text_primary"
                         android:textSize="18sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -196,10 +196,10 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_margin="8dp"
-                app:cardBackgroundColor="@color/dark_card_background"
+                app:cardBackgroundColor="@color/semantic_card_background"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
-                app:strokeColor="@color/dark_divider"
+                app:strokeColor="@color/semantic_divider"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -215,14 +215,14 @@
                         android:layout_height="48dp"
                         android:contentDescription="@string/icon_config_content_description"
                         android:src="@drawable/ic_config"
-                        app:tint="@color/dark_text_primary" />
+                        app:tint="@color/semantic_text_primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="@string/config_da_rede"
-                        android:textColor="@color/dark_text_primary"
+                        android:textColor="@color/semantic_text_primary"
                         android:textSize="18sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -238,10 +238,10 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            app:cardBackgroundColor="@color/dark_card_background"
+            app:cardBackgroundColor="@color/semantic_card_background"
             app:cardCornerRadius="8dp"
             app:cardElevation="4dp"
-            app:strokeColor="@color/dark_divider"
+            app:strokeColor="@color/semantic_divider"
             app:strokeWidth="1dp">
 
             <LinearLayout
@@ -257,7 +257,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/mudar_perfil"
-                    android:textColor="@color/dark_text_primary"
+                    android:textColor="@color/semantic_text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -266,7 +266,7 @@
                     android:layout_height="32dp"
                     android:contentDescription="@string/icon_mudar_perfil_content_description"
                     android:src="@drawable/ic_change_account"
-                    app:tint="@color/dark_text_primary" />
+                    app:tint="@color/semantic_text_primary" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

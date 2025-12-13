@@ -8,8 +8,8 @@
     style="@style/Widget.MaterialComponents.CardView"
     app:cardCornerRadius="8dp"
     app:cardElevation="2dp"
-    app:cardBackgroundColor="@color/dark_card_background"
-    app:strokeColor="@color/dark_divider"
+    app:cardBackgroundColor="@color/semantic_card_background"
+    app:strokeColor="@color/semantic_divider"
     app:strokeWidth="1dp">
 
     <LinearLayout
@@ -25,7 +25,7 @@
             android:text="@string/nome_do_usuario_label"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@color/dark_text_primary"
+            android:textColor="@color/semantic_text_primary"
             android:layout_marginBottom="4dp"/>
 
         <TextView
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="@string/papel_usuario_label_exemplo"
             android:textSize="14sp"
-            android:textColor="@color/dark_text_secondary"/>
+            android:textColor="@color/semantic_text_secondary"/>
 
     </LinearLayout>
 

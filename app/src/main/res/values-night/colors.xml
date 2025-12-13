@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Semantic Colors (Dark Mode) -->
-    <color name="app_background">#181818</color>
-    <color name="app_text">#FFFFFF</color>
-    <color name="app_icon">#1F1F1F</color>
-    <color name="app_card_background">#181818</color>
-    <color name="app_button_text">#FFFFFF</color>
-    <color name="app_divider">#1FFFFFFF</color> <!-- 12% opacity white for divider -->
-    
-    <!-- Status Colors (Can adjust for dark mode if needed, keeping standard for now) -->
-    <color name="status_green">#4CAF50</color>
-    <color name="status_red">#F44336</color>
+    <color name="semantic_background">@color/dark_background</color>
+    <color name="semantic_text_primary">@color/dark_text_primary</color>
+    <color name="semantic_text_secondary">@color/dark_text_secondary</color>
+    <color name="semantic_card_background">@color/dark_card_background</color>
+    <color name="semantic_input_background">@color/dark_card_background</color>
+    <color name="semantic_icon_tint">@color/dark_text_primary</color>
+    <color name="semantic_stroke">@color/dark_text_secondary</color>
+    <color name="semantic_accent">@color/dark_accent</color>
+    <color name="semantic_divider">@color/dark_divider</color>
 </resources>

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/dark_background"
+    android:background="@color/semantic_background"
     tools:context=".ui.usuarios.ListaUsuariosRedeActivity">
 
     <RelativeLayout
@@ -21,7 +21,7 @@
             android:layout_centerVertical="true"
             android:padding="8dp"
             android:contentDescription="@string/voltar"
-            app:tint="@color/dark_text_primary" />
+            app:tint="@color/semantic_text_primary" />
 
         <TextView
             android:id="@+id/text_page_title"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/usuarios_da_rede"
-            android:textColor="@color/dark_text_primary"
+            android:textColor="@color/semantic_text_primary"
             android:textSize="22sp"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -38,10 +38,10 @@
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/dark_background"
-        app:tabTextColor="@color/dark_text_secondary"
-        app:tabSelectedTextColor="@color/dark_accent"
-        app:tabIndicatorColor="@color/dark_accent" />
+        android:background="@color/semantic_background"
+        app:tabTextColor="@color/semantic_text_secondary"
+        app:tabSelectedTextColor="@color/semantic_accent"
+        app:tabIndicatorColor="@color/semantic_accent" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"

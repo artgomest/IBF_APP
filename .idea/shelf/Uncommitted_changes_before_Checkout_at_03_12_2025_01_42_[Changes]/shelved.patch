@@ -1,0 +1,74 @@
+Index: app/src/main/java/com/ibf/app/ui/main/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.ibf.app.ui.main\r\n\r\nimport android.Manifest\r\nimport android.content.Intent\r\nimport android.content.pm.PackageManager\r\nimport android.os.Build\r\nimport android.os.Bundle\r\nimport android.util.Log\r\nimport android.widget.Button\r\nimport android.widget.EditText\r\nimport android.widget.TextView\r\nimport android.widget.Toast\r\nimport androidx.activity.result.contract.ActivityResultContracts\r\nimport androidx.annotation.RequiresApi\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport androidx.core.content.ContextCompat\r\nimport androidx.core.content.edit\r\nimport com.google.firebase.auth.FirebaseAuth\r\nimport com.google.firebase.firestore.FirebaseFirestore\r\nimport com.google.firebase.firestore.SetOptions\r\nimport com.google.firebase.messaging.FirebaseMessaging\r\nimport com.ibf.app.R\r\nimport com.ibf.app.ui.dashboard.LiderDashboardActivity\r\nimport com.ibf.app.ui.dashboard.PastorDashboardActivity\r\nimport com.ibf.app.ui.dashboard.SecretarioDashboardActivity\r\nimport com.ibf.app.ui.shared.SelecionarPerfilSheet\r\nimport com.ibf.app.ui.usuarios.SolicitacaoCadastroActivity\r\n\r\nclass MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionadoListener {\r\n\r\n    private lateinit var firebaseAuth: FirebaseAuth\r\n    private lateinit var firestore: FirebaseFirestore\r\n    private lateinit var emailInput: EditText\r\n    private lateinit var passwordInput: EditText\r\n    private lateinit var loginButton: Button\r\n    private lateinit var textCadastreSe: TextView\r\n\r\n    private val requestPermissionLauncher =\r\n        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->\r\n            if (isGranted) {\r\n                Toast.makeText(this, \"Permissão para notificações concedida!\", Toast.LENGTH_SHORT).show()\r\n            } else {\r\n                Toast.makeText(this, \"Permissão para notificações negada.\", Toast.LENGTH_SHORT).show()\r\n            }\r\n        }\r\n\r\n    override fun onStart() {\r\n        super.onStart()\r\n        val currentUser = firebaseAuth.currentUser\r\n        if (currentUser != null) {\r\n            val sharedPref = getSharedPreferences(\"app_prefs\", MODE_PRIVATE)\r\n            val redeSalva = sharedPref.getString(\"REDE_SELECIONADA\", null)\r\n            val papelSalvo = sharedPref.getString(\"PAPEL_SELECIONADO\", null)\r\n\r\n            if (redeSalva != null && papelSalvo != null) {\r\n                navegarParaTelaCorreta(redeSalva, papelSalvo)\r\n            }\r\n        }\r\n    }\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(R.layout.activity_main)\r\n\r\n        firebaseAuth = FirebaseAuth.getInstance()\r\n        firestore = FirebaseFirestore.getInstance()\r\n\r\n        emailInput = findViewById(R.id.editTextEmailAddress)\r\n        passwordInput = findViewById(R.id.editTextPassword)\r\n        loginButton = findViewById(R.id.buttonLogin)\r\n        textCadastreSe = findViewById(R.id.text_cadastre_se)\r\n\r\n        loginButton.setOnClickListener {\r\n            val email = emailInput.text.toString().trim()\r\n            val password = passwordInput.text.toString().trim()\r\n\r\n            if (email.isEmpty() || password.isEmpty()) {\r\n                Toast.makeText(this, getString(R.string.preencher_todos_campos), Toast.LENGTH_SHORT).show()\r\n                return@setOnClickListener\r\n            }\r\n\r\n            firebaseAuth.signInWithEmailAndPassword(email, password)\r\n                .addOnCompleteListener(this) { task ->\r\n                    if (task.isSuccessful) {\r\n                        task.result?.user?.uid?.let { uid ->\r\n                            salvarTokenDoDispositivo(uid)\r\n                        }\r\n                        processarLogin()\r\n                    } else {\r\n                        Toast.makeText(this, getString(R.string.falha_login_credenciais), Toast.LENGTH_SHORT).show()\r\n                    }\r\n                }\r\n        }\r\n        textCadastreSe.setOnClickListener {\r\n            val intent = Intent(this, SolicitacaoCadastroActivity::class.java)\r\n            startActivity(intent)\r\n        }\r\n\r\n        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {\r\n            pedirPermissaoDeNotificacao()\r\n        }\r\n    }\r\n\r\n    private fun salvarTokenDoDispositivo(uid: String) {\r\n        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->\r\n            if (!task.isSuccessful) {\r\n                Log.w(\"MainActivity\", \"Falha ao obter token do FCM.\", task.exception)\r\n                return@addOnCompleteListener\r\n            }\r\n            val token = task.result\r\n            val userDocument = firestore.collection(\"usuarios\").document(uid)\r\n            userDocument.set(mapOf(\"fcmToken\" to token), SetOptions.merge())\r\n                .addOnSuccessListener { Log.d(\"MainActivity\", \"Token FCM salvo para o utilizador: $uid\") }\r\n                .addOnFailureListener { e -> Log.e(\"MainActivity\", \"Erro ao salvar token FCM\", e) }\r\n        }\r\n    }\r\n\r\n    private fun processarLogin() {\r\n        val user = firebaseAuth.currentUser ?: return\r\n\r\n        // CORREÇÃO CRÍTICA: Lendo o documento\r\n        firestore.collection(\"usuarios\").document(user.uid).get()\r\n            .addOnSuccessListener { document ->\r\n                if (document != null && document.exists()) {\r\n                    val nomeUsuario = document.getString(\"nome\") ?: getString(R.string.usuario_padrao)\r\n\r\n                    // 1. LER: Pega os dados como um Map genérico (seguro para qualquer implementação do Android)\r\n                    val dadosDoBanco = document.get(\"funcoes\") as? Map<*, *>\r\n\r\n                    // 2. CONVERTER: Cria um NOVO HashMap explícito e copia apenas Strings\r\n                    // Isso garante que o objeto final seja 100% compatível com Serializable e com o resto do app\r\n                    val funcoes = HashMap<String, String>()\r\n                    dadosDoBanco?.forEach { (key, value) ->\r\n                        if (key is String && value is String) {\r\n                            funcoes[key] = value\r\n                        }\r\n                    }\r\n\r\n                    Log.d(\"DEBUG_LOGIN\", \"Map convertido com sucesso: $funcoes\")\r\n\r\n                    if (funcoes.isEmpty()) {\r\n                        Toast.makeText(this, getString(R.string.usuario_sem_papeis_definidos), Toast.LENGTH_LONG).show()\r\n                        firebaseAuth.signOut()\r\n                        return@addOnSuccessListener\r\n                    }\r\n\r\n                    if (funcoes.size > 1) {\r\n                        // Agora 'funcoes' é um java.util.HashMap real, que funciona no putSerializable\r\n                        val bottomSheet = SelecionarPerfilSheet.newInstance(funcoes, nomeUsuario)\r\n                        bottomSheet.show(supportFragmentManager, \"SelecionarPerfilSheet\")\r\n                    } else {\r\n                        val (rede, papel) = funcoes.entries.first()\r\n                        salvarPerfilSelecionado(rede, papel)\r\n                        navegarParaTelaCorreta(rede, papel)\r\n                    }\r\n                } else {\r\n                    Toast.makeText(this, getString(R.string.dados_usuario_nao_encontrados), Toast.LENGTH_LONG).show()\r\n                    firebaseAuth.signOut()\r\n                }\r\n            }\r\n            .addOnFailureListener { e ->\r\n                Log.e(\"DEBUG_LOGIN\", \"Erro ao buscar usuário: ${e.message}\")\r\n                Toast.makeText(this, \"Erro de conexão: ${e.message}\", Toast.LENGTH_SHORT).show()\r\n            }\r\n    }\r\n\r\n    override fun onPerfilSelecionado(rede: String, papel: String) {\r\n        salvarPerfilSelecionado(rede, papel)\r\n        navegarParaTelaCorreta(rede, papel)\r\n    }\r\n\r\n    override fun onLogoutSelecionado() {\r\n        fazerLogout()\r\n    }\r\n\r\n    private fun fazerLogout() {\r\n        firebaseAuth.signOut()\r\n        val sharedPref = getSharedPreferences(\"app_prefs\", MODE_PRIVATE)\r\n        sharedPref.edit { clear() }\r\n        val intent = Intent(this, MainActivity::class.java)\r\n        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK\r\n        startActivity(intent)\r\n        finish()\r\n    }\r\n\r\n    private fun salvarPerfilSelecionado(rede: String, papel: String) {\r\n        val sharedPref = getSharedPreferences(\"app_prefs\", MODE_PRIVATE)\r\n        sharedPref.edit {\r\n            putString(\"REDE_SELECIONADA\", rede)\r\n            putString(\"PAPEL_SELECIONADO\", papel)\r\n        }\r\n    }\r\n\r\n    private fun navegarParaTelaCorreta(rede: String, papel: String?) {\r\n        val intent = when (papel) {\r\n            \"pastor\" -> Intent(this, PastorDashboardActivity::class.java)\r\n            \"lider\" -> Intent(this, LiderDashboardActivity::class.java)\r\n            \"secretario\" -> Intent(this, SecretarioDashboardActivity::class.java)\r\n            else -> null\r\n        }\r\n\r\n        if (intent != null) {\r\n            intent.putExtra(\"REDE_SELECIONADA\", rede)\r\n            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK\r\n            startActivity(intent)\r\n            finish()\r\n        } else {\r\n            Toast.makeText(this, getString(R.string.papel_desconhecido, papel), Toast.LENGTH_LONG).show()\r\n            firebaseAuth.signOut()\r\n        }\r\n    }\r\n\r\n    @RequiresApi(Build.VERSION_CODES.TIRAMISU)\r\n    private fun pedirPermissaoDeNotificacao() {\r\n        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=\r\n            PackageManager.PERMISSION_GRANTED\r\n        ) {\r\n            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/ibf/app/ui/main/MainActivity.kt b/app/src/main/java/com/ibf/app/ui/main/MainActivity.kt
+--- a/app/src/main/java/com/ibf/app/ui/main/MainActivity.kt	(revision 4d6dabe8bf779bead0059a0382322c042ed92aba)
++++ b/app/src/main/java/com/ibf/app/ui/main/MainActivity.kt	(date 1764736311417)
+@@ -118,17 +118,21 @@
+     private fun processarLogin() {
+         val user = firebaseAuth.currentUser ?: return
+ 
+-        // CORREÇÃO CRÍTICA: Lendo o documento
++        // Buscamos o documento no Firestore
+         firestore.collection("usuarios").document(user.uid).get()
+             .addOnSuccessListener { document ->
+                 if (document != null && document.exists()) {
+                     val nomeUsuario = document.getString("nome") ?: getString(R.string.usuario_padrao)
+ 
+-                    // 1. LER: Pega os dados como um Map genérico (seguro para qualquer implementação do Android)
++                    // LOG 1: Verificar o UID para ter a certeza que é o utilizador certo
++                    Log.d("DEBUG_LOGIN", "Login sucesso. UID: ${user.uid}")
++
++                    // CORREÇÃO CRÍTICA AQUI:
++                    // 1. Lemos como Map genérico (aceita ArrayMap do Android)
+                     val dadosDoBanco = document.get("funcoes") as? Map<*, *>
+ 
+-                    // 2. CONVERTER: Cria um NOVO HashMap explícito e copia apenas Strings
+-                    // Isso garante que o objeto final seja 100% compatível com Serializable e com o resto do app
++                    // 2. Criamos um HashMap limpo e copiamos os dados manualmente
++                    // Isso resolve o problema de compatibilidade entre ArrayMap e HashMap
+                     val funcoes = HashMap<String, String>()
+                     dadosDoBanco?.forEach { (key, value) ->
+                         if (key is String && value is String) {
+@@ -136,30 +140,34 @@
+                         }
+                     }
+ 
+-                    Log.d("DEBUG_LOGIN", "Map convertido com sucesso: $funcoes")
++                    // LOG 2: Ver o que foi lido realmente
++                    Log.d("DEBUG_LOGIN", "Funções convertidas: $funcoes")
+ 
+                     if (funcoes.isEmpty()) {
++                        // Se cair aqui, o Log 2 acima vai mostrar "{}" (vazio), indicando que o doc no banco está vazio
+                         Toast.makeText(this, getString(R.string.usuario_sem_papeis_definidos), Toast.LENGTH_LONG).show()
+                         firebaseAuth.signOut()
+                         return@addOnSuccessListener
+                     }
+ 
++                    // Se tiver mais que uma função, abre o seletor
+                     if (funcoes.size > 1) {
+-                        // Agora 'funcoes' é um java.util.HashMap real, que funciona no putSerializable
+                         val bottomSheet = SelecionarPerfilSheet.newInstance(funcoes, nomeUsuario)
+                         bottomSheet.show(supportFragmentManager, "SelecionarPerfilSheet")
+                     } else {
++                        // Se só tiver uma, entra direto
+                         val (rede, papel) = funcoes.entries.first()
+                         salvarPerfilSelecionado(rede, papel)
+                         navegarParaTelaCorreta(rede, papel)
+                     }
+                 } else {
++                    Log.e("DEBUG_LOGIN", "Documento não existe para o UID: ${user.uid}")
+                     Toast.makeText(this, getString(R.string.dados_usuario_nao_encontrados), Toast.LENGTH_LONG).show()
+                     firebaseAuth.signOut()
+                 }
+             }
+             .addOnFailureListener { e ->
+-                Log.e("DEBUG_LOGIN", "Erro ao buscar usuário: ${e.message}")
++                Log.e("DEBUG_LOGIN", "Falha de conexão: ${e.message}")
+                 Toast.makeText(this, "Erro de conexão: ${e.message}", Toast.LENGTH_SHORT).show()
+             }
+     }
