@@ -66,8 +66,8 @@
                 android:layout_marginEnd="8dp"
                 android:text="Data"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:textColor="@color/dark_primary"
-                app:strokeColor="@color/dark_primary" />
+                android:textColor="@color/dark_accent"
+                app:strokeColor="@color/dark_accent" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_hora"
@@ -77,8 +77,8 @@
                 android:layout_marginStart="8dp"
                 android:text="Hora"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:textColor="@color/dark_primary"
-                app:strokeColor="@color/dark_primary" />
+                android:textColor="@color/dark_accent"
+                app:strokeColor="@color/dark_accent" />
         </LinearLayout>
 
         <TextView
@@ -97,8 +97,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:hint="Local"
-            app:boxBackgroundColor="@color/dark_surface"
-            app:boxStrokeColor="@color/dark_primary"
+            app:boxBackgroundColor="@color/dark_card_background"
+            app:boxStrokeColor="@color/dark_accent"
             app:hintTextColor="@color/dark_text_secondary">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -137,7 +137,7 @@
             android:layout_marginBottom="12dp"
             android:padding="12dp"
             android:text="Agendar Discipulado"
-            android:backgroundTint="@color/dark_primary"
+            android:backgroundTint="@color/dark_accent"
             android:textColor="@color/white"
             app:cornerRadius="8dp" />
 
