@@ -33,6 +33,8 @@
     <color name="status_red_dark_theme">#C62828</color>
     <color name="bottom_nav_selected">#1DB954</color>
     <color name="bottom_nav_unselected">#B3B3B3</color>
+    <color name="accent_primary">#1DB954</color>
+    <color name="accent_secondary">#1DB954</color>
 
     <!-- Semantic Colors (Day) -->
     <color name="semantic_background">@color/light_background</color>
