@@ -153,6 +153,21 @@
             app:icon="@drawable/ic_share"
             app:iconTint="#25D366"
             app:cornerRadius="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_adicionar_agenda"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="Adicionar ao Google Agenda"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:textColor="#4285F4"
+            app:strokeColor="#4285F4"
+            app:icon="@drawable/ic_calendar"
+            app:iconTint="#4285F4"
+            app:cornerRadius="8dp"
             android:visibility="gone" />
 
     </LinearLayout>

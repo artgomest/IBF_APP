@@ -3,7 +3,8 @@
     package="com.ibf.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -53,6 +54,7 @@
         <activity android:name=".ui.agenda.AgendaActivity" />
         <activity android:name=".ui.agenda.AgendarReuniaoActivity" />
         <activity android:name=".ui.agenda.DetalhesReuniaoActivity" />
+        <activity android:name=".ui.agenda.RelatorioReuniaoActivity" />
 
         <service
             android:name=".services.MyFirebaseMessagingService"

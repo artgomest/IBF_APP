@@ -119,6 +119,7 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
         // Ação para abrir a "ficha" do membro, passando o seu ID
         val intent = Intent(this, FichaMembroActivity::class.java)
         intent.putExtra("MEMBRO_ID", usuario.uid)
+        intent.putExtra("REDE_SELECIONADA", redeSelecionada)
         startActivity(intent)
     }
 }

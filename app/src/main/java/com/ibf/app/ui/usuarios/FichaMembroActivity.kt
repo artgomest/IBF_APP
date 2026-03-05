@@ -1,5 +1,6 @@
 package com.ibf.app.ui.usuarios
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -8,22 +9,28 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.checkbox.MaterialCheckBox
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.ibf.app.R
+import com.ibf.app.ui.agenda.AgendarReuniaoActivity
 
 class FichaMembroActivity : AppCompatActivity() {
 
     private lateinit var firestore: FirebaseFirestore
     private var membroId: String? = null
+    private var redeSelecionada: String? = null
+    private var membroNome: String = ""
+    private var membroEmail: String = ""
     private var isEditing = false
 
     // Componentes da UI
     private lateinit var textPageTitle: TextView
     private lateinit var fabEditarMembro: FloatingActionButton
     private lateinit var fabSalvarMembro: FloatingActionButton
+    private lateinit var fabMarcarDiscipulado: ExtendedFloatingActionButton
 
     // Inputs
     private lateinit var inputs: List<View> // Lista para facilitar manipular todos de uma vez
@@ -75,6 +82,7 @@ class FichaMembroActivity : AppCompatActivity() {
 
         firestore = FirebaseFirestore.getInstance()
         membroId = intent.getStringExtra("MEMBRO_ID")
+        redeSelecionada = intent.getStringExtra("REDE_SELECIONADA")
 
         inicializarComponentes()
 
@@ -92,6 +100,7 @@ class FichaMembroActivity : AppCompatActivity() {
         textPageTitle = findViewById(R.id.text_page_title)
         fabEditarMembro = findViewById(R.id.fab_editar_membro)
         fabSalvarMembro = findViewById(R.id.fab_salvar_membro)
+        fabMarcarDiscipulado = findViewById(R.id.fab_marcar_discipulado)
 
         // Pessoais
         textNomeMembro = findViewById(R.id.text_nome_membro)
@@ -155,6 +164,15 @@ class FichaMembroActivity : AppCompatActivity() {
         fabSalvarMembro.setOnClickListener {
             salvarAlteracoes()
         }
+
+        fabMarcarDiscipulado.setOnClickListener {
+            val intent = Intent(this, AgendarReuniaoActivity::class.java)
+            intent.putExtra("REDE_SELECIONADA", redeSelecionada)
+            intent.putExtra("MEMBRO_PRE_SELECIONADO_ID", membroId)
+            intent.putExtra("MEMBRO_PRE_SELECIONADO_NOME", membroNome)
+            intent.putExtra("MEMBRO_PRE_SELECIONADO_EMAIL", membroEmail)
+            startActivity(intent)
+        }
     }
 
     private fun alternarModoEdicao(editar: Boolean) {
@@ -167,10 +185,12 @@ class FichaMembroActivity : AppCompatActivity() {
         if (editar) {
             fabEditarMembro.visibility = View.GONE
             fabSalvarMembro.visibility = View.VISIBLE
+            fabMarcarDiscipulado.visibility = View.GONE
             textNomeMembro.requestFocus()
         } else {
             fabEditarMembro.visibility = View.VISIBLE
             fabSalvarMembro.visibility = View.GONE
+            fabMarcarDiscipulado.visibility = View.VISIBLE
         }
     }
 
@@ -247,7 +267,9 @@ class FichaMembroActivity : AppCompatActivity() {
                 .addOnSuccessListener { document ->
                     if (document != null && document.exists()) {
                         
-                        textPageTitle.text = document.getString("nome") ?: "Nome não encontrado"
+                        membroNome = document.getString("nome") ?: "Nome não encontrado"
+                        membroEmail = document.getString("email") ?: ""
+                        textPageTitle.text = membroNome
 
                         // Pessoais
                         textNomeMembro.setText(document.getString("nome"))
