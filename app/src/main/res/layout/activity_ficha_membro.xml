@@ -595,6 +595,18 @@
         </ScrollView>
     </LinearLayout>
 
+    <!-- Botão Marcar Discipulado (inicialmente visível, some em modo edição) -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_marcar_discipulado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:layout_margin="16dp"
+        android:text="Marcar Discipulado"
+        app:icon="@drawable/ic_calendar"
+        app:tint="@color/white"
+        app:backgroundTint="@color/dark_accent" />
+
     <!-- Botão de Edição (inicialmente visível) -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_editar_membro"

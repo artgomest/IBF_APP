@@ -13,5 +13,7 @@ data class Reuniao(
     var status: String = "Agendada", // Agendada, Concluída, Cancelada
     var rede: String = "",
     var audioUrl: String = "",
-    var fotoUrl: String = ""
+    var fotoUrl: String = "",
+    var resumo: String = "",
+    var relatorioPreenchido: Boolean = false
 )

@@ -3,8 +3,8 @@ package com.ibf.app.ui.agenda
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -18,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ibf.app.R
 import com.ibf.app.data.models.Reuniao
-import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -35,12 +34,17 @@ class AgendarReuniaoActivity : AppCompatActivity() {
     private lateinit var textData: android.widget.TextView
     private lateinit var btnSalvar: MaterialButton
     private lateinit var btnWhatsapp: MaterialButton
+    private lateinit var btnAdicionarAgenda: MaterialButton
 
     private val calendar = Calendar.getInstance()
     private val membrosMap = mutableMapOf<String, String>() // Nome -> UID
     private val membrosCelularMap = mutableMapOf<String, String>() // Nome -> Celular
+    private val membrosEmailMap = mutableMapOf<String, String>() // Nome -> Email
 
     private var redeSelecionada: String? = null
+    private var membroPreSelecionadoNome: String? = null
+    private var membroPreSelecionadoId: String? = null
+    private var membroPreSelecionadoEmail: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,13 +53,16 @@ class AgendarReuniaoActivity : AppCompatActivity() {
         firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         redeSelecionada = intent.getStringExtra("REDE_SELECIONADA")
+        membroPreSelecionadoNome = intent.getStringExtra("MEMBRO_PRE_SELECIONADO_NOME")
+        membroPreSelecionadoId = intent.getStringExtra("MEMBRO_PRE_SELECIONADO_ID")
+        membroPreSelecionadoEmail = intent.getStringExtra("MEMBRO_PRE_SELECIONADO_EMAIL")
 
         initViews()
         carregarMembros()
-        setupPickers()
 
         btnSalvar.setOnClickListener { salvarReuniao() }
         btnWhatsapp.setOnClickListener { abrirWhatsapp() }
+        btnAdicionarAgenda.setOnClickListener { abrirGoogleAgenda() }
     }
 
     private fun initViews() {
@@ -65,10 +72,11 @@ class AgendarReuniaoActivity : AppCompatActivity() {
         textData = findViewById(R.id.text_data_selecionada)
         btnSalvar = findViewById(R.id.btn_salvar_reuniao)
         btnWhatsapp = findViewById(R.id.btn_convidar_whatsapp)
+        btnAdicionarAgenda = findViewById(R.id.btn_adicionar_agenda)
 
         findViewById<MaterialButton>(R.id.btn_data).setOnClickListener { pickDate() }
         findViewById<MaterialButton>(R.id.btn_hora).setOnClickListener { pickTime() }
-        
+
         updateDateText()
     }
 
@@ -98,18 +106,34 @@ class AgendarReuniaoActivity : AppCompatActivity() {
             val nomes = mutableListOf<String>()
             membrosMap.clear()
             membrosCelularMap.clear()
+            membrosEmailMap.clear()
 
             for (doc in documents) {
                  val nome = doc.getString("nome") ?: "Sem Nome"
                  val id = doc.id
                  val celular = doc.getString("celular") ?: ""
-                 
+                 val email = doc.getString("email") ?: ""
+
                  // Don't list yourself
                  if (id != uid) {
                      nomes.add(nome)
                      membrosMap[nome] = id
                      membrosCelularMap[nome] = celular
+                     membrosEmailMap[nome] = email
                  }
+            }
+
+            // Se veio com membro pré-selecionado, garante que está no mapa
+            membroPreSelecionadoNome?.let { nome ->
+                membroPreSelecionadoId?.let { id ->
+                    if (!membrosMap.containsKey(nome)) {
+                        nomes.add(nome)
+                        membrosMap[nome] = id
+                    }
+                    membrosEmailMap[nome] = membroPreSelecionadoEmail ?: membrosEmailMap[nome] ?: ""
+                    autoCompleteMembro.setText(nome, false)
+                    autoCompleteMembro.isEnabled = false
+                }
             }
 
             val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, nomes)
@@ -188,6 +212,7 @@ class AgendarReuniaoActivity : AppCompatActivity() {
                 Toast.makeText(this, "Agenda criada com sucesso!", Toast.LENGTH_SHORT).show()
                 btnSalvar.visibility = View.GONE
                 btnWhatsapp.visibility = View.VISIBLE
+                btnAdicionarAgenda.visibility = View.VISIBLE
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Erro ao agendar: ${it.message}", Toast.LENGTH_SHORT).show()
@@ -198,35 +223,41 @@ class AgendarReuniaoActivity : AppCompatActivity() {
 
     private fun abrirWhatsapp() {
         val nomeMembro = autoCompleteMembro.text.toString()
-        val celular = membrosCelularMap[nomeMembro] ?: ""
-        
-        if (celular.isEmpty()) {
-            Toast.makeText(this, "Membro sem celular cadastrado.", Toast.LENGTH_SHORT).show()
-            return
-        }
-        
-        // Format number (simple check, assuming BR +55 or need to add)
-        // Usually stored as pure digits. WhatsApp API needs country code.
-        // Assuming localized usage, we might prepend 55 if length is 10 or 11.
-        
-        var phone = celular.replace(Regex("[^0-9]"), "")
-        if (phone.length <= 11 && !phone.startsWith("55")) {
-             phone = "55$phone"
-        }
-
         val format = SimpleDateFormat("dd/MM 'às' HH:mm", Locale("pt", "BR"))
         val dataStr = format.format(calendar.time)
         val local = inputLocal.text.toString()
-        
         val message = "Olá $nomeMembro, marquei nosso discipulado para $dataStr no local: $local. Confirma?"
-        
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, message)
+        }
+        startActivity(Intent.createChooser(intent, "Convidar via..."))
+    }
+
+    private fun abrirGoogleAgenda() {
+        val nomeMembro = autoCompleteMembro.text.toString()
+        val local = inputLocal.text.toString()
+        val obs = inputObservacoes.text.toString()
+        val emailMembro = membrosEmailMap[nomeMembro] ?: ""
+
+        val startMs = calendar.timeInMillis
+        val endMs = startMs + 60 * 60 * 1000L // duração padrão de 1 hora
+
         try {
-            val url = "https://api.whatsapp.com/send?phone=$phone&text=${URLEncoder.encode(message, "UTF-8")}"
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(url)
+            val intent = Intent(Intent.ACTION_INSERT).apply {
+                data = CalendarContract.Events.CONTENT_URI
+                putExtra(CalendarContract.Events.TITLE, "Discipulado com $nomeMembro")
+                putExtra(CalendarContract.Events.EVENT_LOCATION, local)
+                putExtra(CalendarContract.Events.DESCRIPTION, if (obs.isNotEmpty()) obs else "Discipulado agendado pelo IBF App")
+                putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startMs)
+                putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endMs)
+                if (emailMembro.isNotEmpty()) {
+                    putExtra(Intent.EXTRA_EMAIL, emailMembro)
+                }
+            }
             startActivity(intent)
         } catch (e: Exception) {
-            Toast.makeText(this, "Erro ao abrir WhatsApp.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Nenhum app de calendário encontrado.", Toast.LENGTH_SHORT).show()
         }
     }
 }

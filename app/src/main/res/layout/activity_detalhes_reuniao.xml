@@ -14,23 +14,51 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- Title -->
+        <!-- Header -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp">
+
+            <ImageView
+                android:id="@+id/button_back"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_arrow_back"
+                android:padding="4dp"
+                android:contentDescription="Voltar"
+                app:tint="@color/dark_text_primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Detalhes do Discipulado"
+                android:textColor="@color/dark_text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <!-- Status Badge -->
         <TextView
+            android:id="@+id/text_status_badge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="24dp"
-            android:text="Detalhes do Discipulado"
-            android:textColor="@color/dark_text_primary"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:layout_marginBottom="16dp"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="6dp"
+            android:text="Agendada"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
         <!-- Info Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            app:cardBackgroundColor="@color/dark_surface"
+            app:cardBackgroundColor="@color/dark_card_background"
             app:cardCornerRadius="12dp">
 
             <LinearLayout
@@ -64,7 +92,7 @@
                     android:text="Local: Igreja"
                     android:textColor="@color/dark_text_secondary"
                     android:layout_marginBottom="8dp"/>
-                
+
                 <TextView
                     android:id="@+id/text_obs"
                     android:layout_width="wrap_content"
@@ -75,60 +103,15 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Audio Section -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gravar Áudio"
-            android:textColor="@color/dark_text_primary"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="8dp">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_record"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gravar"
-                android:layout_marginEnd="8dp"
-                app:icon="@drawable/ic_mic" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_stop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Parar"
-                android:enabled="false"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:textColor="@color/status_red_dark_theme"
-                app:strokeColor="@color/status_red_dark_theme"/>
-
-        </LinearLayout>
-        
-        <TextView
-            android:id="@+id/text_audio_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Aguardando..."
-            android:textColor="@color/dark_text_secondary"
-            android:layout_marginBottom="24dp"/>
-
         <!-- Photo Section -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Foto do Encontro"
             android:textColor="@color/dark_text_primary"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="8dp"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_photo"
@@ -137,7 +120,7 @@
             android:text="Tirar Foto"
             android:backgroundTint="@color/dark_card_background"
             app:icon="@drawable/ic_camera"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="8dp"/>
 
         <ImageView
             android:id="@+id/image_preview"
@@ -146,8 +129,34 @@
             android:scaleType="centerCrop"
             android:background="@color/dark_card_background"
             android:src="@drawable/ic_image_placeholder"
-            android:contentDescription="Foto da reunião" 
+            android:contentDescription="Foto da reunião"
             android:layout_marginBottom="24dp"/>
+
+        <!-- Preencher Relatório button (visible after meeting date passes) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_preencher_relatorio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="Preencher Relatório"
+            android:backgroundTint="@color/dark_accent"
+            android:textColor="@color/white"
+            app:icon="@drawable/ic_reports"
+            app:cornerRadius="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
+
+        <!-- Relatório already filled badge -->
+        <TextView
+            android:id="@+id/text_relatorio_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="✓ Relatório já preenchido"
+            android:textColor="@color/dark_accent"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
 
     </LinearLayout>
 </ScrollView>
