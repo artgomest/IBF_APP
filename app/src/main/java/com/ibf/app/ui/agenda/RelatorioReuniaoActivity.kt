@@ -27,6 +27,7 @@ import java.io.IOException
 import java.io.FileInputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class RelatorioReuniaoActivity : AppCompatActivity() {
