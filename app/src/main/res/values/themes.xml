@@ -193,6 +193,7 @@
     </style>
 
     <!-- Shape Appearances -->
+    <style name="ShapeAppearance.IBF" parent="ShapeAppearance.Material3.SmallComponent" />
     <style name="ShapeAppearance.IBF.Circle">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
