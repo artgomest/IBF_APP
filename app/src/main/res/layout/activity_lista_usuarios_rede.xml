@@ -39,7 +39,7 @@
             android:layout_marginStart="4dp" />
 
         <ImageButton
-            android:id="@+id/btn_convidar"
+            android:id="@+id/fab_adicionar_usuario"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_add_user"

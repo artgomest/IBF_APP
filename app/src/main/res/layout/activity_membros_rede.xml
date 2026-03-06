@@ -39,7 +39,7 @@
             android:layout_marginStart="4dp" />
 
         <ImageButton
-            android:id="@+id/btn_add_membro"
+            android:id="@+id/fab_adicionar_membro"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_add"
@@ -47,7 +47,8 @@
             android:contentDescription="Adicionar membro"
             app:tint="?attr/colorOnBackground"
             android:padding="8dp" />
-    </LinearLayout>
+        <Button android:id="@+id/button_ver_agenda" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+</LinearLayout>
 
     <!-- Search -->
     <com.google.android.material.textfield.TextInputLayout
@@ -69,7 +70,7 @@
 
     <!-- List -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_membros"
+        android:id="@+id/recycler_view_membros"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -77,4 +78,5 @@
         android:paddingBottom="16dp"
         android:clipToPadding="false" />
 
+    <Button android:id="@+id/button_ver_agenda" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
 </LinearLayout>
