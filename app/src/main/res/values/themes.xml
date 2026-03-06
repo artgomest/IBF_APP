@@ -19,6 +19,7 @@
         <item name="colorTertiaryContainer">@color/accent_container</item>
         <item name="colorOnTertiaryContainer">@color/near_black</item>
         <item name="android:colorBackground">@color/ibf_background</item>
+        <item name="colorOnBackground">@color/ibf_on_background</item>
         <item name="colorSurface">@color/ibf_surface</item>
         <item name="colorOnSurface">@color/ibf_on_surface</item>
         <item name="colorSurfaceVariant">@color/ibf_surface_variant</item>
@@ -52,6 +53,7 @@
         <item name="colorTertiaryContainer">#1B3A2A</item>
         <item name="colorOnTertiaryContainer">@color/off_white</item>
         <item name="android:colorBackground">@color/ibf_background</item>
+        <item name="colorOnBackground">@color/ibf_on_background</item>
         <item name="colorSurface">@color/ibf_surface</item>
         <item name="colorOnSurface">@color/ibf_on_surface</item>
         <item name="colorSurfaceVariant">@color/ibf_surface_variant</item>
