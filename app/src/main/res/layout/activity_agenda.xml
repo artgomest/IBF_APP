@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorBackground"
+    android:background="?android:colorBackground"
     tools:context=".ui.agenda.AgendaActivity">
 
     <LinearLayout
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_add"
                 app:backgroundTint="?attr/colorOnBackground"
-                app:tint="?attr/colorBackground"
+                app:tint="?android:colorBackground"
                 app:fabSize="mini"/>
         </LinearLayout>
 

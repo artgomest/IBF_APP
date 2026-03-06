@@ -192,6 +192,12 @@
         <item name="android:letterSpacing">0.08</item>
     </style>
 
+    <!-- Shape Appearances -->
+    <style name="ShapeAppearance.IBF.Circle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
     <!-- Divider -->
     <style name="IBF.Divider">
         <item name="android:layout_width">match_parent</item>

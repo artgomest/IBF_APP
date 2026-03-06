@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/colorBackground">
+    android:background="?android:colorBackground">
 
     <!-- Header -->
     <LinearLayout
@@ -16,7 +16,7 @@
         android:paddingStart="8dp"
         android:paddingEnd="20dp"
         android:gravity="center_vertical"
-        android:background="?attr/colorBackground">
+        android:background="?android:colorBackground">
 
         <ImageButton
             android:id="@+id/btn_back"

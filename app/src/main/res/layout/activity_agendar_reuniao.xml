@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/colorBackground"
+    android:background="?android:colorBackground"
     tools:context=".ui.agenda.AgendarReuniaoActivity">
 
     <LinearLayout
@@ -75,6 +75,6 @@
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingHorizontal="20dp" android:paddingVertical="16dp" android:background="?attr/colorSurface">
         <com.google.android.material.button.MaterialButton android:id="@+id/btn_whatsapp" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_marginEnd="8dp" android:text="WhatsApp" app:backgroundTint="?attr/colorSurface" app:strokeColor="?attr/colorOutline" app:strokeWidth="1dp" app:cornerRadius="12dp" app:icon="@drawable/ic_whatsapp" app:iconTint="@color/accent" android:textColor="?attr/colorOnSurface"/>
-        <com.google.android.material.button.MaterialButton android:id="@+id/btn_agendar" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:text="Agendar" app:backgroundTint="?attr/colorOnBackground" app:cornerRadius="12dp" android:textColor="?attr/colorBackground"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_agendar" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:text="Agendar" app:backgroundTint="?attr/colorOnBackground" app:cornerRadius="12dp" android:textColor="?android:colorBackground"/>
     </LinearLayout>
 </LinearLayout>

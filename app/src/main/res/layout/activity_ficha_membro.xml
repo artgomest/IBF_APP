@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorBackground">
+    android:background="?android:colorBackground">
 
     <!-- Header -->
     <LinearLayout
@@ -16,7 +16,7 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:gravity="center_vertical"
-        android:background="?attr/colorBackground">
+        android:background="?android:colorBackground">
 
         <ImageButton
             android:id="@+id/btn_back"
@@ -52,7 +52,7 @@
             android:id="@+id/btn_save"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_check"
+            android:src="@drawable/ic_save"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Salvar"
             app:tint="?attr/colorOnBackground"
@@ -87,7 +87,7 @@
                     android:layout_height="80dp"
                     android:background="@drawable/bg_icon_container"
                     android:padding="20dp"
-                    android:src="@drawable/ic_person"
+                    android:src="@drawable/ic_profile"
                     app:tint="?attr/colorOnSurfaceVariant"
                     app:shapeAppearanceOverlay="@style/ShapeAppearance.IBF.Circle" />
 
@@ -223,9 +223,9 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="20dp"
         android:text="Discipulado"
-        app:icon="@drawable/ic_group"
+        app:icon="@drawable/ic_user_group"
         app:backgroundTint="?attr/colorOnBackground"
-        android:textColor="?attr/colorBackground"
-        app:iconTint="?attr/colorBackground" />
+        android:textColor="?android:colorBackground"
+        app:iconTint="?android:colorBackground" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
