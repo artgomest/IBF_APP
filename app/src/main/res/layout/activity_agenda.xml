@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_background"
+    android:background="?attr/colorBackground"
     tools:context=".ui.agenda.AgendaActivity">
 
     <LinearLayout
@@ -12,150 +13,113 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Header -->
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/dark_card_background">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="56dp"
+            android:paddingBottom="16dp"
+            android:gravity="center_vertical">
 
             <ImageView
-                android:id="@+id/button_back"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:id="@+id/btn_back"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:src="@drawable/ic_arrow_back"
-                android:layout_centerVertical="true"
-                android:padding="8dp"
-                android:contentDescription="Voltar"
-                app:tint="@color/dark_text_primary" />
+                app:tint="?attr/colorOnBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="Voltar"/>
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Agenda"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnBackground"
+                android:layout_marginStart="12dp"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_add_reuniao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add"
+                app:backgroundTint="?attr/colorOnBackground"
+                app:tint="?attr/colorBackground"
+                app:fabSize="mini"/>
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="12dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_todos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="Todos"
+                    android:layout_marginEnd="8dp"
+                    style="@style/Widget.Material3.Chip.Filter"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_proximos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="Próximos"
+                    android:layout_marginEnd="8dp"
+                    style="@style/Widget.Material3.Chip.Filter"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_passados"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="Passados"
+                    style="@style/Widget.Material3.Chip.Filter"/>
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_reunioes"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="16dp"
+            android:clipToPadding="false"
+            tools:listitem="@layout/item_reuniao"/>
+
+        <LinearLayout
+            android:id="@+id/layout_empty"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/ic_calendar"
+                app:tint="?attr/colorOnSurfaceVariant"
+                android:alpha="0.4"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="Agenda de Discipulado"
-                android:textColor="@color/dark_text_primary"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-        </RelativeLayout>
-
-        <!-- Calendar Card -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp"
-            app:cardBackgroundColor="@color/dark_card_background"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
-
-                <!-- Month navigation -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="8dp">
-
-                    <ImageView
-                        android:id="@+id/btn_prev_month"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:src="@drawable/ic_arrow_back"
-                        android:padding="4dp"
-                        android:contentDescription="Mês anterior"
-                        app:tint="@color/dark_text_primary" />
-
-                    <TextView
-                        android:id="@+id/text_month_year"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="Março 2026"
-                        android:textColor="@color/dark_text_primary"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <ImageView
-                        android:id="@+id/btn_next_month"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:src="@drawable/ic_arrow_forward"
-                        android:padding="4dp"
-                        android:contentDescription="Próximo mês"
-                        app:tint="@color/dark_text_primary" />
-                </LinearLayout>
-
-                <!-- Day headers: Dom Seg Ter Qua Qui Sex Sáb -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="4dp">
-
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="D" android:textColor="@color/dark_text_secondary" android:textSize="12sp" android:textStyle="bold" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="S" android:textColor="@color/dark_text_secondary" android:textSize="12sp" android:textStyle="bold" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="T" android:textColor="@color/dark_text_secondary" android:textSize="12sp" android:textStyle="bold" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="Q" android:textColor="@color/dark_text_secondary" android:textSize="12sp" android:textStyle="bold" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="Q" android:textColor="@color/dark_text_secondary" android:textSize="12sp" android:textStyle="bold" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="S" android:textColor="@color/dark_text_secondary" android:textSize="12sp" android:textStyle="bold" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="S" android:textColor="@color/dark_text_secondary" android:textSize="12sp" android:textStyle="bold" />
-                </LinearLayout>
-
-                <!-- Calendar grid — populated programmatically -->
-                <GridLayout
-                    android:id="@+id/calendar_grid"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:columnCount="7" />
-
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Filter label -->
-        <TextView
-            android:id="@+id/text_filter_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="6dp"
-            android:text="Todos os discipulados"
-            android:textColor="@color/dark_text_secondary"
-            android:textSize="13sp" />
-
-        <!-- Meeting List -->
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresh_layout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_agenda"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="8dp"
-                android:clipToPadding="false"
-                tools:listitem="@layout/item_reuniao" />
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                android:text="Nenhuma reunião agendada"
+                android:textSize="16sp"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:layout_marginTop="16dp"/>
+        </LinearLayout>
     </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_adicionar_reuniao"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:contentDescription="Agendar Reunião"
-        app:srcCompat="@drawable/ic_add"
-        android:backgroundTint="@color/dark_accent" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

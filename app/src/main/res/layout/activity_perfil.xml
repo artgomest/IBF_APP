@@ -2,81 +2,173 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:fitsSystemWindows="true"
-    android:paddingTop="?attr/actionBarSize"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/semantic_background"
+    android:background="?attr/colorBackground"
     tools:context=".ui.perfil.PerfilActivity">
 
-    <RelativeLayout
+    <!-- Header -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:paddingHorizontal="8dp">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="56dp"
+        android:paddingBottom="20dp"
+        android:gravity="center_vertical">
+
         <ImageView
-            android:id="@+id/button_back"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:id="@+id/btn_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_arrow_back"
-            android:layout_centerVertical="true"
-            android:padding="8dp"
-            android:contentDescription="@string/voltar"
-            app:tint="@color/semantic_text_primary" />
+            app:tint="?attr/colorOnBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Voltar"/>
+
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/perfil_titulo"
-            android:textColor="@color/semantic_text_primary"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-    </RelativeLayout>
+            android:layout_weight="1"
+            android:text="Perfil"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnBackground"
+            android:layout_marginStart="12dp"/>
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingHorizontal="20dp"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingBottom="32dp">
 
+            <!-- Avatar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingVertical="24dp">
+
+                <FrameLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp">
+
+                    <ImageView
+                        android:id="@+id/image_profile"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@drawable/ic_profile_placeholder"
+                        android:background="@drawable/bg_icon_container"
+                        android:padding="16dp"
+                        android:contentDescription="Foto de perfil"/>
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/text_nome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nome do Usuário"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnBackground"
+                    android:layout_marginTop="16dp"/>
+
+                <TextView
+                    android:id="@+id/text_papel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pastor"
+                    android:textSize="14sp"
+                    android:textColor="@color/accent"
+                    android:layout_marginTop="4dp"/>
+            </LinearLayout>
+            <!-- Info Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                app:cardBackgroundColor="@color/semantic_card_background"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="?attr/colorSurface"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="0dp">
+                app:cardElevation="0dp"
+                app:strokeColor="?attr/colorOutlineVariant"
+                app:strokeWidth="1dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
-                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="@string/perfil_informacoes_pessoais" android:textColor="@color/semantic_text_primary" android:textSize="18sp"/>
-                        <Button android:id="@+id/button_editar_salvar" style="@style/Widget.Material3.Button.TextButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/perfil_editar" android:textSize="13sp"/>
-                    </LinearLayout>
-                    <TextView android:text="@string/perfil_nome" android:textColor="@color/semantic_text_secondary" android:layout_marginTop="16dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                    <EditText android:id="@+id/edit_text_nome_perfil"
-                        android:autofillHints=""
-                        android:enabled="false" android:background="@drawable/edit_text_background" android:textColor="@color/semantic_text_primary" android:padding="12dp" android:minHeight="48dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp"
-                        tools:ignore="LabelFor,TextFields" />
-                    <TextView android:text="@string/perfil_email" android:textColor="@color/semantic_text_secondary" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                    <EditText android:id="@+id/edit_text_email_perfil"
-                        android:autofillHints=""
-                        android:enabled="false" android:background="@drawable/edit_text_background" android:textColor="@color/semantic_text_primary" android:padding="12dp" android:minHeight="48dp" android:layout_width="match_parent" android:layout_height="wrap_content"
-                        tools:ignore="LabelFor,TextFields" />
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="INFORMAÇÕES"
+                        android:textSize="11sp"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textAllCaps="true"
+                        android:letterSpacing="0.08"
+                        android:layout_marginBottom="16dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Email"
+                        android:textSize="12sp"
+                        android:textColor="?attr/colorOnSurfaceVariant"/>
+
+                    <TextView
+                        android:id="@+id/text_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="usuario@email.com"
+                        android:textSize="15sp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginBottom="16dp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?attr/colorOutlineVariant"
+                        android:layout_marginBottom="16dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rede"
+                        android:textSize="12sp"
+                        android:textColor="?attr/colorOnSurfaceVariant"/>
+
+                    <TextView
+                        android:id="@+id/text_rede"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nome da Rede"
+                        android:textSize="15sp"
+                        android:textColor="?attr/colorOnSurface"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <Button android:id="@+id/button_estatisticas" android:text="@string/perfil_estatisticas" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:padding="12dp" android:textColor="@color/semantic_text_secondary" app:strokeColor="@color/semantic_stroke" android:textSize="18sp"/>
-            <Button android:id="@+id/button_notificacoes" android:text="@string/perfil_notificacoes" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:padding="12dp" android:textColor="@color/semantic_text_secondary" app:strokeColor="@color/semantic_stroke" android:textSize="18sp"/>
-            <Button android:id="@+id/button_ajuda" android:text="@string/perfil_ajuda" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:padding="12dp" android:textColor="@color/semantic_text_secondary" app:strokeColor="@color/semantic_stroke" android:textSize="18sp"/>
-            <Button android:id="@+id/button_alternar_tema" android:text="@string/alternar_tema" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:padding="12dp" android:textColor="@color/semantic_text_secondary" app:strokeColor="@color/semantic_stroke" android:textSize="18sp"/>
-
+            <!-- Logout -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_logout"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:text="Sair da conta"
+                android:textColor="@color/ibf_error"
+                app:backgroundTint="?attr/colorSurface"
+                app:strokeColor="@color/ibf_error"
+                app:strokeWidth="1dp"
+                app:cornerRadius="12dp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Spacing -->
+    <dimen name="space_xs">4dp</dimen>
+    <dimen name="space_sm">8dp</dimen>
+    <dimen name="space_md">16dp</dimen>
+    <dimen name="space_lg">24dp</dimen>
+    <dimen name="space_xl">32dp</dimen>
+    <dimen name="space_xxl">48dp</dimen>
+
+    <!-- Corner Radius -->
+    <dimen name="radius_xs">4dp</dimen>
+    <dimen name="radius_sm">8dp</dimen>
+    <dimen name="radius_md">12dp</dimen>
+    <dimen name="radius_lg">16dp</dimen>
+    <dimen name="radius_xl">24dp</dimen>
+    <dimen name="radius_full">100dp</dimen>
+
+    <!-- Icon Sizes -->
+    <dimen name="icon_sm">20dp</dimen>
+    <dimen name="icon_md">24dp</dimen>
+    <dimen name="icon_lg">32dp</dimen>
+    <dimen name="icon_xl">48dp</dimen>
+
+    <!-- Button Heights -->
+    <dimen name="btn_height_sm">40dp</dimen>
+    <dimen name="btn_height_md">52dp</dimen>
+    <dimen name="btn_height_lg">56dp</dimen>
+
+    <!-- Input Heights -->
+    <dimen name="input_height">56dp</dimen>
+
+    <!-- Card -->
+    <dimen name="card_elevation">0dp</dimen>
+    <dimen name="card_stroke_width">1dp</dimen>
+    <dimen name="card_padding">16dp</dimen>
+
+    <!-- Screen Padding -->
+    <dimen name="screen_padding_horizontal">20dp</dimen>
+    <dimen name="screen_padding_vertical">16dp</dimen>
+
+    <!-- Header -->
+    <dimen name="header_height">64dp</dimen>
+    <dimen name="avatar_size">44dp</dimen>
+
+    <!-- Typography -->
+    <dimen name="text_display">28sp</dimen>
+    <dimen name="text_headline_lg">24sp</dimen>
+    <dimen name="text_headline_md">20sp</dimen>
+    <dimen name="text_title_lg">18sp</dimen>
+    <dimen name="text_title_md">16sp</dimen>
+    <dimen name="text_body_lg">15sp</dimen>
+    <dimen name="text_body_md">14sp</dimen>
+    <dimen name="text_body_sm">13sp</dimen>
+    <dimen name="text_caption">12sp</dimen>
+    <dimen name="text_label">11sp</dimen>
+
+    <!-- Bottom Navigation -->
+    <dimen name="bottom_nav_height">64dp</dimen>
+
+    <!-- Divider -->
+    <dimen name="divider_height">1dp</dimen>
+
+</resources>

@@ -1,84 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_background"
-    tools:context=".ui.usuarios.MembrosRedeActivity">
+    android:orientation="vertical"
+    android:background="?attr/colorBackground">
 
+    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="56dp"
+        android:paddingBottom="16dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="20dp"
+        android:gravity="center_vertical"
+        android:background="?attr/colorBackground">
 
-        <!-- Cabeçalho com Botão de Voltar e Calendário -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:paddingHorizontal="8dp">
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_arrow_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Voltar"
+            app:tint="?attr/colorOnBackground"
+            android:padding="8dp" />
 
-            <ImageView
-                android:id="@+id/button_back"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_centerVertical="true"
-                android:contentDescription="@string/voltar"
-                android:padding="8dp"
-                android:src="@drawable/ic_arrow_back"
-                app:tint="@color/dark_text_primary" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Membros da Rede"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnBackground"
+            android:layout_marginStart="4dp" />
 
-            <TextView
-                android:id="@+id/text_page_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/membros"
-                android:textColor="@color/dark_text_primary"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/button_ver_agenda"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:contentDescription="@string/ver_agenda_de_discipulados"
-                android:padding="8dp"
-                android:src="@drawable/ic_calendar"
-                app:tint="@color/dark_text_primary" />
-        </RelativeLayout>
-
-        <!-- Wrapper para a funcionalidade "Puxar para Atualizar" -->
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresh_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <!-- Lista de Membros -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_membros"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="8dp"
-                tools:listitem="@layout/item_usuario_rede" />
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+        <ImageButton
+            android:id="@+id/btn_add_membro"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_add"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Adicionar membro"
+            app:tint="?attr/colorOnBackground"
+            android:padding="8dp" />
     </LinearLayout>
 
-    <!-- Botão Flutuante para Adicionar Membro -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_adicionar_membro"
-        android:layout_width="wrap_content"
+    <!-- Search -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/IBF.TextInputLayout.Rounded"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_add_user"
-        android:contentDescription="@string/adicionar_novo_usuario_content_description"
-        app:tint="@color/white"
-        app:backgroundTint="@color/dark_text_secondary" />
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="16dp"
+        app:startIconDrawable="@drawable/ic_search"
+        app:startIconTint="?attr/colorOnSurfaceVariant"
+        app:hintTextColor="?attr/colorOnSurfaceVariant">
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Buscar membro..."
+            android:imeOptions="actionSearch"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_membros"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="16dp"
+        android:clipToPadding="false" />
+
+</LinearLayout>

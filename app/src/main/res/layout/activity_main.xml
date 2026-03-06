@@ -1,65 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="16dp"
-    android:background="@color/semantic_background"
+    android:background="?attr/colorBackground"
+    android:fillViewport="true"
     tools:context=".ui.main.MainActivity">
 
-    <ImageView
-        android:layout_width="279dp"
-        android:layout_height="190dp"
-        android:layout_marginBottom="48dp"
-        android:contentDescription="@string/app_logo_content_description"
-        android:src="@drawable/logobranca"
-        app:tint="@color/semantic_text_primary"/>
-
-    <EditText
-        android:id="@+id/editTextEmailAddress"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/email_hint"
-        android:inputType="textEmailAddress"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/edit_text_background"
-        android:textColor="@color/semantic_text_primary"
-        android:textColorHint="@color/semantic_text_secondary"/>
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingHorizontal="28dp"
+        android:paddingTop="80dp"
+        android:paddingBottom="40dp">
 
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/senha_hint"
-        android:inputType="textPassword"
-        android:padding="12dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/edit_text_background"
-        android:textColor="@color/semantic_text_primary"
-        android:textColorHint="@color/semantic_text_secondary"/>
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="64dp"
+            android:contentDescription="@string/app_logo_content_description"
+            android:src="@drawable/logobranca"
+            app:tint="?attr/colorOnBackground"
+            android:scaleType="fitCenter"/>
 
-    <Button
-        android:id="@+id/buttonLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/login_button_text"
-        android:padding="12dp"
-        android:backgroundTint="@color/semantic_accent"
-        android:textColor="@color/white"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bem-vindo"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnBackground"
+            android:layout_marginBottom="6dp"
+            android:letterSpacing="-0.02"/>
 
-    <TextView
-        android:id="@+id/text_cadastre_se"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/nao_tem_conta_cadastre_se"
-        android:textColor="@color/semantic_accent"
-        android:layout_marginTop="24dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="8dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fa&#231;a login para continuar"
+            android:textSize="15sp"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:layout_marginBottom="40dp"/>
 
-</LinearLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="@string/email_hint"
+            style="@style/IBF.TextInputLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextEmailAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:textColor="?attr/colorOnSurface"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:hint="@string/senha_hint"
+            app:endIconMode="password_toggle"
+            style="@style/IBF.TextInputLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:textColor="?attr/colorOnSurface"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonLogin"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="@string/login_button_text"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            app:backgroundTint="?attr/colorOnBackground"
+            app:cornerRadius="12dp"/>
+
+        <TextView
+            android:id="@+id/text_cadastre_se"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nao_tem_conta_cadastre_se"
+            android:textColor="@color/accent"
+            android:textSize="14sp"
+            android:layout_marginTop="24dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"/>
+
+    </LinearLayout>
+</ScrollView>

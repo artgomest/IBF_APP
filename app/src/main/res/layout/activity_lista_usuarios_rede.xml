@@ -1,63 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:fitsSystemWindows="true"
-    android:paddingTop="?attr/actionBarSize"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/semantic_background"
-    tools:context=".ui.usuarios.ListaUsuariosRedeActivity">
+    android:background="?attr/colorBackground">
 
-    <RelativeLayout
+    <!-- Header -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
-        <ImageView
-            android:id="@+id/button_back"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="56dp"
+        android:paddingBottom="16dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:gravity="center_vertical"
+        android:background="?attr/colorBackground">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_arrow_back"
-            android:layout_centerVertical="true"
-            android:padding="8dp"
-            android:contentDescription="@string/voltar"
-            app:tint="@color/semantic_text_primary" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Voltar"
+            app:tint="?attr/colorOnBackground"
+            android:padding="8dp" />
 
         <TextView
-            android:id="@+id/text_page_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/usuarios_da_rede"
-            android:textColor="@color/semantic_text_primary"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-    </RelativeLayout>
+            android:layout_weight="1"
+            android:text="Usuarios da Rede"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnBackground"
+            android:layout_marginStart="4dp" />
 
+        <ImageButton
+            android:id="@+id/btn_convidar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_person_add"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Convidar usuario"
+            app:tint="?attr/colorOnBackground"
+            android:padding="8dp" />
+    </LinearLayout>
+
+    <!-- Tabs -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/semantic_background"
-        app:tabTextColor="@color/semantic_text_secondary"
-        app:tabSelectedTextColor="@color/semantic_accent"
-        app:tabIndicatorColor="@color/semantic_accent" />
+        android:layout_height="48dp"
+        android:layout_marginHorizontal="20dp"
+        app:tabBackground="?attr/colorBackground"
+        app:tabTextColor="?attr/colorOnSurfaceVariant"
+        app:tabSelectedTextColor="?attr/colorOnBackground"
+        app:tabIndicatorColor="?attr/colorOnBackground"
+        app:tabIndicatorHeight="2dp"
+        app:tabGravity="fill"
+        app:tabMode="fixed" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/colorOutlineVariant" />
+
+    <!-- ViewPager -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_adicionar_usuario"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_add_user"
-        android:contentDescription="@string/adicionar_novo_usuario_content_description"
-        app:tint="@color/white"
-        app:backgroundTint="@color/design_default_color_primary" />
 
 </LinearLayout>
