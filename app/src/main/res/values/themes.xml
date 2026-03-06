@@ -71,6 +71,10 @@
     <!--   Reusable Component Styles                 -->
     <!-- =========================================== -->
 
+    <!-- Base styles (required for dot-notation inheritance) -->
+    <style name="IBF" parent="" />
+    <style name="IBF.Text" parent="IBF" />
+
     <!-- Cards -->
     <style name="IBF.Card" parent="Widget.Material3.CardView.Outlined">
         <item name="cardBackgroundColor">?attr/colorSurface</item>
