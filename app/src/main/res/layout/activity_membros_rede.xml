@@ -47,7 +47,6 @@
             android:contentDescription="Adicionar membro"
             app:tint="?attr/colorOnBackground"
             android:padding="8dp" />
-        <Button android:id="@+id/button_ver_agenda" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
 </LinearLayout>
 
     <!-- Search -->
