@@ -56,8 +56,6 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="16dp"
-        app:startIconDrawable="@drawable/ic_search"
-        app:startIconTint="?attr/colorOnSurfaceVariant"
         app:hintTextColor="?attr/colorOnSurfaceVariant">
 
         <com.google.android.material.textfield.TextInputEditText

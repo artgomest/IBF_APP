@@ -42,7 +42,7 @@
             android:id="@+id/btn_convidar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_person_add"
+            android:src="@drawable/ic_add_user"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Convidar usuario"
             app:tint="?attr/colorOnBackground"
