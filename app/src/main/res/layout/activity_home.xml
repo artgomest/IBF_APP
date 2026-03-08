@@ -1,27 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/semantic_background"
     android:gravity="center"
-    tools:context=".ui.main.HomeActivity"> <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/home_screen_title"
-    android:textColor="@color/semantic_text_primary"
-    android:textSize="24sp"
-    android:textStyle="bold"
-    android:layout_marginBottom="32dp"/>
+    tools:context=".ui.main.HomeActivity">
 
-    <Button
-        android:id="@+id/buttonLogout"
+    <ImageView
+        android:layout_width="160dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="@dimen/space_xxl"
+        android:contentDescription="@string/app_logo_content_description"
+        android:src="@drawable/logobranca"
+        android:scaleType="fitCenter"
+        app:tint="?attr/colorOnBackground" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/home_screen_title"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="@dimen/text_headline_lg"
+        android:textStyle="bold"
+        android:layout_marginBottom="@dimen/space_xl" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/btn_height_md"
         android:text="@string/logout_button_text"
-        android:padding="12dp"
-        android:backgroundTint="@color/semantic_accent"
-        android:textColor="@color/white"/>
+        android:paddingHorizontal="@dimen/space_xl"
+        style="@style/IBF.Button.Secondary" />
 
 </LinearLayout>
