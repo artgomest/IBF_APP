@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_background"
     android:fillViewport="true"
     tools:context=".ui.agenda.AgendarReuniaoActivity">
 
@@ -20,28 +19,24 @@
             android:layout_gravity="center"
             android:layout_marginBottom="24dp"
             android:text="Agendar Discipulado"
-            android:textColor="@color/dark_text_primary"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <!-- Seleção de Membro -->
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            style="@style/IBF.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:hint="Membro"
-            app:boxBackgroundColor="@color/dark_card_background"
-            app:boxStrokeColor="@color/dark_accent"
-            app:hintTextColor="@color/dark_accent"
-            android:backgroundTint="@color/dark_accent">
+            android:hint="Membro">
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteMembro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-                android:textColor="@color/dark_text_primary" />
+                android:textColor="?attr/colorOnSurface" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Data -->
@@ -50,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="Data e Hora"
-            android:textColor="@color/dark_text_secondary" />
+            android:textColor="?attr/colorOnSurfaceVariant" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -65,9 +60,7 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
                 android:text="Data"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:textColor="@color/dark_accent"
-                app:strokeColor="@color/dark_accent" />
+                style="@style/IBF.Button.Secondary" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_hora"
@@ -76,9 +69,7 @@
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:text="Hora"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:textColor="@color/dark_accent"
-                app:strokeColor="@color/dark_accent" />
+                style="@style/IBF.Button.Secondary" />
         </LinearLayout>
 
         <TextView
@@ -88,36 +79,31 @@
             android:layout_marginBottom="16dp"
             android:gravity="center"
             android:text="Nenhuma data selecionada"
-            android:textColor="@color/dark_text_primary"
+            android:textColor="?attr/colorOnSurface"
             android:textStyle="bold" />
 
         <!-- Local -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/IBF.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:hint="Local"
-            app:boxBackgroundColor="@color/dark_card_background"
-            app:boxStrokeColor="@color/dark_accent"
-            app:hintTextColor="@color/dark_text_secondary">
+            android:hint="Local">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_local"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/dark_text_primary" />
+                android:textColor="?attr/colorOnSurface" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Observações -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/IBF.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:hint="Observações (Opcional)"
-            app:boxBackgroundColor="@color/dark_card_background"
-            app:boxStrokeColor="@color/dark_accent"
-            app:hintTextColor="@color/dark_accent"
-            android:backgroundTint="@color/dark_accent">
+            android:hint="Observações (Opcional)">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_observacoes"
@@ -126,7 +112,7 @@
                 android:inputType="textMultiLine"
                 android:minLines="3"
                 android:gravity="top|start"
-                android:textColor="@color/dark_text_primary" />
+                android:textColor="?attr/colorOnSurface" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Actions -->
@@ -135,11 +121,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:padding="12dp"
             android:text="Agendar Discipulado"
-            android:backgroundTint="@color/dark_accent"
-            android:textColor="@color/white"
-            app:cornerRadius="8dp" />
+            style="@style/IBF.Button.Accent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_convidar_whatsapp"
