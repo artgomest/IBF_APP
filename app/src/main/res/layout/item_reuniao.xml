@@ -1,87 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardBackgroundColor="@color/dark_card_background"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    android:layout_marginBottom="@dimen/space_sm"
+    style="@style/IBF.Card">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="@dimen/card_padding">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
-            
+            android:gravity="center_vertical"
+            android:layout_marginBottom="@dimen/space_sm">
+
             <TextView
                 android:id="@+id/text_membro_nome"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Nome do Membro"
-                android:textColor="@color/dark_text_primary"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="@dimen/text_title_md"
+                android:textStyle="bold"
+                tools:text="Nome do Membro" />
 
             <TextView
                 android:id="@+id/text_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_status_pending"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="4dp"
-                android:text="Agendada"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:paddingHorizontal="@dimen/space_sm"
+                android:paddingVertical="@dimen/space_xs"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_body_sm"
+                tools:text="Agendada" />
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="8dp">
+            android:gravity="center_vertical"
+            android:layout_marginBottom="@dimen/space_xs">
 
             <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="@dimen/icon_sm"
+                android:layout_height="@dimen/icon_sm"
                 android:src="@drawable/ic_calendar"
-                app:tint="@color/dark_accent"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="@dimen/space_sm"
+                android:contentDescription="@null"
+                app:tint="@color/accent" />
 
             <TextView
                 android:id="@+id/text_data_hora"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10/10/2023 - 14:00"
-                android:textColor="@color/dark_text_secondary" />
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="@dimen/text_body_md"
+                tools:text="10/10/2023 - 14:00" />
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="4dp">
+            android:gravity="center_vertical">
 
             <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="@dimen/icon_sm"
+                android:layout_height="@dimen/icon_sm"
                 android:src="@drawable/ic_location"
-                app:tint="@color/dark_accent"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="@dimen/space_sm"
+                android:contentDescription="@null"
+                app:tint="@color/accent" />
 
             <TextView
                 android:id="@+id/text_local"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Local: Igreja"
-                android:textColor="@color/dark_text_secondary" />
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="@dimen/text_body_md"
+                tools:text="Local: Igreja" />
+
         </LinearLayout>
+
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+
+</com.google.android.material.card.MaterialCardView>
