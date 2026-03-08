@@ -1,81 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="?android:colorBackground">
+    android:background="?attr/colorBackground">
 
     <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/header_height"
         android:orientation="horizontal"
-        android:paddingTop="56dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="20dp"
         android:gravity="center_vertical"
-        android:background="?android:colorBackground">
+        android:paddingHorizontal="@dimen/space_sm"
+        android:background="?attr/colorBackground">
 
-        <ImageButton
-            android:id="@+id/btn_back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+        <ImageView
+            android:id="@+id/button_back"
+            android:layout_width="@dimen/icon_xl"
+            android:layout_height="@dimen/icon_xl"
             android:src="@drawable/ic_arrow_back"
+            android:padding="@dimen/space_sm"
+            android:contentDescription="@string/voltar"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Voltar"
-            app:tint="?attr/colorOnBackground"
-            android:padding="8dp" />
+            app:tint="?attr/colorOnBackground" />
 
         <TextView
+            android:id="@+id/text_page_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="Membros da Rede"
-            android:textSize="20sp"
-            android:textStyle="bold"
             android:textColor="?attr/colorOnBackground"
-            android:layout_marginStart="4dp" />
+            android:textSize="@dimen/text_headline_md"
+            android:textStyle="bold" />
 
-        <ImageButton
-            android:id="@+id/fab_adicionar_membro"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_add"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Adicionar membro"
-            app:tint="?attr/colorOnBackground"
-            android:padding="8dp" />
-</LinearLayout>
+        <View
+            android:layout_width="@dimen/icon_xl"
+            android:layout_height="@dimen/icon_xl" />
+    </LinearLayout>
 
-    <!-- Search -->
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/IBF.TextInputLayout.Rounded"
+    <!-- Content below header -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="16dp"
-        app:hintTextColor="?attr/colorOnSurfaceVariant">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/header_height">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_search"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/IBF.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Buscar membro..."
-            android:imeOptions="actionSearch"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginHorizontal="@dimen/screen_padding_horizontal"
+            android:layout_marginTop="@dimen/space_sm"
+            android:layout_marginBottom="@dimen/space_sm"
+            android:hint="Buscar membro...">
 
-    <!-- List -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_membros"
-        android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:textColor="?attr/colorOnSurface" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_membros"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="@dimen/screen_padding_horizontal"
+                android:paddingBottom="@dimen/space_xl"
+                android:clipToPadding="false" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </LinearLayout>
+
+    <!-- FAB -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_adicionar_membro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/space_lg"
+        android:contentDescription="Adicionar membro"
+        android:src="@drawable/ic_add"
+        app:backgroundTint="@color/accent"
+        app:tint="@android:color/white" />
+
+    <Button
+        android:id="@+id/button_ver_agenda"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingHorizontal="20dp"
-        android:paddingBottom="16dp"
-        android:clipToPadding="false" />
+        android:visibility="gone" />
 
-    <Button android:id="@+id/button_ver_agenda" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
