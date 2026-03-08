@@ -93,7 +93,7 @@
         app:backgroundTint="@color/accent"
         app:tint="@android:color/white" />
 
-    <Button
+    <ImageView
         android:id="@+id/button_ver_agenda"
         android:layout_width="0dp"
         android:layout_height="0dp"
