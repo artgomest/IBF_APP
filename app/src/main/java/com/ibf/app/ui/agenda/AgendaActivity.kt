@@ -158,9 +158,9 @@ class AgendaActivity : AppCompatActivity() {
         val totalCells = firstDayOffset + daysInMonth
         val rows = Math.ceil(totalCells / 7.0).toInt()
 
-        val accentColor = ContextCompat.getColor(this, R.color.dark_accent)
-        val textPrimaryColor = ContextCompat.getColor(this, R.color.dark_text_primary)
-        val textSecondaryColor = ContextCompat.getColor(this, R.color.dark_text_secondary)
+        val accentColor = ContextCompat.getColor(this, R.color.accent)
+        val textPrimaryColor = ContextCompat.getColor(this, R.color.ibf_on_surface)
+        val textSecondaryColor = ContextCompat.getColor(this, R.color.ibf_on_surface_variant)
 
         fun dp(value: Int): Int = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, value.toFloat(), resources.displayMetrics

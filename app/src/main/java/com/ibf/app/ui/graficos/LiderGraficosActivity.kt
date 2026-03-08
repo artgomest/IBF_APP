@@ -135,8 +135,8 @@ class LiderGraficosActivity : AppCompatActivity() {
             BarEntry(index.toFloat(), relatorio.totalPessoas.toFloat())
         }
         val dataSet = BarDataSet(entries, getString(R.string.pessoas_por_culto))
-        dataSet.color = ContextCompat.getColor(this, R.color.design_default_color_primary)
-        dataSet.valueTextColor = ContextCompat.getColor(this, R.color.dark_text_primary)
+        dataSet.color = ContextCompat.getColor(this, R.color.accent)
+        dataSet.valueTextColor = ContextCompat.getColor(this, R.color.ibf_on_surface)
         dataSet.valueTextSize = 12f
         chartPessoas.data = BarData(dataSet)
         // CORREÇÃO: toDate com formato
@@ -149,8 +149,8 @@ class LiderGraficosActivity : AppCompatActivity() {
             BarEntry(index.toFloat(), relatorio.valorOferta.toFloat())
         }
         val dataSet = BarDataSet(entries, getString(R.string.ofertas_por_culto))
-        dataSet.color = ContextCompat.getColor(this, R.color.design_default_color_secondary)
-        dataSet.valueTextColor = ContextCompat.getColor(this, R.color.dark_text_primary)
+        dataSet.color = ContextCompat.getColor(this, R.color.ibf_on_surface_variant)
+        dataSet.valueTextColor = ContextCompat.getColor(this, R.color.ibf_on_surface)
         dataSet.valueTextSize = 12f
         chartOfertas.data = BarData(dataSet)
         // CORREÇÃO: Assumindo que você tem 'data' em Relatorio e chamando toDate com formato
@@ -176,13 +176,13 @@ class LiderGraficosActivity : AppCompatActivity() {
         val xAxis = chart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.granularity = 1f
-        xAxis.textColor = ContextCompat.getColor(this, R.color.dark_text_secondary)
+        xAxis.textColor = ContextCompat.getColor(this, R.color.ibf_on_surface_variant)
         xAxis.setDrawGridLines(false)
         xAxis.valueFormatter = formatter
         val leftAxis = chart.axisLeft
-        leftAxis.textColor = ContextCompat.getColor(this, R.color.dark_text_secondary)
+        leftAxis.textColor = ContextCompat.getColor(this, R.color.ibf_on_surface_variant)
         leftAxis.setDrawGridLines(true)
-        leftAxis.gridColor = ContextCompat.getColor(this, R.color.dark_divider)
+        leftAxis.gridColor = ContextCompat.getColor(this, R.color.ibf_outline_variant)
         leftAxis.axisMinimum = 0f
         chart.axisRight.isEnabled = false
     }

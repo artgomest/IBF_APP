@@ -105,8 +105,8 @@ class RelatorioReuniaoActivity : AppCompatActivity() {
 
     private fun setTab(audioMode: Boolean) {
         isAudioMode = audioMode
-        val accentColor = ContextCompat.getColor(this, R.color.dark_accent)
-        val secondaryColor = ContextCompat.getColor(this, R.color.dark_text_secondary)
+        val accentColor = ContextCompat.getColor(this, R.color.accent)
+        val secondaryColor = ContextCompat.getColor(this, R.color.ibf_on_surface_variant)
 
         if (!audioMode) {
             // Text tab selected

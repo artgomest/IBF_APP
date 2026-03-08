@@ -111,9 +111,9 @@ class DetalhesReuniaoActivity : AppCompatActivity() {
         // Status badge with rounded background
         textStatusBadge.text = r.status
         val bgColorRes = when (r.status) {
-            "Concluída" -> R.color.status_green_dark_theme
-            "Cancelada" -> R.color.status_red_dark_theme
-            else -> R.color.dark_accent
+            "Concluída" -> R.color.ibf_success
+            "Cancelada" -> R.color.ibf_error
+            else -> R.color.ibf_warning
         }
         val badgeDrawable = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
