@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_background"
     tools:context=".ui.usuarios.FichaMembroActivity">
 
     <LinearLayout
@@ -28,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="@string/ficha_do_membro"
-                android:textColor="@color/dark_text_primary"
+                android:textColor="?attr/colorOnBackground"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -39,7 +38,7 @@
                 android:contentDescription="@string/voltar"
                 android:padding="8dp"
                 android:src="@drawable/ic_arrow_back"
-                app:tint="@color/dark_text_primary" />
+                app:tint="?attr/colorOnBackground" />
         </RelativeLayout>
 
         <ScrollView
@@ -56,7 +55,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Dados Pessoais"
-                    android:textColor="@color/dark_accent"
+                    android:textColor="@color/accent"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="8dp"/>
@@ -190,7 +189,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Contato e Endereço"
-                    android:textColor="@color/dark_accent"
+                    android:textColor="@color/accent"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginTop="24dp"
@@ -333,7 +332,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Dados Familiares"
-                    android:textColor="@color/dark_accent"
+                    android:textColor="@color/accent"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginTop="24dp"
@@ -440,7 +439,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Dados Eclesiásticos"
-                    android:textColor="@color/dark_accent"
+                    android:textColor="@color/accent"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginTop="24dp"
@@ -605,7 +604,7 @@
         android:text="Marcar Discipulado"
         app:icon="@drawable/ic_calendar"
         app:tint="@color/white"
-        app:backgroundTint="@color/dark_accent" />
+        app:backgroundTint="@color/accent" />
 
     <!-- Botão de Edição (inicialmente visível) -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -617,7 +616,7 @@
         android:src="@drawable/ic_edit"
         android:contentDescription="@string/editar_dados_do_membro"
         app:tint="@color/white"
-        app:backgroundTint="@color/dark_accent" />
+        app:backgroundTint="@color/accent" />
 
     <!-- Botão de Salvar (inicialmente invisível) -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -630,7 +629,7 @@
         android:visibility="gone"
         android:contentDescription="@string/salvar_altera_es"
         app:tint="@color/white"
-        app:backgroundTint="@color/dark_accent" />
+        app:backgroundTint="@color/accent" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

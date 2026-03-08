@@ -7,12 +7,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/dark_background"
     tools:context=".ui.usuarios.DetalhesUsuarioActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
+
         <ImageView
             android:id="@+id/button_back"
             android:layout_width="48dp"
@@ -21,7 +21,7 @@
             android:layout_centerVertical="true"
             android:padding="8dp"
             android:contentDescription="@string/voltar"
-            app:tint="@color/dark_text_primary" />
+            app:tint="?attr/colorOnBackground" />
 
         <TextView
             android:id="@+id/text_page_title"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/detalhes_do_usuario"
-            android:textColor="@color/dark_text_primary"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="22sp"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -42,7 +42,7 @@
         android:padding="16dp">
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/IBF.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/nome_completo_hint"
@@ -52,11 +52,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:textColor="@color/dark_text_primary"/>
+                android:textColor="?attr/colorOnSurface" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/IBF.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/email_hint"
@@ -66,12 +66,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:textColor="@color/dark_text_primary"/>
+                android:textColor="?attr/colorOnSurface" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_papel_texto"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/IBF.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/papel_na_rede"
@@ -81,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:textColor="@color/dark_text_primary"/>
+                android:textColor="?attr/colorOnSurface" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Spinner
@@ -108,15 +108,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/remover_da_rede"
-            android:backgroundTint="@color/status_red_dark_theme"
+            android:backgroundTint="@color/ibf_error"
             android:textColor="@color/white"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="8dp" />
 
         <Button
             android:id="@+id/button_editar_salvar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/editar_informacoes"/>
+            android:text="@string/editar_informacoes" />
     </LinearLayout>
 
 </LinearLayout>

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_background"
     tools:context=".ui.agenda.AgendaActivity">
 
     <LinearLayout
@@ -15,8 +14,7 @@
         <!-- Header -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/dark_card_background">
+            android:layout_height="?attr/actionBarSize">
 
             <ImageView
                 android:id="@+id/button_back"
@@ -26,14 +24,14 @@
                 android:layout_centerVertical="true"
                 android:padding="8dp"
                 android:contentDescription="Voltar"
-                app:tint="@color/dark_text_primary" />
+                app:tint="?attr/colorOnBackground" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="Agenda de Discipulado"
-                android:textColor="@color/dark_text_primary"
+                android:textColor="?attr/colorOnBackground"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </RelativeLayout>
@@ -45,7 +43,6 @@
             android:layout_marginHorizontal="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="4dp"
-            app:cardBackgroundColor="@color/dark_card_background"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp">
 
@@ -70,7 +67,7 @@
                         android:src="@drawable/ic_arrow_back"
                         android:padding="4dp"
                         android:contentDescription="Mês anterior"
-                        app:tint="@color/dark_text_primary" />
+                        app:tint="?attr/colorOnSurface" />
 
                     <TextView
                         android:id="@+id/text_month_year"
@@ -79,7 +76,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="Março 2026"
-                        android:textColor="@color/dark_text_primary"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -90,7 +87,7 @@
                         android:src="@drawable/ic_arrow_forward"
                         android:padding="4dp"
                         android:contentDescription="Próximo mês"
-                        app:tint="@color/dark_text_primary" />
+                        app:tint="?attr/colorOnSurface" />
                 </LinearLayout>
 
                 <!-- Day headers: Dom Seg Ter Qua Qui Sex Sáb -->
@@ -100,13 +97,13 @@
                     android:orientation="horizontal"
                     android:layout_marginBottom="4dp">
 
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="D" android:textColor="@color/dark_text_secondary" android:textSize="12sp" android:textStyle="bold" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="S" android:textColor="@color/dark_text_secondary" android:textSize="12sp" android:textStyle="bold" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="T" android:textColor="@color/dark_text_secondary" android:textSize="12sp" android:textStyle="bold" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="Q" android:textColor="@color/dark_text_secondary" android:textSize="12sp" android:textStyle="bold" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="Q" android:textColor="@color/dark_text_secondary" android:textSize="12sp" android:textStyle="bold" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="S" android:textColor="@color/dark_text_secondary" android:textSize="12sp" android:textStyle="bold" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="S" android:textColor="@color/dark_text_secondary" android:textSize="12sp" android:textStyle="bold" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="D" android:textColor="?attr/colorOnSurfaceVariant" android:textSize="12sp" android:textStyle="bold" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="S" android:textColor="?attr/colorOnSurfaceVariant" android:textSize="12sp" android:textStyle="bold" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="T" android:textColor="?attr/colorOnSurfaceVariant" android:textSize="12sp" android:textStyle="bold" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="Q" android:textColor="?attr/colorOnSurfaceVariant" android:textSize="12sp" android:textStyle="bold" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="Q" android:textColor="?attr/colorOnSurfaceVariant" android:textSize="12sp" android:textStyle="bold" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="S" android:textColor="?attr/colorOnSurfaceVariant" android:textSize="12sp" android:textStyle="bold" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="S" android:textColor="?attr/colorOnSurfaceVariant" android:textSize="12sp" android:textStyle="bold" />
                 </LinearLayout>
 
                 <!-- Calendar grid — populated programmatically -->
@@ -127,7 +124,7 @@
             android:paddingHorizontal="16dp"
             android:paddingVertical="6dp"
             android:text="Todos os discipulados"
-            android:textColor="@color/dark_text_secondary"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="13sp" />
 
         <!-- Meeting List -->
@@ -156,6 +153,7 @@
         android:layout_margin="16dp"
         android:contentDescription="Agendar Reunião"
         app:srcCompat="@drawable/ic_add"
-        android:backgroundTint="@color/dark_accent" />
+        app:backgroundTint="@color/accent"
+        app:tint="@android:color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
