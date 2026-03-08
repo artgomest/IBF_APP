@@ -1,110 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:fitsSystemWindows="true"
-    android:paddingTop="?attr/actionBarSize"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/dark_background"
+    android:fillViewport="true"
     tools:context=".ui.usuarios.SolicitacaoCadastroActivity">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
-        <ImageView
-            android:id="@+id/button_back"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_arrow_back"
-            android:layout_centerVertical="true"
-            android:padding="8dp"
-            android:contentDescription="@string/voltar"
-            app:tint="@color/dark_text_primary" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/criar_nova_conta"
-            android:textColor="@color/dark_text_primary"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-    </RelativeLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/nome_completo_hint"
-                android:layout_marginBottom="16dp">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_nome"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:textColor="@color/dark_text_primary"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/email_hint"
-                android:layout_marginBottom="16dp">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:textColor="@color/dark_text_primary"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/senha_hint"
-                android:layout_marginBottom="16dp">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_senha"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:textColor="@color/dark_text_primary"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/solicitar_entrada_em"
-                android:textSize="16sp"
-                android:textColor="@color/dark_text_secondary"
-                android:layout_marginBottom="8dp"/>
-            <Spinner
-                android:id="@+id/spinner_redes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dropdown"
-                android:background="@drawable/spinner_background"
-                android:layout_marginBottom="24dp"/>
-
-            <Button
-                android:id="@+id/button_enviar_solicitacao"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/enviar_solicitacao" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="@dimen/header_height" android:orientation="horizontal" android:gravity="center_vertical" android:paddingHorizontal="@dimen/space_sm">
+            <ImageView android:id="@+id/button_back" android:layout_width="@dimen/icon_xl" android:layout_height="@dimen/icon_xl" android:src="@drawable/ic_arrow_back" android:padding="@dimen/space_sm" android:contentDescription="@string/voltar" android:background="?attr/selectableItemBackgroundBorderless" app:tint="?attr/colorOnBackground" />
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="@string/criar_nova_conta" android:textColor="?attr/colorOnBackground" android:textSize="@dimen/text_headline_md" android:textStyle="bold" />
+            <View android:layout_width="@dimen/icon_xl" android:layout_height="@dimen/icon_xl" />
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="@dimen/screen_padding_horizontal" android:paddingTop="@dimen/space_md" android:paddingBottom="@dimen/space_xl">
+            <com.google.android.material.textfield.TextInputLayout style="@style/IBF.TextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/nome_completo_hint" android:layout_marginBottom="@dimen/space_md">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/edit_text_nome" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textPersonName" android:textColor="?attr/colorOnSurface" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout style="@style/IBF.TextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/email_hint" android:layout_marginBottom="@dimen/space_md">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/edit_text_email" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textEmailAddress" android:textColor="?attr/colorOnSurface" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout style="@style/IBF.TextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/senha_hint" app:endIconMode="password_toggle" android:layout_marginBottom="@dimen/space_md">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/edit_text_senha" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textPassword" android:textColor="?attr/colorOnSurface" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/solicitar_entrada_em" android:textSize="@dimen/text_body_md" android:textColor="?attr/colorOnSurfaceVariant" android:layout_marginBottom="@dimen/space_sm" />
+            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/space_xl" style="@style/IBF.Card">
+                <Spinner android:id="@+id/spinner_redes" android:layout_width="match_parent" android:layout_height="wrap_content" android:spinnerMode="dropdown" android:background="@drawable/spinner_background" android:minHeight="52dp" android:padding="@dimen/space_md" />
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.button.MaterialButton android:id="@+id/button_enviar_solicitacao" android:layout_width="match_parent" android:layout_height="@dimen/btn_height_md" android:text="@string/enviar_solicitacao" style="@style/IBF.Button.Accent" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
