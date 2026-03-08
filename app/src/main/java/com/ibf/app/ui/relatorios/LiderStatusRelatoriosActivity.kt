@@ -104,53 +104,73 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
             set(2025, Calendar.JULY, 1, 0, 0, 0)
         }.time
 
-        firestore.collection("redes").whereEqualTo("nome", redeAtiva).get().addOnSuccessListener { redesDocs ->
-            if (redesDocs.isEmpty) { return@addOnSuccessListener }
-            val diaDaSemana = redesDocs.documents.first().getLong("diaDaSemana")?.toInt() ?: return@addOnSuccessListener
-
-            firestore.collection("relatorios")
-                .whereEqualTo("autorUid", usuarioAtual.uid)
-                .whereEqualTo("idRede", redeAtiva)
-                .get().addOnSuccessListener { relatoriosDocs ->
-                    val relatoriosEnviados = relatoriosDocs.mapNotNull { doc -> doc.toObject(Relatorio::class.java).apply { id = doc.id } }
-                    val statusFinal = mutableListOf<StatusRelatorio>()
-                    val semanasParaVerificar = 8
-
-                    for (i in 0 until semanasParaVerificar) {
-                        val dataEsperadaCal = Calendar.getInstance()
-                        dataEsperadaCal.add(Calendar.WEEK_OF_YEAR, -i)
-                        dataEsperadaCal.set(Calendar.DAY_OF_WEEK, diaDaSemana)
-
-                        // 2. Adicionamos a condição para ignorar datas anteriores a Julho
-                        if (dataEsperadaCal.time.before(dataInicio) || dataEsperadaCal.time.after(Date())) {
-                            continue
-                        }
-
-                        val dataEsperadaStr = sdf.format(dataEsperadaCal.time)
-                        val relatorioEncontrado = relatoriosEnviados.find { it.dataReuniao == dataEsperadaStr }
-
-                        if (relatorioEncontrado != null) {
-                            statusFinal.add(StatusRelatorio.Enviado(relatorioEncontrado))
-                        } else {
-                            statusFinal.add(StatusRelatorio.Faltante(dataEsperadaStr, redeAtiva))
-                        }
-                    }
-
-                    listaDeStatus.clear()
-                    val sortedList = statusFinal.sortedByDescending {
-                        try {
-                            when(it) {
-                                is StatusRelatorio.Enviado -> sdf.parse(it.relatorio.dataReuniao)
-                                is StatusRelatorio.Faltante -> sdf.parse(it.dataEsperada)
-                            }
-                        } catch (e: Exception) {
-                            Date(0)
-                        }
-                    }
-                    listaDeStatus.addAll(sortedList)
-                    relatorioAdapter.notifyDataSetChanged()
+        firestore.collection("redes").whereEqualTo("nome", redeAtiva).get()
+            .addOnSuccessListener { redesDocs ->
+                if (redesDocs.isEmpty) {
+                    swipeRefreshLayout.isRefreshing = false
+                    Toast.makeText(this, "Rede '$redeAtiva' não encontrada. Configure a rede em Configurações.", Toast.LENGTH_LONG).show()
+                    return@addOnSuccessListener
                 }
-        }
+                val diaDaSemana = redesDocs.documents.first().getLong("diaDaSemana")?.toInt()
+                if (diaDaSemana == null) {
+                    swipeRefreshLayout.isRefreshing = false
+                    Toast.makeText(this, "Dia da semana não configurado para a rede '$redeAtiva'. Acesse Configurações → Editar Rede.", Toast.LENGTH_LONG).show()
+                    return@addOnSuccessListener
+                }
+
+                firestore.collection("relatorios")
+                    .whereEqualTo("autorUid", usuarioAtual.uid)
+                    .whereEqualTo("idRede", redeAtiva)
+                    .get()
+                    .addOnSuccessListener { relatoriosDocs ->
+                        val relatoriosEnviados = relatoriosDocs.mapNotNull { doc -> doc.toObject(Relatorio::class.java).apply { id = doc.id } }
+                        val statusFinal = mutableListOf<StatusRelatorio>()
+                        val semanasParaVerificar = 8
+
+                        for (i in 0 until semanasParaVerificar) {
+                            val dataEsperadaCal = Calendar.getInstance()
+                            dataEsperadaCal.add(Calendar.WEEK_OF_YEAR, -i)
+                            dataEsperadaCal.set(Calendar.DAY_OF_WEEK, diaDaSemana)
+
+                            // 2. Adicionamos a condição para ignorar datas anteriores a Julho
+                            if (dataEsperadaCal.time.before(dataInicio) || dataEsperadaCal.time.after(Date())) {
+                                continue
+                            }
+
+                            val dataEsperadaStr = sdf.format(dataEsperadaCal.time)
+                            val relatorioEncontrado = relatoriosEnviados.find { it.dataReuniao == dataEsperadaStr }
+
+                            if (relatorioEncontrado != null) {
+                                statusFinal.add(StatusRelatorio.Enviado(relatorioEncontrado))
+                            } else {
+                                statusFinal.add(StatusRelatorio.Faltante(dataEsperadaStr, redeAtiva))
+                            }
+                        }
+
+                        listaDeStatus.clear()
+                        val sortedList = statusFinal.sortedByDescending {
+                            try {
+                                when(it) {
+                                    is StatusRelatorio.Enviado -> sdf.parse(it.relatorio.dataReuniao)
+                                    is StatusRelatorio.Faltante -> sdf.parse(it.dataEsperada)
+                                }
+                            } catch (e: Exception) {
+                                Date(0)
+                            }
+                        }
+                        listaDeStatus.addAll(sortedList)
+                        relatorioAdapter.notifyDataSetChanged()
+                        swipeRefreshLayout.isRefreshing = false
+                    }
+                    .addOnFailureListener { e ->
+                        swipeRefreshLayout.isRefreshing = false
+                        Toast.makeText(this, "Erro ao carregar relatórios: ${e.message}", Toast.LENGTH_LONG).show()
+                    }
+            }
+            .addOnFailureListener { e ->
+                swipeRefreshLayout.isRefreshing = false
+                Toast.makeText(this, "Erro ao verificar a rede: ${e.message}", Toast.LENGTH_LONG).show()
+            }
     }
 
     // --- CORREÇÃO AQUI: onitemClick para o líder ---
