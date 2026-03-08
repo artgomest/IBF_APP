@@ -11,7 +11,10 @@
         android:id="@+id/recycler_view_solicitacoes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp"
-        tools:listitem="@layout/item_solicitacao_pendente"/>
+        android:paddingHorizontal="@dimen/screen_padding_horizontal"
+        android:paddingTop="@dimen/space_sm"
+        android:paddingBottom="@dimen/space_xl"
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_solicitacao_pendente" />
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
