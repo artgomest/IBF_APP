@@ -4,28 +4,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    style="@style/Widget.MaterialComponents.CardView"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp"
-    app:cardBackgroundColor="@color/dark_card_background"
-    app:strokeColor="@color/dark_divider"
-    app:strokeWidth="1dp">
+    android:layout_marginBottom="@dimen/space_sm"
+    style="@style/IBF.Card">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="@dimen/card_padding">
 
         <TextView
             android:id="@+id/item_status_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="@dimen/space_xs"
             android:text="@string/item_status_data_label_placeholder"
-            android:textColor="@color/dark_text_primary"
-            android:textSize="18sp"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="@dimen/text_title_lg"
             android:textStyle="bold" />
 
         <TextView
@@ -33,17 +28,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/item_status_rede_label_placeholder"
-            android:textColor="@color/dark_text_secondary"
-            android:textSize="14sp" />
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="@dimen/text_body_md" />
 
         <TextView
             android:id="@+id/item_status_tipo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/item_status_tipo_label_placeholder"
-            android:textColor="@color/dark_text_secondary"
-            android:textSize="14sp" />
-
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="@dimen/text_body_md" />
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
