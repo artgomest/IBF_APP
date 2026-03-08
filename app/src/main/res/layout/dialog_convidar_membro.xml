@@ -4,39 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="24dp"
-    android:background="@drawable/bg_card_modern">
+    android:padding="@dimen/space_lg">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Convidar Membro"
-        android:textColor="@color/dark_text_primary"
-        android:textSize="22sp"
-        android:fontFamily="sans-serif-medium"
-        android:layout_marginBottom="8dp" />
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="@dimen/text_headline_md"
+        android:textStyle="bold"
+        android:layout_marginBottom="@dimen/space_sm" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Digite o CPF do novo membro para enviar o convite via WhatsApp."
-        android:textColor="@color/dark_text_secondary"
-        android:textSize="14sp"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textSize="@dimen/text_body_md"
         android:lineSpacingExtra="2dp"
-        android:layout_marginBottom="24dp" />
+        android:layout_marginBottom="@dimen/space_lg" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_cpf"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/IBF.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="CPF (apenas números)"
-        app:boxCornerRadiusBottomEnd="12dp"
-        app:boxCornerRadiusBottomStart="12dp"
-        app:boxCornerRadiusTopEnd="12dp"
-        app:boxCornerRadiusTopStart="12dp"
-        app:boxStrokeColor="@color/accent_primary"
-        app:hintTextColor="@color/dark_text_secondary">
+        android:hint="CPF (apenas números)">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_cpf"
@@ -44,22 +37,20 @@
             android:layout_height="wrap_content"
             android:inputType="number"
             android:maxLength="11"
-            android:textColor="@color/dark_text_primary" />
+            android:textColor="?attr/colorOnSurface" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_enviar_convite"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginTop="24dp"
+        android:layout_height="@dimen/btn_height_md"
+        android:layout_marginTop="@dimen/space_lg"
         android:text="Enviar Convite"
-        android:textSize="15sp"
         android:enabled="false"
-        android:backgroundTint="@color/accent_secondary"
-        app:cornerRadius="14dp"
+        style="@style/IBF.Button.Accent"
         app:icon="@drawable/ic_whatsapp"
         app:iconGravity="textStart"
-        app:iconPadding="8dp" />
+        app:iconPadding="@dimen/space_sm" />
 
 </LinearLayout>
