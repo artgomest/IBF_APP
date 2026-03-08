@@ -1,32 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/dark_background">
+    android:paddingHorizontal="@dimen/screen_padding_horizontal"
+    android:paddingTop="@dimen/space_lg"
+    android:paddingBottom="@dimen/space_xl">
+
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/space_lg"
+        android:background="?attr/colorOutlineVariant" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/selecionar_tipo_relatorio"
-        android:textColor="@color/dark_text_primary"
-        android:textSize="20sp"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="@dimen/text_title_lg"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="@dimen/space_lg" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_ver_relatorios"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/btn_height_md"
+        android:layout_marginBottom="@dimen/space_sm"
         android:text="@string/ver_relatorios_button"
-        android:layout_marginBottom="8dp"/>
+        style="@style/IBF.Button.Secondary" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_criar_relatorio"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/criar_novo_relatorio_button"/>
+        android:layout_height="@dimen/btn_height_md"
+        android:text="@string/criar_novo_relatorio_button"
+        style="@style/IBF.Button.Accent" />
 
 </LinearLayout>

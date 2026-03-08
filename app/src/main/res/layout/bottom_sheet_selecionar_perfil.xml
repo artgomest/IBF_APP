@@ -1,33 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/dark_background">
+    android:paddingHorizontal="@dimen/screen_padding_horizontal"
+    android:paddingTop="@dimen/space_lg"
+    android:paddingBottom="@dimen/space_xl">
+
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/space_lg"
+        android:background="?attr/colorOutlineVariant"
+        android:backgroundTint="?attr/colorOutlineVariant" />
 
     <TextView
         android:id="@+id/text_greeting_bottom_sheet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/ola_nome_bottom_sheet_placeholder"
-        android:textColor="@color/dark_text_primary"
-        android:textSize="20sp"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="@dimen/text_title_lg"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="@dimen/space_md" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_perfis"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="@dimen/space_md"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_perfil"/> <Button
-    android:id="@+id/button_logout_bottom_sheet"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="@string/logout_button_text_bottom_sheet"/>
+        tools:listitem="@layout/item_perfil" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_logout_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/btn_height_md"
+        android:text="@string/logout_button_text_bottom_sheet"
+        style="@style/IBF.Button.Secondary" />
 
 </LinearLayout>
