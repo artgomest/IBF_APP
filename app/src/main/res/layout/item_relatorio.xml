@@ -6,12 +6,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp"
-    app:cardBackgroundColor="@color/semantic_card_background"
-    app:strokeColor="@color/semantic_divider"
-    app:strokeWidth="1dp">
+    android:layout_marginBottom="@dimen/space_sm"
+    style="@style/IBF.Card">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,43 +15,45 @@
         android:orientation="horizontal">
 
         <View
-            android:layout_width="6dp"
+            android:layout_width="4dp"
             android:layout_height="match_parent"
-            android:background="@color/semantic_accent"/>
+            android:background="@color/accent" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/card_padding">
 
-        <TextView
-            android:id="@+id/item_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/semantic_text_primary"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            tools:text="@string/item_data_label_placeholder" />
+            <TextView
+                android:id="@+id/item_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="@dimen/text_title_md"
+                android:textStyle="bold"
+                tools:text="12/01/2025" />
 
-        <TextView
-            android:id="@+id/item_rede"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/semantic_text_secondary"
-            android:textSize="16sp"
-            tools:text="@string/item_rede_label_placeholder" />
+            <TextView
+                android:id="@+id/item_rede"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="@dimen/text_body_md"
+                android:layout_marginTop="@dimen/space_xs"
+                tools:text="Rede Alpha" />
 
-        <TextView
-            android:id="@+id/item_autor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/semantic_text_secondary"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp"
-            android:alpha="0.7"
-            tools:text="@string/item_autor_label_placeholder" />
+            <TextView
+                android:id="@+id/item_autor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="@dimen/text_body_sm"
+                android:layout_marginTop="@dimen/space_xs"
+                tools:text="Enviado por: Arthur" />
+
         </LinearLayout>
 
     </LinearLayout>
+
 </com.google.android.material.card.MaterialCardView>

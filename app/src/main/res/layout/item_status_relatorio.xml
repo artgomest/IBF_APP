@@ -6,29 +6,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp"
-    app:cardBackgroundColor="@color/dark_card_background">
+    android:layout_marginBottom="@dimen/space_sm"
+    style="@style/IBF.Card">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp"
+        android:padding="@dimen/card_padding"
         android:gravity="center_vertical">
 
         <ImageView
             android:id="@+id/icon_status"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="16dp"
+            android:layout_width="@dimen/icon_xl"
+            android:layout_height="@dimen/icon_xl"
+            android:layout_marginEnd="@dimen/space_md"
             android:contentDescription="@string/status_do_relatorio"
             tools:src="@drawable/ic_check_circle"
-            app:tint="@color/status_green" />
+            app:tint="?attr/colorOnSurfaceVariant" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -40,27 +35,28 @@
                 android:id="@+id/text_data_reuniao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/dark_text_primary"
-                android:textSize="18sp"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="@dimen/text_title_md"
                 android:textStyle="bold"
-                tools:text="@string/data_reuniao_placeholder" />
+                tools:text="12/01/2025" />
 
             <TextView
                 android:id="@+id/text_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/status_green"
-                android:textSize="14sp"
-                tools:text="@string/status_enviado_placeholder" />
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="@dimen/text_body_md"
+                android:layout_marginTop="@dimen/space_xs"
+                tools:text="Enviado" />
 
         </LinearLayout>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/icon_md"
+            android:layout_height="@dimen/icon_md"
             android:src="@drawable/ic_arrow_forward"
-            app:tint="@color/dark_text_primary"
-            android:contentDescription="@string/ver_detalhes" />
+            android:contentDescription="@string/ver_detalhes"
+            app:tint="?attr/colorOnSurfaceVariant" />
 
     </LinearLayout>
 
