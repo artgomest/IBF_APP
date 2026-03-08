@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.ibf.app.R // Importação de R
@@ -68,21 +69,21 @@ class RelatorioAdapter(
             enviadoHolder.rede.text = context.getString(R.string.item_rede_label, relatorio.idRede)
             enviadoHolder.autor.text = context.getString(R.string.item_autor_label, relatorio.autorNome)
 
-            enviadoHolder.cardView.setCardBackgroundColor(context.resources.getColor(R.color.status_green_dark_theme, null))
-            enviadoHolder.cardView.strokeColor = context.resources.getColor(R.color.status_green, null)
-            enviadoHolder.data.setTextColor(context.resources.getColor(R.color.white, null))
-            enviadoHolder.rede.setTextColor(context.resources.getColor(R.color.white, null))
-            enviadoHolder.autor.setTextColor(context.resources.getColor(R.color.white, null))
+            enviadoHolder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.ibf_success))
+            enviadoHolder.cardView.strokeColor = ContextCompat.getColor(context, R.color.ibf_success)
+            enviadoHolder.data.setTextColor(ContextCompat.getColor(context, R.color.white))
+            enviadoHolder.rede.setTextColor(ContextCompat.getColor(context, R.color.white))
+            enviadoHolder.autor.setTextColor(ContextCompat.getColor(context, R.color.white))
 
         } else if (holder.itemViewType == TIPO_FALTANTE && statusAtual is StatusRelatorio.Faltante) {
             val faltanteHolder = holder as FaltanteViewHolder
             faltanteHolder.data.text = context.getString(R.string.item_faltante_data_label, statusAtual.dataEsperada)
             faltanteHolder.rede.text = context.getString(R.string.item_faltante_rede_label, statusAtual.nomeRede)
 
-            faltanteHolder.cardView.setCardBackgroundColor(context.resources.getColor(R.color.status_red_dark_theme, null))
-            faltanteHolder.cardView.strokeColor = context.resources.getColor(R.color.status_red, null)
-            faltanteHolder.data.setTextColor(context.resources.getColor(R.color.white, null))
-            faltanteHolder.rede.setTextColor(context.resources.getColor(R.color.white, null))
+            faltanteHolder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.ibf_error))
+            faltanteHolder.cardView.strokeColor = ContextCompat.getColor(context, R.color.ibf_error)
+            faltanteHolder.data.setTextColor(ContextCompat.getColor(context, R.color.white))
+            faltanteHolder.rede.setTextColor(ContextCompat.getColor(context, R.color.white))
         }
     }
 
