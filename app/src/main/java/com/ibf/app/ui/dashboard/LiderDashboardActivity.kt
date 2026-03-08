@@ -14,6 +14,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ibf.app.R
+import com.ibf.app.ui.agenda.AgendaActivity
 import com.ibf.app.ui.configuracoes.ConfiguracoesRedeActivity
 import com.ibf.app.ui.graficos.LiderGraficosActivity
 import com.ibf.app.ui.main.MainActivity
@@ -115,6 +116,12 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
             } else {
                 Toast.makeText(this, "Aguarde, a carregar dados do perfil...", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        findViewById<MaterialCardView>(R.id.card_agenda).setOnClickListener {
+            val intent = Intent(this, AgendaActivity::class.java)
+            intent.putExtra("REDE_SELECIONADA", redeSelecionada)
+            startActivity(intent)
         }
 
         findViewById<MaterialCardView>(R.id.card_mudar_perfil).setOnClickListener {
