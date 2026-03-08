@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorBackground">
+    >
 
     <!-- Header -->
     <LinearLayout
@@ -12,8 +12,7 @@
         android:layout_height="@dimen/header_height"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingHorizontal="@dimen/space_sm"
-        android:background="?attr/colorBackground">
+        android:paddingHorizontal="@dimen/space_sm">
 
         <ImageView
             android:id="@+id/button_back"
@@ -53,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginHorizontal="@dimen/screen_padding_horizontal"
-            app:tabBackground="?attr/colorBackground"
+            app:tabBackground="?android:colorBackground"
             app:tabTextColor="?attr/colorOnSurfaceVariant"
             app:tabSelectedTextColor="?attr/colorOnBackground"
             app:tabIndicatorColor="?attr/colorOnBackground"
