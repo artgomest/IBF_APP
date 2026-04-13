@@ -2,6 +2,7 @@ package com.ibf.app.ui.relatorios
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -29,6 +30,7 @@ class FormularioRedeActivity : AppCompatActivity() {
     private var relatorioId: String? = null
     private var redeSelecionada: String? = null
     private var dataPendente: String? = null
+    private var modoVisualizacao: Boolean = false
 
     private lateinit var editTextNome: EditText
     private lateinit var editTextRede: EditText
@@ -66,6 +68,7 @@ class FormularioRedeActivity : AppCompatActivity() {
         relatorioId = intent.getStringExtra("RELATORIO_ID")
         redeSelecionada = intent.getStringExtra("REDE_SELECIONADA")
         dataPendente = intent.getStringExtra("DATA_PENDENTE")
+        modoVisualizacao = intent.getBooleanExtra("MODO_VISUALIZACAO", false)
 
         if (redeSelecionada == null) {
             Toast.makeText(this, getString(R.string.erro_rede_nao_especificada_formulario), Toast.LENGTH_LONG).show()
@@ -85,7 +88,10 @@ class FormularioRedeActivity : AppCompatActivity() {
 
         editTextValorOferta.addTextChangedListener(MoneyTextWatcher(editTextValorOferta, currencyFormatter))
 
-        if (relatorioId != null) {
+        if (modoVisualizacao) {
+            carregarRelatorioExistente(relatorioId!!)
+            desabilitarFormulario()
+        } else if (relatorioId != null) {
             carregarRelatorioExistente(relatorioId!!)
             buttonEnviar.text = getString(R.string.form_button_atualizar)
         } else {
@@ -117,6 +123,17 @@ class FormularioRedeActivity : AppCompatActivity() {
             val dadosColetados = coletarDadosDoFormulario()
             salvarRelatorio(relatorioId, dadosColetados)
         }
+    }
+
+    private fun desabilitarFormulario() {
+        editTextNome.isEnabled = false
+        editTextDescricao.isEnabled = false
+        editTextTotalPessoas.isEnabled = false
+        editTextTotalVisitantes.isEnabled = false
+        editTextValorOferta.isEnabled = false
+        editTextComentarios.isEnabled = false
+        buttonEnviar.visibility = View.GONE
+        findViewById<TextView>(R.id.text_page_title)?.text = "Visualizar Relatório"
     }
 
     private fun coletarDadosDoFormulario(): Map<String, Any> {
