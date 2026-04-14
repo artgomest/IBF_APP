@@ -40,7 +40,58 @@ const checkFields = ['temFilhos', 'batizado'];
 // --- INIT AUTH (Anonymous for Connection) ---
 // We authorize the *device* anonymously to read firestore, 
 // but we identify the *member* by CPF Query.
-signInAnonymously(auth).catch(console.error);
+signInAnonymously(auth).catch(err => {
+    console.error("Auth error:", err);
+    if(err.code === 'auth/operation-not-allowed') {
+        alert("Erro Crítico: Login Anônimo não está ativado no Firebase Console! O site não vai funcionar.");
+    }
+});
+
+// --- INPUT MASKS & VIACEP ---
+
+function applyCpfMask(e) {
+    let v = e.target.value.replace(/\D/g, "");
+    v = v.replace(/(\d{3})(\d)/, "$1.$2");
+    v = v.replace(/(\d{3})(\d)/, "$1.$2");
+    v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    e.target.value = v;
+}
+document.getElementById('login-cpf').addEventListener('input', applyCpfMask);
+const formCpf = document.getElementById('cpf');
+if(formCpf) formCpf.addEventListener('input', applyCpfMask);
+
+function maskPhone(e) {
+    let v = e.target.value.replace(/\D/g, "");
+    v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+    v = v.replace(/(\d)(\d{4})$/, "$1-$2");
+    e.target.value = v;
+}
+document.getElementById('celular').addEventListener('input', maskPhone);
+document.getElementById('telefoneFixo').addEventListener('input', maskPhone);
+
+const cepInput = document.getElementById('cep');
+cepInput.addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, "");
+    value = value.replace(/^(\d{5})(\d)/, "$1-$2");
+    e.target.value = value;
+});
+
+cepInput.addEventListener('blur', async function(e) {
+    const cep = e.target.value.replace(/\D/g, "");
+    if(cep.length === 8) {
+        try {
+            const resp = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            const data = await resp.json();
+            if(!data.erro) {
+                document.getElementById('rua').value = data.logradouro || "";
+                document.getElementById('bairro').value = data.bairro || "";
+                document.getElementById('cidade').value = data.localidade || "";
+            }
+        } catch(err) {
+            console.error("ViaCEP error:", err);
+        }
+    }
+});
 
 // --- UI TOGGLES ---
 function showAuthUI() {
@@ -59,14 +110,22 @@ function showFormUI() {
 // --- CPF LOGIN LOGIC ---
 authForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    
+    // Check if auth system completed anonymous sign-in!
+    if (!auth.currentUser) {
+        alert("Conectando ao servidor... Tente novamente em alguns segundos. Se persistir, verifique a internet.");
+        return;
+    }
+
     const btn = authForm.querySelector('button');
     const originalText = btn.textContent;
     btn.textContent = "Verificando...";
     btn.disabled = true;
 
-    const cpfInput = document.getElementById('login-cpf').value.trim();
+    // Get Raw CPF (numbers only) to match Android format
+    const rawCpf = document.getElementById('login-cpf').value.replace(/\D/g, '');
 
-    if (cpfInput.length !== 11) {
+    if (rawCpf.length !== 11) {
         alert("CPF deve ter 11 dígitos.");
         btn.textContent = originalText;
         btn.disabled = false;
@@ -76,7 +135,7 @@ authForm.addEventListener('submit', async (e) => {
     try {
         // Query Firestore for this CPF
         const usersRef = collection(db, "usuarios");
-        const q = query(usersRef, where("cpf", "==", cpfInput));
+        const q = query(usersRef, where("cpf", "==", rawCpf));
         const querySnapshot = await getDocs(q);
 
         if (querySnapshot.empty) {

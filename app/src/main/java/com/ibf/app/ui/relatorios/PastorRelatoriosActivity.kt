@@ -12,12 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.ibf.app.R
 import com.ibf.app.adapters.RelatorioAdapter
 import com.ibf.app.data.models.Relatorio
 import com.ibf.app.data.models.StatusRelatorio
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -36,7 +36,7 @@ class PastorRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnItemCli
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_lider_status_relatorios) // Reutilizando layout
+        setContentView(R.layout.activity_lider_status_relatorios)
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
@@ -47,7 +47,7 @@ class PastorRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnItemCli
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_relatorios)
         swipeRefreshLayout.setOnRefreshListener {
-            carregarRelatorios()
+            carregarStatusDosRelatorios()
         }
 
         textPageTitle = findViewById(R.id.text_page_title)
@@ -60,14 +60,10 @@ class PastorRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnItemCli
             return
         }
 
-        textPageTitle.text = if (redeSelecionada == "Todas") {
-            "Relatórios - Visão Geral"
-        } else {
-            getString(R.string.relatorios_rede_label, redeSelecionada)
-        }
+        textPageTitle.text = getString(R.string.relatorios_rede_label, redeSelecionada)
 
         setupRecyclerView()
-        carregarRelatorios()
+        carregarStatusDosRelatorios()
     }
 
     private fun setupRecyclerView() {
@@ -78,63 +74,98 @@ class PastorRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnItemCli
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun carregarRelatorios() {
+    private fun carregarStatusDosRelatorios() {
         val redeAtiva = redeSelecionada ?: return
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
-        val query = if (redeAtiva == "Todas") {
-            firestore.collection("relatorios")
-        } else {
-            firestore.collection("relatorios")
-                .whereEqualTo("idRede", redeAtiva)
-        }
+        val dataInicio = Calendar.getInstance().apply {
+            set(2025, Calendar.JULY, 1, 0, 0, 0)
+        }.time
 
-        // Ordenar por data de criação ou data de reunião se possível
-        // Como 'dataReuniao' é string no código original, a ordenação pode ser complicada via query direta.
-        // Vamos buscar e ordenar em memória por enquanto, ou usar orderBy se houver timestamp.
-        
-        query.get().addOnSuccessListener { relatoriosDocs ->
-            val relatoriosEnviados = relatoriosDocs.mapNotNull { doc -> doc.toObject(Relatorio::class.java).apply { id = doc.id } }
-            
-            val statusFinal = relatoriosEnviados.map { StatusRelatorio.Enviado(it) }
-
-            listaDeStatus.clear()
-            val sortedList = statusFinal.sortedByDescending {
-                try {
-                    sdf.parse(it.relatorio.dataReuniao)
-                } catch (e: Exception) {
-                    Date(0)
+        firestore.collection("redes").whereEqualTo("nome", redeAtiva).get()
+            .addOnSuccessListener { redesDocs ->
+                if (redesDocs.isEmpty) {
+                    swipeRefreshLayout.isRefreshing = false
+                    Toast.makeText(this, "Rede '$redeAtiva' não encontrada.", Toast.LENGTH_LONG).show()
+                    return@addOnSuccessListener
                 }
+                val diaDaSemana = redesDocs.documents.first().getLong("diaDaSemana")?.toInt()
+                if (diaDaSemana == null) {
+                    swipeRefreshLayout.isRefreshing = false
+                    Toast.makeText(this, "Dia da semana não configurado para a rede '$redeAtiva'.", Toast.LENGTH_LONG).show()
+                    return@addOnSuccessListener
+                }
+
+                // Pastor vê TODOS os relatórios da rede, não apenas os seus
+                firestore.collection("relatorios")
+                    .whereEqualTo("idRede", redeAtiva)
+                    .get()
+                    .addOnSuccessListener { relatoriosDocs ->
+                        val relatoriosEnviados = relatoriosDocs.mapNotNull { doc ->
+                            doc.toObject(Relatorio::class.java).apply { id = doc.id }
+                        }
+                        val statusFinal = mutableListOf<StatusRelatorio>()
+                        val semanasParaVerificar = 8
+
+                        for (i in 0 until semanasParaVerificar) {
+                            val dataEsperadaCal = Calendar.getInstance()
+                            dataEsperadaCal.add(Calendar.WEEK_OF_YEAR, -i)
+                            dataEsperadaCal.set(Calendar.DAY_OF_WEEK, diaDaSemana)
+
+                            if (dataEsperadaCal.time.before(dataInicio) || dataEsperadaCal.time.after(Date())) {
+                                continue
+                            }
+
+                            val dataEsperadaStr = sdf.format(dataEsperadaCal.time)
+                            val relatorioEncontrado = relatoriosEnviados.find { it.dataReuniao == dataEsperadaStr }
+
+                            if (relatorioEncontrado != null) {
+                                statusFinal.add(StatusRelatorio.Enviado(relatorioEncontrado))
+                            } else {
+                                statusFinal.add(StatusRelatorio.Faltante(dataEsperadaStr, redeAtiva))
+                            }
+                        }
+
+                        listaDeStatus.clear()
+                        val sortedList = statusFinal.sortedByDescending {
+                            try {
+                                when (it) {
+                                    is StatusRelatorio.Enviado -> sdf.parse(it.relatorio.dataReuniao)
+                                    is StatusRelatorio.Faltante -> sdf.parse(it.dataEsperada)
+                                }
+                            } catch (e: Exception) {
+                                Date(0)
+                            }
+                        }
+                        listaDeStatus.addAll(sortedList)
+                        relatorioAdapter.notifyDataSetChanged()
+                        swipeRefreshLayout.isRefreshing = false
+                    }
+                    .addOnFailureListener { e ->
+                        swipeRefreshLayout.isRefreshing = false
+                        Toast.makeText(this, "Erro ao carregar relatórios: ${e.message}", Toast.LENGTH_LONG).show()
+                    }
             }
-            listaDeStatus.addAll(sortedList)
-            relatorioAdapter.notifyDataSetChanged()
-            swipeRefreshLayout.isRefreshing = false
-        }
-        .addOnFailureListener {
-            Toast.makeText(this, "Erro ao carregar relatórios.", Toast.LENGTH_SHORT).show()
-            swipeRefreshLayout.isRefreshing = false
-        }
+            .addOnFailureListener { e ->
+                swipeRefreshLayout.isRefreshing = false
+                Toast.makeText(this, "Erro ao verificar a rede: ${e.message}", Toast.LENGTH_LONG).show()
+            }
     }
 
     override fun onItemClick(status: StatusRelatorio) {
-        val intent = Intent(this, FormularioRedeActivity::class.java)
-
-        // Passamos a rede selecionada para o formulário (ou a rede do relatório se for Geral)
-        
         when (status) {
             is StatusRelatorio.Enviado -> {
-                intent.putExtra("REDE_SELECIONADA", status.relatorio.idRede) // Usa a rede do relatório
-                Toast.makeText(this, getString(R.string.editando_relatorio, status.relatorio.dataReuniao), Toast.LENGTH_SHORT).show()
+                // Pastor abre em modo visualização (read-only)
+                val intent = Intent(this, FormularioRedeActivity::class.java)
+                intent.putExtra("REDE_SELECIONADA", status.relatorio.idRede)
                 intent.putExtra("RELATORIO_ID", status.relatorio.id)
                 intent.putExtra("DATA_PENDENTE", status.relatorio.dataReuniao)
-                
-                // IMPORTANTE: Adicionar flag ou lógica para modo "Visualização" se o Pastor não deve editar
-                // Por enquanto, permite edição como o Líder, mas talvez o Pastor só devesse ver.
+                intent.putExtra("MODO_VISUALIZACAO", true)
+                startActivity(intent)
             }
             is StatusRelatorio.Faltante -> {
-               // Pastor não deve ver Faltantes nesta view por enquanto
+                Toast.makeText(this, "Relatório pendente para ${status.dataEsperada}. Aguardando envio pelo líder/secretário.", Toast.LENGTH_SHORT).show()
             }
         }
-        startActivity(intent)
     }
 }

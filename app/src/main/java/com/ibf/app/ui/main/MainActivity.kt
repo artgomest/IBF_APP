@@ -146,7 +146,12 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                         return@addOnSuccessListener
                     }
 
-                    if (funcoes.size > 1) {
+                    // Se é pastor com acesso geral, ir direto ao dashboard de visão geral
+                    if (funcoes.containsKey("geral") && funcoes["geral"] == "pastor") {
+                        salvarPerfilSelecionado("geral", "pastor")
+                        navegarParaTelaCorreta("geral", "pastor")
+                        return@addOnSuccessListener
+                    } else if (funcoes.size > 1) {
                         val bottomSheet = SelecionarPerfilSheet.newInstance(funcoes, nomeUsuario)
                         bottomSheet.show(supportFragmentManager, "SelecionarPerfilSheet")
                     } else {
