@@ -127,20 +127,13 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                 if (document != null && document.exists()) {
                     val nomeUsuario = document.getString("nome") ?: getString(R.string.usuario_padrao)
 
-                    // LER: Pega os dados como um Map genérico (Mantemos essa proteção)
-                    val dadosDoBanco = document.get("funcoes") as? Map<*, *>
+                    // Conversão segura de funcoes — compatível com qualquer tipo retornado pelo Firestore SDK
+                    val funcoes = extrairFuncoes(document.get("funcoes"))
 
-                    // CONVERTER: Cria um NOVO HashMap explícito
-                    val funcoes = HashMap<String, String>()
-                    dadosDoBanco?.forEach { (key, value) ->
-                        if (key is String && value is String) {
-                            funcoes[key] = value
-                        }
-                    }
-
-                    Log.d("DEBUG_LOGIN", "Map convertido com sucesso: $funcoes")
+                    Log.d("DEBUG_LOGIN", "UID: ${user.uid} | funcoes extraídas: $funcoes")
 
                     if (funcoes.isEmpty()) {
+                        Log.e("DEBUG_LOGIN", "funcoes VAZIO. Raw value: ${document.get("funcoes")} | Class: ${document.get("funcoes")?.javaClass?.name}")
                         Toast.makeText(this, getString(R.string.usuario_sem_papeis_definidos), Toast.LENGTH_LONG).show()
                         firebaseAuth.signOut()
                         return@addOnSuccessListener
@@ -148,6 +141,7 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
 
                     // Se é pastor com acesso geral, ir direto ao dashboard de visão geral
                     if (funcoes.containsKey("geral") && funcoes["geral"] == "pastor") {
+                        Log.d("DEBUG_LOGIN", "Pastor geral detectado, indo para dashboard.")
                         salvarPerfilSelecionado("geral", "pastor")
                         navegarParaTelaCorreta("geral", "pastor")
                         return@addOnSuccessListener
@@ -168,6 +162,28 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                 Log.e("DEBUG_LOGIN", "Erro ao buscar usuário: ${e.message}")
                 Toast.makeText(this, "Erro de conexão: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    /**
+     * Extrai funcoes de forma 100% segura, independente do tipo retornado pelo Firestore SDK.
+     * Aceita Map<*, *>, HashMap<String, String>, HashMap<String, Object>, etc.
+     */
+    private fun extrairFuncoes(raw: Any?): HashMap<String, String> {
+        val result = HashMap<String, String>()
+        if (raw == null) {
+            Log.w("DEBUG_LOGIN", "funcoes é null no documento")
+            return result
+        }
+        if (raw is Map<*, *>) {
+            for ((key, value) in raw) {
+                if (key is String && value != null) {
+                    result[key] = value.toString()
+                }
+            }
+        } else {
+            Log.e("DEBUG_LOGIN", "funcoes não é Map! Tipo: ${raw.javaClass.name}, Valor: $raw")
+        }
+        return result
     }
 
     override fun onPerfilSelecionado(rede: String, papel: String) {

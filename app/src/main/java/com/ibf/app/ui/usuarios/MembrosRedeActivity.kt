@@ -97,9 +97,8 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
                     val uid = document.id
                     val nome = document.getString("nome") ?: "Nome Desconhecido"
 
-                    @Suppress("UNCHECKED_CAST")
-                    val funcoes = document.get("funcoes") as? HashMap<String, String>
-                    val papelNaRede = funcoes?.get(redeSelecionada)
+                    val funcoesRaw = document.get("funcoes") as? Map<*, *>
+                    val papelNaRede = funcoesRaw?.get(redeSelecionada)?.toString()
 
                     if (papelNaRede != null) {
                         usuariosDaRede.add(UsuarioRede(uid, nome, papelNaRede))

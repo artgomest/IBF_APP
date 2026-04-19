@@ -66,11 +66,12 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
                         val nome = document.getString("nome") ?: getString(R.string.usuario_padrao)
                         textGreeting.text = getString(R.string.ola_nome, nome)
 
-                        @Suppress("UNCHECKED_CAST")
-                        val funcoes = document.get("funcoes") as? HashMap<String, String>
-                        papelUsuarioLogado = funcoes?.get(redeSelecionada)
+                        val funcoesRaw = document.get("funcoes") as? Map<*, *>
+                        val funcoes = HashMap<String, String>()
+                        funcoesRaw?.forEach { (k, v) -> if (k is String && v != null) funcoes[k] = v.toString() }
+                        papelUsuarioLogado = funcoes[redeSelecionada]
                         if (papelUsuarioLogado == null) {
-                            papelUsuarioLogado = funcoes?.get("geral")
+                            papelUsuarioLogado = funcoes["geral"]
                         }
 
                         // --- CORREÇÃO APLICADA AQUI ---
@@ -151,9 +152,10 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         firestore.collection("usuarios").document(user.uid).get().addOnSuccessListener { document ->
             if (document != null && document.exists()) {
                 val nomeUsuario = document.getString("nome") ?: getString(R.string.usuario_padrao)
-                @Suppress("UNCHECKED_CAST")
-                val funcoes = document.get("funcoes") as? HashMap<String, String>
-                if (!funcoes.isNullOrEmpty()) {
+                val funcoesRaw = document.get("funcoes") as? Map<*, *>
+                val funcoes = HashMap<String, String>()
+                funcoesRaw?.forEach { (k, v) -> if (k is String && v != null) funcoes[k] = v.toString() }
+                if (funcoes.isNotEmpty()) {
                     val bottomSheet = SelecionarPerfilSheet.newInstance(funcoes, nomeUsuario)
                     bottomSheet.show(supportFragmentManager, "SelecionarPerfilSheet")
                 }

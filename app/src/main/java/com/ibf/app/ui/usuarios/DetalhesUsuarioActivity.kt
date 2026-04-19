@@ -81,9 +81,8 @@ class DetalhesUsuarioActivity : AppCompatActivity() {
                 if (document != null && document.exists()) {
                     val nome = document.getString("nome") ?: ""
                     val email = document.getString("email") ?: ""
-                    @Suppress("UNCHECKED_CAST")
-                    val funcoes = document.get("funcoes") as? Map<String, String>
-                    val papelNaRede = funcoes?.get(redeId!!)?.replaceFirstChar { it.titlecase() } ?: "Papel não definido"
+                    val funcoesRaw = document.get("funcoes") as? Map<*, *>
+                    val papelNaRede = funcoesRaw?.get(redeId!!)?.toString()?.replaceFirstChar { it.titlecase() } ?: "Papel não definido"
                     editTextNome.setText(nome)
                     editTextEmail.setText(email)
                     editTextPapel.setText(papelNaRede)

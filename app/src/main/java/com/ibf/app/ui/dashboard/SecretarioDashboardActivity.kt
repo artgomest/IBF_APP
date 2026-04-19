@@ -218,9 +218,10 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
         firestore.collection("usuarios").document(user.uid).get().addOnSuccessListener { document ->
             if (document != null && document.exists()) {
                 val nomeUsuario = document.getString("nome") ?: getString(R.string.usuario_padrao)
-                @Suppress("UNCHECKED_CAST")
-                val funcoes = document.get("funcoes") as? HashMap<String, String>
-                if (!funcoes.isNullOrEmpty()) {
+                val funcoesRaw = document.get("funcoes") as? Map<*, *>
+                val funcoes = HashMap<String, String>()
+                funcoesRaw?.forEach { (k, v) -> if (k is String && v != null) funcoes[k] = v.toString() }
+                if (funcoes.isNotEmpty()) {
                     val bottomSheet = SelecionarPerfilSheet.newInstance(funcoes, nomeUsuario)
                     bottomSheet.show(supportFragmentManager, "SelecionarPerfilSheet")
                 }

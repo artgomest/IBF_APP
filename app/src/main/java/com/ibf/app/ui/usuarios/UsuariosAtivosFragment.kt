@@ -70,9 +70,8 @@ class UsuariosAtivosFragment : Fragment(), UsuarioRedeAdapter.OnItemClickListene
                 for (document in documents) {
                     val uid = document.id
                     val nome = document.getString("nome") ?: "Nome Desconhecido"
-                    @Suppress("UNCHECKED_CAST")
-                    val funcoes = document.get("funcoes") as? HashMap<String, String>
-                    val papelNaRede = funcoes?.get(redeId)
+                    val funcoesRaw = document.get("funcoes") as? Map<*, *>
+                    val papelNaRede = funcoesRaw?.get(redeId)?.toString()
                     if (papelNaRede != null) {
                         usuariosDaRede.add(UsuarioRede(uid, nome, papelNaRede))
                     }
