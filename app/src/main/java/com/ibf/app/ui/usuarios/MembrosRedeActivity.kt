@@ -63,9 +63,8 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
 
     private fun configurarBotoes() {
         findViewById<FloatingActionButton>(R.id.fab_adicionar_membro).setOnClickListener {
-            val intent = Intent(this, CadastroMembroActivity::class.java)
-            intent.putExtra("REDE_SELECIONADA", redeSelecionada)
-            startActivity(intent)
+            Log.d("MembrosRedeActivity", "FAB Adicionar Membro clicado")
+            mostrarDialogoCadastroCpf()
         }
 
         findViewById<ImageView>(R.id.button_ver_agenda).setOnClickListener {
@@ -101,7 +100,8 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
                     val papelNaRede = funcoesRaw?.get(redeSelecionada)?.toString()
 
                     if (papelNaRede != null) {
-                        usuariosDaRede.add(UsuarioRede(uid, nome, papelNaRede))
+                        val cadastroCompleto = document.getBoolean("cadastroCompleto") ?: false
+                        usuariosDaRede.add(UsuarioRede(uid, nome, papelNaRede, cadastroCompleto = cadastroCompleto))
                     }
                 }
                 adapter.atualizarLista(usuariosDaRede.sortedBy { it.nome })
@@ -120,6 +120,104 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
         intent.putExtra("MEMBRO_ID", usuario.uid)
         intent.putExtra("REDE_SELECIONADA", redeSelecionada)
         startActivity(intent)
+    }
+
+    private fun mostrarDialogoCadastroCpf() {
+        try {
+            Log.d("MembrosRedeActivity", "Iniciando mostrarDialogoCadastroCpf")
+            val builder = com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+            builder.setTitle("Cadastrar Novo Membro")
+            builder.setMessage("Digite o CPF do membro para prosseguir:")
+            
+            val input = com.google.android.material.textfield.TextInputEditText(this)
+            input.hint = "000.000.000-00"
+            input.inputType = android.text.InputType.TYPE_CLASS_NUMBER
+            
+            try {
+                input.addTextChangedListener(com.ibf.app.utils.MaskUtils.applyMask(input, com.ibf.app.utils.MaskUtils.MASK_CPF))
+            } catch (e: Exception) {
+                Log.e("MembrosRedeActivity", "Erro ao aplicar máscara: ${e.message}")
+            }
+            
+            val padding = (24 * resources.displayMetrics.density).toInt()
+            val container = android.widget.FrameLayout(this)
+            val lp = android.widget.FrameLayout.LayoutParams(
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            lp.setMargins(padding, 0, padding, 0)
+            input.layoutParams = lp
+            container.addView(input)
+            
+            builder.setView(container)
+
+            builder.setPositiveButton("Avançar") { _, _ ->
+                val cpfComMascara = input.text.toString().trim()
+                val cpf = cpfComMascara.replace(".", "").replace("-", "")
+                if (cpf.length == 11) {
+                    verificarCpfEGerarLink(cpf)
+                } else {
+                    Toast.makeText(this, "CPF inválido", Toast.LENGTH_SHORT).show()
+                }
+            }
+            builder.setNegativeButton("Cancelar", null)
+            
+            Log.d("MembrosRedeActivity", "Exibindo o diálogo")
+            builder.show()
+        } catch (e: Exception) {
+            Log.e("MembrosRedeActivity", "Erro ao criar diálogo: ${e.message}", e)
+            Toast.makeText(this, "Erro ao abrir cadastro: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun verificarCpfEGerarLink(cpf: String) {
+        firestore.collection("usuarios").whereEqualTo("cpf", cpf).get()
+            .addOnSuccessListener { documents ->
+                if (documents.isEmpty) {
+                    val novoMembro = hashMapOf(
+                        "cpf" to cpf,
+                        "nome" to "Novo Membro", // Provisório, será atualizado na web
+                        "cadastroCompleto" to false,
+                        "funcoes" to if (redeSelecionada != null) hashMapOf(redeSelecionada!! to "Membro") else hashMapOf<String, String>()
+                    )
+                    firestore.collection("usuarios").add(novoMembro).addOnSuccessListener {
+                        mostrarDialogoWhatsApp()
+                        carregarMembrosDaRede()
+                    }
+                } else {
+                    // Já cadastrado
+                    mostrarDialogoWhatsApp()
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Erro ao verificar CPF", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun mostrarDialogoWhatsApp() {
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+        builder.setTitle("Enviar Link")
+        builder.setMessage("Membro preparado! Envie o link do portal web pelo WhatsApp para que ele possa completar o cadastro.")
+
+        builder.setPositiveButton("Enviar pelo WhatsApp") { _, _ ->
+            val link = "https://ibfapp-c4078.web.app"
+            val mensagem = "Olá! Por favor, conclua seu cadastro acessando o link: $link \n\nUtilize seu CPF para acessar."
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "text/plain"
+            intent.putExtra(Intent.EXTRA_TEXT, mensagem)
+            intent.setPackage("com.whatsapp")
+            
+            try {
+                startActivity(intent)
+            } catch (e: Exception) {
+                val shareIntent = Intent(Intent.ACTION_SEND)
+                shareIntent.type = "text/plain"
+                shareIntent.putExtra(Intent.EXTRA_TEXT, mensagem)
+                startActivity(Intent.createChooser(shareIntent, "Compartilhar link via"))
+            }
+        }
+        builder.setNegativeButton("Fechar", null)
+        builder.show()
     }
 }
 

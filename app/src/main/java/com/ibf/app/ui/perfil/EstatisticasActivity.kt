@@ -65,14 +65,20 @@ class EstatisticasActivity : AppCompatActivity() {
 
                     // 3. Calcula a taxa de entrega APENAS PARA A REDE ATIVA
                     var totalEsperado = 0
-                    val semanasParaVerificar = 8
-                    for (i in 0 until semanasParaVerificar) {
-                        val dataEsperadaCal = Calendar.getInstance()
-                        dataEsperadaCal.add(Calendar.WEEK_OF_YEAR, -i)
-                        dataEsperadaCal.set(Calendar.DAY_OF_WEEK, diaDaSemana)
-                        if (!dataEsperadaCal.time.after(Date())) {
-                            totalEsperado++
-                        }
+                    val dataInicio = Calendar.getInstance().apply {
+                        set(2025, Calendar.JULY, 1, 0, 0, 0)
+                    }.time
+
+                    val calLoop = Calendar.getInstance()
+                    calLoop.set(Calendar.DAY_OF_WEEK, diaDaSemana)
+                    
+                    if (calLoop.time.after(Date())) {
+                        calLoop.add(Calendar.WEEK_OF_YEAR, -1)
+                    }
+
+                    while (!calLoop.time.before(dataInicio)) {
+                        totalEsperado++
+                        calLoop.add(Calendar.WEEK_OF_YEAR, -1)
                     }
 
                     if (totalEsperado > 0) {

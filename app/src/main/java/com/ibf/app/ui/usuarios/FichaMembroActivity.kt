@@ -14,8 +14,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import com.ibf.app.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.ibf.app.data.models.Reuniao
 import com.ibf.app.ui.agenda.AgendarReuniaoActivity
+import com.ibf.app.ui.agenda.ReuniaoAdapter
+import com.ibf.app.utils.MaskUtils
+import com.ibf.app.R
 
 class FichaMembroActivity : AppCompatActivity() {
 
@@ -31,6 +36,9 @@ class FichaMembroActivity : AppCompatActivity() {
     private lateinit var fabEditarMembro: FloatingActionButton
     private lateinit var fabSalvarMembro: FloatingActionButton
     private lateinit var fabMarcarDiscipulado: ExtendedFloatingActionButton
+    private lateinit var recyclerHistorico: RecyclerView
+    private lateinit var adapterHistorico: ReuniaoAdapter
+    private val listaHistorico = mutableListOf<Reuniao>()
 
     // Inputs
     private lateinit var inputs: List<View> // Lista para facilitar manipular todos de uma vez
@@ -93,7 +101,15 @@ class FichaMembroActivity : AppCompatActivity() {
         }
 
         configurarBotoes()
+        setupHistorico()
         carregarDadosDoMembro()
+    }
+
+    private fun setupHistorico() {
+        recyclerHistorico = findViewById(R.id.recycler_historico_discipulado)
+        recyclerHistorico.layoutManager = LinearLayoutManager(this)
+        adapterHistorico = ReuniaoAdapter(listaHistorico)
+        recyclerHistorico.adapter = adapterHistorico
     }
 
     private fun inicializarComponentes() {
@@ -152,6 +168,14 @@ class FichaMembroActivity : AppCompatActivity() {
             textDataBatismo, textIgrejaBatismo, textTipoMembro, textAceitoPor, textIgrejaAnterior,
             textPastorAnterior, textCargos, textTalentos, textDesejaFuncao
         )
+
+        // Aplicar Máscaras
+        textCpf.addTextChangedListener(MaskUtils.applyMask(textCpf, MaskUtils.MASK_CPF))
+        textCelular.addTextChangedListener(MaskUtils.applyMask(textCelular, MaskUtils.MASK_PHONE))
+        textFixo.addTextChangedListener(MaskUtils.applyMask(textFixo, MaskUtils.MASK_PHONE))
+        textDataNascimento.addTextChangedListener(MaskUtils.applyMask(textDataNascimento, MaskUtils.MASK_DATE))
+        textDataCasamento.addTextChangedListener(MaskUtils.applyMask(textDataCasamento, MaskUtils.MASK_DATE))
+        textDataBatismo.addTextChangedListener(MaskUtils.applyMask(textDataBatismo, MaskUtils.MASK_DATE))
     }
 
     private fun configurarBotoes() {
@@ -209,14 +233,14 @@ class FichaMembroActivity : AppCompatActivity() {
             "sexo" to textSexo.text.toString().trim(),
             "rg" to textRg.text.toString().trim(),
             "orgaoExpeditor" to textOrgaoExpeditor.text.toString().trim(),
-            "cpf" to textCpf.text.toString().trim(),
+            "cpf" to textCpf.text.toString().trim().replace(".", "").replace("-", ""),
             "naturalidade" to textNaturalidade.text.toString().trim(),
             "escolaridade" to textEscolaridade.text.toString().trim(),
 
             // Contato
             "email" to textEmail.text.toString().trim(),
-            "celular" to textCelular.text.toString().trim(),
-            "telefoneFixo" to textFixo.text.toString().trim(),
+            "celular" to textCelular.text.toString().trim().replace("(", "").replace(")", "").replace("-", "").replace(" ", ""),
+            "telefoneFixo" to textFixo.text.toString().trim().replace("(", "").replace(")", "").replace("-", "").replace(" ", ""),
             "cep" to textCep.text.toString().trim(),
             "cidade" to textCidade.text.toString().trim(),
             "rua" to textRua.text.toString().trim(),
@@ -318,7 +342,29 @@ class FichaMembroActivity : AppCompatActivity() {
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(this, "Erro ao carregar dados do membro.", Toast.LENGTH_SHORT).show()
-                    Log.e("FichaMembroActivity", "Erro ao buscar documento: ${e.message}", e)
+                        Log.e("FichaMembroActivity", "Erro ao buscar documento: ${e.message}", e)
+                }
+            carregarHistoricoDiscipulado()
+        }
+    }
+
+    private fun carregarHistoricoDiscipulado() {
+        membroId?.let { id ->
+            firestore.collection("reunioes")
+                .whereEqualTo("membroUid", id)
+                .get()
+                .addOnSuccessListener { documents ->
+                    listaHistorico.clear()
+                    for (doc in documents) {
+                        val r = doc.toObject(Reuniao::class.java)
+                        r.id = doc.id
+                        listaHistorico.add(r)
+                    }
+                    listaHistorico.sortByDescending { it.dataHora?.toDate() }
+                    adapterHistorico.updateList(listaHistorico)
+                }
+                .addOnFailureListener { e ->
+                    Log.e("FichaMembroActivity", "Erro ao carregar histórico: ${e.message}", e)
                 }
         }
     }

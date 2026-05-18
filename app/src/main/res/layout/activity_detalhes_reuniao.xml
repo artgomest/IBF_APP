@@ -130,6 +130,33 @@
             android:contentDescription="Foto da reunião"
             android:layout_marginBottom="24dp" />
 
+        <!-- Audio Section -->
+        <LinearLayout
+            android:id="@+id/section_audio_player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Áudio do Relatório"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_play_audio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ouvir Áudio"
+                style="@style/IBF.Button.Secondary"
+                app:icon="@drawable/ic_play" />
+        </LinearLayout>
+
         <!-- Preencher Relatório button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_preencher_relatorio"
@@ -145,14 +172,45 @@
         <!-- Relatório already filled badge -->
         <TextView
             android:id="@+id/text_relatorio_ok"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="✓ Relatório já preenchido"
+            android:text="Relatório preenchido ✅"
             android:textColor="@color/accent"
-            android:textSize="14sp"
-            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"
             android:visibility="gone" />
+        <!-- Actions (Reschedule/Cancel) -->
+        <LinearLayout
+            android:id="@+id/layout_acoes_agenda"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:visibility="gone">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_remarcar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="Remarcar"
+                style="@style/IBF.Button.Secondary"
+                app:icon="@drawable/ic_calendar" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_cancelar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Cancelar"
+                style="@style/IBF.Button.Secondary"
+                android:textColor="@color/ibf_error"
+                app:iconTint="@color/ibf_error"
+                app:icon="@drawable/ic_close" />
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

@@ -14,14 +14,12 @@
         </LinearLayout>
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="@dimen/screen_padding_horizontal" android:paddingTop="@dimen/space_md" android:paddingBottom="@dimen/space_xl">
             <com.google.android.material.textfield.TextInputLayout style="@style/IBF.TextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="CPF (Apenas n\u00fameros)" android:layout_marginBottom="@dimen/space_md" app:helperText="Ex: 12345678900" tools:ignore="HardcodedText">
-                <com.google.android.material.textfield.TextInputEditText android:id="@+id/edit_text_cpf_membro" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="11" android:textColor="?attr/colorOnSurface" />
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/edit_text_cpf_membro" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="14" android:textColor="?attr/colorOnSurface" />
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout style="@style/IBF.TextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Nome Completo" android:layout_marginBottom="@dimen/space_md" tools:ignore="HardcodedText">
                 <com.google.android.material.textfield.TextInputEditText android:id="@+id/edit_text_nome_membro" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textPersonName" android:textColor="?attr/colorOnSurface" />
             </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout style="@style/IBF.TextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Data de Nascimento (dd/mm/aaaa)" android:layout_marginBottom="@dimen/space_md" tools:ignore="HardcodedText">
-                <com.google.android.material.textfield.TextInputEditText android:id="@+id/edit_text_data_nascimento" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="date" android:textColor="?attr/colorOnSurface" />
-            </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.button.MaterialButton android:id="@+id/button_cadastrar_membro" android:layout_width="match_parent" android:layout_height="@dimen/btn_height_md" android:text="Cadastrar Membro" android:layout_marginTop="@dimen/space_md" style="@style/IBF.Button.Accent" tools:ignore="HardcodedText" />
         </LinearLayout>
     </LinearLayout>

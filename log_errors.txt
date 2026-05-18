@@ -1,0 +1,604 @@
+--------- beginning of main
+05-16 05:05:00.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918700
+05-16 05:05:00.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:00.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:01.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918701
+05-16 05:05:01.680   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:01.680   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:02.481   829   865 E BatteryDump: !@new_battery_dump : 4264,0,1800,2100,100,299,298,312,0,0,309,312,0,Full,NO_CHARGING,None,Good,USB,1,Normal,0,0,9420,0x0,0x30000,0x0,0,0000,0000,00000000,0,0,0,0,1253,4267,9980,978,0,
+05-16 05:05:02.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918702
+05-16 05:05:02.683   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:02.683   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:03.416   816   876 E SensorsHub: AccSensor : Meta event
+05-16 05:05:03.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918703
+05-16 05:05:03.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:03.685   841   875 E HeatmapThread: !@ CAM is Working
+--------- beginning of system
+05-16 05:05:03.827  1130  1223 E Watchdog: !@Sync: 340 heap(MB): 135 / 182 native(MB): 87 FD: 1263 WaitTime: 0 ms GCcnt: 0 FullGC: 0 [2026-05-16 05:05:03.722]
+05-16 05:05:04.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918704
+05-16 05:05:04.681   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:04.681   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:05.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918705
+05-16 05:05:05.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:05.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:06.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918706
+05-16 05:05:06.682   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:06.682   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:07.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918707
+05-16 05:05:07.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:07.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:08.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918708
+05-16 05:05:08.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:08.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:09.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918709
+05-16 05:05:09.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:09.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:10.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918710
+05-16 05:05:10.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:10.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:11.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918711
+05-16 05:05:11.686   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:11.687   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:12.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918712
+05-16 05:05:12.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:12.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:13.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918713
+05-16 05:05:13.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:13.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:14.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918714
+05-16 05:05:14.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:14.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:15.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918715
+05-16 05:05:15.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:15.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:16.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918716
+05-16 05:05:16.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:16.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:17.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918717
+05-16 05:05:17.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:17.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:18.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918718
+05-16 05:05:18.686   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:18.686   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:19.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918719
+05-16 05:05:19.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:19.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:20.399  2374  2754 E BtGatt.AdvertiseManager: [GSIM LOG]: gsimLogHandler, msg: MESSAGE_ADV_SET_STOP, appName: com.google.android.gms, id: 2, isLegacy: true
+05-16 05:05:20.403  2374  2754 E BtGatt.AdvertiseManager: [GSIM LOG]: gsimLogHandler, msg: MESSAGE_ADV_SET_STOP, appName: com.google.android.gms, id: 1, isLegacy: false
+05-16 05:05:20.425  2374  2754 E BtGatt.AdvertiseManager: [GSIM LOG]: gsimLogHandler, msg: MESSAGE_ADV_SET_START, appName: com.google.android.gms, id: 0, isLegacy: true
+05-16 05:05:20.436  1869 12238 E NearbyMediums: MEDIUM_ERROR [SYSTEM][WIFI_LAN][START_LISTENING_INCOMING_CONNECTION][ACCEPT_CONNECTION_FAILED][SOCKET_CLOSED], service-id=NearbySharing
+05-16 05:05:20.436  1869 12238 E NearbyMediums: Extra Sensitive/PII message : Socket closed
+05-16 05:05:20.465  2374  2755 E ScanManager: [GSIM LOG]: gsimLogHandler, msg: MESSAGE_SCAN_STOP, appName: com.google.android.gms, scannerId: 9, reportDelayMillis=0
+05-16 05:05:20.495  2374  2755 E ScanManager: [GSIM LOG]: gsimLogHandler, msg: MESSAGE_SCAN_START, appName: com.google.android.gms, scannerId: 9, reportDelayMillis=0
+05-16 05:05:20.528  2374  2754 E BtGatt.AdvertiseManager: [GSIM LOG]: gsimLogHandler, msg: MESSAGE_ADV_SET_START, appName: com.google.android.gms, id: 1, isLegacy: false
+05-16 05:05:20.543  2374  2754 E BtGatt.AdvertiseManager: [GSIM LOG]: gsimLogHandler, msg: MESSAGE_ADV_SET_START, appName: com.google.android.gms, id: 2, isLegacy: true
+05-16 05:05:20.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918720
+05-16 05:05:20.688   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:20.689   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:21.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918721
+05-16 05:05:21.687   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:21.687   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:22.440  2374  2754 E BtGatt.AdvertiseManager: [GSIM LOG]: gsimLogHandler, msg: MESSAGE_ADV_SET_STOP, appName: com.google.android.gms, id: 0, isLegacy: true
+05-16 05:05:22.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918722
+05-16 05:05:22.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:22.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:23.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918723
+05-16 05:05:23.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:23.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:24.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918724
+05-16 05:05:24.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:24.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:25.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918725
+05-16 05:05:25.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:25.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:26.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918726
+05-16 05:05:26.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:26.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:27.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918727
+05-16 05:05:27.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:27.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:28.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918728
+05-16 05:05:28.681   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:28.681   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:29.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918729
+05-16 05:05:29.679   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:29.679   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:30.501  2374  2755 E ScanManager: [GSIM LOG]: gsimLogHandler, msg: MESSAGE_SCAN_STOP, appName: com.google.android.gms, scannerId: 9, reportDelayMillis=0
+05-16 05:05:30.511  2374  2755 E ScanManager: [GSIM LOG]: gsimLogHandler, msg: MESSAGE_SCAN_START, appName: com.google.android.gms, scannerId: 9, reportDelayMillis=0
+05-16 05:05:30.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918730
+05-16 05:05:30.680   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:30.680   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:30.960 19066 19066 E com.samsung.cmh: Not starting debugger since process cannot load the jdwp agent.
+05-16 05:05:31.015 19066 19080 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.
+05-16 05:05:31.315 19116 19116 E ung.faceservice: Not starting debugger since process cannot load the jdwp agent.
+05-16 05:05:31.366 19116 19129 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.
+05-16 05:05:31.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918731
+05-16 05:05:31.682   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:31.682   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:32.542   829   865 E BatteryDump: !@new_battery_dump : 4264,0,1800,2100,100,297,297,319,0,0,307,319,0,Full,NO_CHARGING,None,Good,USB,1,Normal,0,0,9420,0x0,0x30000,0x0,0,0000,0000,00000000,0,0,0,0,1253,4267,9980,978,0,
+05-16 05:05:32.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918732
+05-16 05:05:32.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:32.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:33.282  1916  1981 E SimpleEventLog: PreciseAlarmManager resize failed! java.nio.charset.MalformedInputException: Input length = 1
+05-16 05:05:33.422  1916  1981 E SimpleEventLog: PreciseAlarmManager resize failed! java.nio.charset.MalformedInputException: Input length = 1
+05-16 05:05:33.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918733
+05-16 05:05:33.683   841   875 E HeatmapThread: !@Entered the read from path function
+05-16 05:05:33.683   841   875 E HeatmapThread: !@Read Extended_heatmap from efs is: 28201 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1616 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1751 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1469 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1433 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1484 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1572 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1680 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1689 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1690 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1692 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 7411 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 9781 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 20004 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 20183 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 22900 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 21598 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 22816 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 11478 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 12020 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 12472 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 12994 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1619 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1779 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1683 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2
+05-16 05:05:33.684   841   875 E HeatmapThread: !@Write Extended Heatmap to efs is: 28202 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1616 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1751 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1469 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1433 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1484 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1572 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1680 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1689 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1690 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1692 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 7411 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 9781 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 20004 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 20183 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 22900 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 21598 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 22816 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 11478 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 12020 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 12472 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 12994 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1619 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1779 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1683 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 20
+05-16 05:05:33.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:33.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:33.832  1130  1223 E Watchdog: !@Sync: 341 heap(MB): 151 / 180 FD: 1262 [2026-05-16 05:05:33.832]
+05-16 05:05:34.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918734
+05-16 05:05:34.682   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:34.682   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:35.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918735
+05-16 05:05:35.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:35.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:36.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918736
+05-16 05:05:36.682   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:36.682   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:37.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918737
+05-16 05:05:37.683   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:37.683   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:38.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918738
+05-16 05:05:38.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:38.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:39.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918739
+05-16 05:05:39.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:39.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:40.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918740
+05-16 05:05:40.680   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:40.680   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:40.766  5392  6837 E WM-WorkerWrapper: Didn't find WorkSpec for id 12a03b72-6f7a-4d5a-8637-1fbf7e3917d1
+05-16 05:05:41.680   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918741
+05-16 05:05:41.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:41.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:42.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918742
+05-16 05:05:42.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:42.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:43.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918743
+05-16 05:05:43.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:43.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:44.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918744
+05-16 05:05:44.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:44.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:45.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918745
+05-16 05:05:45.686   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:45.686   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:46.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918746
+05-16 05:05:46.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:46.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:47.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918747
+05-16 05:05:47.681   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:47.681   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:48.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918748
+05-16 05:05:48.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:48.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:49.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918749
+05-16 05:05:49.682   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:49.682   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:50.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918750
+05-16 05:05:50.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:50.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:51.535  3027  3027 E pageboostd: Received HALT command code 2
+05-16 05:05:51.668  3027  3027 E pageboostd: Received HALT command code 2
+05-16 05:05:51.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918751
+05-16 05:05:51.680   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:51.680   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:51.687   850   850 E SurfaceFlinger: alpha changed 1.000 -> 0.000 - ActivityRecord{139366039 u0 com.ibf.app/.ui.usuarios.MembrosRedeActivity t974}#4432
+05-16 05:05:51.687   850   850 E SurfaceFlinger: alpha changed 1.000 -> 0.000 - DimTransitionLayer for Surface(name=ActivityRecord{139366039 u0 com.ibf.app/.ui.usuarios.MembrosRedeActivity t974})/@0xc71495b#4439
+05-16 05:05:51.687   850   850 E SurfaceFlinger: alpha changed 0.000 -> 1.000 - ActivityRecord{139366039 u0 com.ibf.app/.ui.usuarios.MembrosRedeActivity t974}#4432
+05-16 05:05:51.687   850   850 E SurfaceFlinger: alpha changed 0.000 -> 0.000 - DimTransitionLayer for Surface(name=ActivityRecord{139366039 u0 com.ibf.app/.ui.usuarios.MembrosRedeActivity t974})/@0xc71495b#4439
+05-16 05:05:51.719   850   850 E SurfaceFlinger: alpha changed 0.000 -> 0.019 - DimTransitionLayer for Surface(name=ActivityRecord{139366039 u0 com.ibf.app/.ui.usuarios.MembrosRedeActivity t974})/@0xc71495b#4439
+05-16 05:05:51.736   850   850 E SurfaceFlinger: alpha changed 1.000 -> 0.000 - Surface(name=e2f214b InputMethod)/@0x96d9dd4 - animation-leash of insets_animation#4440
+05-16 05:05:52.184  1130  2760 E WindowManager: win=Window{1aa754b u0 com.ibf.app/com.ibf.app.ui.dashboard.LiderDashboardActivity} destroySurfaces: appStopped=true cleanupOnResume=false win.mWindowRemovalAllowed=false win.mRemoveOnExit=false win.mViewVisibility=8 caller=com.android.server.wm.ActivityRecord.destroySurfaces:25 com.android.server.wm.ActivityRecord.activityStopped:192 com.android.server.wm.ActivityClientController.activityStopped:97 android.app.IActivityClientController$Stub.onTransact:740 com.android.server.wm.ActivityClientController.onTransact:1 android.os.Binder.execTransactInternal:1462 android.os.Binder.execTransact:1401 
+05-16 05:05:52.559  3027  3027 E pageboostd: Received HALT command code 2
+--------- beginning of crash
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: FATAL EXCEPTION: main
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: Process: com.ibf.app, PID: 18559
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: android.content.ActivityNotFoundException: Unable to find explicit activity class {com.ibf.app/com.ibf.app.ui.usuarios.CadastroMembroActivity}; have you declared this activity in your AndroidManifest.xml, or does your intent not match its declared <intent-filter>?
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at android.app.Instrumentation.checkStartActivityResult(Instrumentation.java:2479)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at android.app.Instrumentation.execStartActivity(Instrumentation.java:2015)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at android.app.Activity.startActivityForResult(Activity.java:6169)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at androidx.activity.ComponentActivity.startActivityForResult(ComponentActivity.kt:675)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at android.app.Activity.startActivityForResult(Activity.java:6126)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at androidx.activity.ComponentActivity.startActivityForResult(ComponentActivity.kt:660)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at android.app.Activity.startActivity(Activity.java:6629)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at android.app.Activity.startActivity(Activity.java:6596)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at com.ibf.app.ui.usuarios.MembrosRedeActivity.configurarBotoes$lambda$1(MembrosRedeActivity.kt:68)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at com.ibf.app.ui.usuarios.MembrosRedeActivity.$r8$lambda$AAFuA1KYbkuIKjxGbGEzahIGZJw(Unknown Source:0)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at com.ibf.app.ui.usuarios.MembrosRedeActivity$$ExternalSyntheticLambda4.onClick(D8$$SyntheticClass:0)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at android.view.View.performClick(View.java:8508)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at android.view.View.performClickInternal(View.java:8485)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at android.view.View.-$$Nest$mperformClickInternal(Unknown Source:0)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at android.view.View$PerformClick.run(View.java:33213)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at android.os.Handler.handleCallback(Handler.java:995)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:103)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:273)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:363)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:10060)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:632)
+05-16 05:05:52.560 18559 18559 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:975)
+05-16 05:05:52.609  1130  4177 E ActivityManager: Sending non-protected broadcast com.sec.android.intent.action.APP_HQM_SEND_REQ from system 4041:com.sec.android.diagmonagent/1000 pkg com.sec.android.diagmonagent
+05-16 05:05:52.609  1130  4177 E ActivityManager: java.lang.Throwable
+05-16 05:05:52.609  1130  4177 E ActivityManager: 	at com.android.server.am.BroadcastController.checkBroadcastFromSystem(qb/108131217 5b2bda52f7bb982197015289c3a0c4ab5bebaa0ef53e5c249674668984d62f02:252)
+05-16 05:05:52.609  1130  4177 E ActivityManager: 	at com.android.server.am.BroadcastController.broadcastIntentLockedTraced(qb/108131217 5b2bda52f7bb982197015289c3a0c4ab5bebaa0ef53e5c249674668984d62f02:344)
+05-16 05:05:52.609  1130  4177 E ActivityManager: 	at com.android.server.am.BroadcastController.broadcastIntentLocked(qb/108131217 5b2bda52f7bb982197015289c3a0c4ab5bebaa0ef53e5c249674668984d62f02:18)
+05-16 05:05:52.609  1130  4177 E ActivityManager: 	at com.android.server.am.ActivityManagerService.broadcastIntentWithFeature(qb/108131217 5b2bda52f7bb982197015289c3a0c4ab5bebaa0ef53e5c249674668984d62f02:149)
+05-16 05:05:52.609  1130  4177 E ActivityManager: 	at android.app.IActivityManager$Stub.onTransact$broadcastIntentWithFeature$(IActivityManager.java:12412)
+05-16 05:05:52.609  1130  4177 E ActivityManager: 	at android.app.IActivityManager$Stub.onTransact(IActivityManager.java:3205)
+05-16 05:05:52.609  1130  4177 E ActivityManager: 	at com.android.server.am.ActivityManagerService.onTransact(qb/108131217 5b2bda52f7bb982197015289c3a0c4ab5bebaa0ef53e5c249674668984d62f02:425)
+05-16 05:05:52.609  1130  4177 E ActivityManager: 	at android.os.Binder.execTransactInternal(Binder.java:1457)
+05-16 05:05:52.609  1130  4177 E ActivityManager: 	at android.os.Binder.execTransact(Binder.java:1401)
+05-16 05:05:52.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918752
+05-16 05:05:52.681   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:52.681   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:52.994 19203 19203 E oid.sm.provider: Not starting debugger since process cannot load the jdwp agent.
+05-16 05:05:53.070   850   850 E SurfaceFlinger: alpha changed 1.000 -> 0.000 - DimTransitionLayer for Surface(name=ActivityRecord{139366039 u0 com.ibf.app/.ui.usuarios.MembrosRedeActivity t974})/@0x5931bca#4444
+05-16 05:05:53.070   850   850 E SurfaceFlinger: alpha changed 0.000 -> 0.180 - DimTransitionLayer for Surface(name=ActivityRecord{139366039 u0 com.ibf.app/.ui.usuarios.MembrosRedeActivity t974})/@0x5931bca#4444
+05-16 05:05:53.086 19180 19180 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.
+05-16 05:05:53.131 19203 19203 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.
+05-16 05:05:53.236   850   850 E SurfaceFlinger: alpha changed 0.020 -> 0.000 - DimTransitionLayer for Surface(name=ActivityRecord{139366039 u0 com.ibf.app/.ui.usuarios.MembrosRedeActivity t974})/@0x5931bca#4444
+05-16 05:05:53.503   850   850 E SurfaceFlinger: alpha changed 1.000 -> 0.000 - Surface(name=e2f214b InputMethod)/@0x96d9dd4 - animation-leash of insets_animation#4448
+05-16 05:05:53.520   850   850 E BpTransactionCompletedListener: Failed to transact (-32)
+05-16 05:05:53.608 19180 19259 E GoogleApiManager: Failed to get service from broker. 
+05-16 05:05:53.608 19180 19259 E GoogleApiManager: java.lang.SecurityException: Unknown calling package name 'com.google.android.gms'.
+05-16 05:05:53.608 19180 19259 E GoogleApiManager: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3354)
+05-16 05:05:53.608 19180 19259 E GoogleApiManager: 	at android.os.Parcel.createException(Parcel.java:3338)
+05-16 05:05:53.608 19180 19259 E GoogleApiManager: 	at android.os.Parcel.readException(Parcel.java:3321)
+05-16 05:05:53.608 19180 19259 E GoogleApiManager: 	at android.os.Parcel.readException(Parcel.java:3263)
+05-16 05:05:53.608 19180 19259 E GoogleApiManager: 	at bjpr.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):36)
+05-16 05:05:53.608 19180 19259 E GoogleApiManager: 	at bjnn.z(:com.google.android.gms@261833035@26.18.33 (260400-913931251):143)
+05-16 05:05:53.608 19180 19259 E GoogleApiManager: 	at bitj.run(:com.google.android.gms@261833035@26.18.33 (260400-913931251):42)
+05-16 05:05:53.608 19180 19259 E GoogleApiManager: 	at android.os.Handler.handleCallback(Handler.java:995)
+05-16 05:05:53.608 19180 19259 E GoogleApiManager: 	at android.os.Handler.dispatchMessage(Handler.java:103)
+05-16 05:05:53.608 19180 19259 E GoogleApiManager: 	at dasm.mG(:com.google.android.gms@261833035@26.18.33 (260400-913931251):1)
+05-16 05:05:53.608 19180 19259 E GoogleApiManager: 	at dasm.dispatchMessage(:com.google.android.gms@261833035@26.18.33 (260400-913931251):5)
+05-16 05:05:53.608 19180 19259 E GoogleApiManager: 	at android.os.Looper.loopOnce(Looper.java:273)
+05-16 05:05:53.608 19180 19259 E GoogleApiManager: 	at android.os.Looper.loop(Looper.java:363)
+05-16 05:05:53.608 19180 19259 E GoogleApiManager: 	at android.os.HandlerThread.run(HandlerThread.java:85)
+05-16 05:05:53.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918753
+05-16 05:05:53.680   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:53.680   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:53.702   850   850 E SurfaceFlinger: alpha changed 1.000 -> 0.000 - Surface(name=e2f214b InputMethod)/@0x96d9dd4 - animation-leash of insets_animation#4453
+05-16 05:05:53.800  1130  1170 E SensorService: BigData:Pakage) 2 already disabled. 
+05-16 05:05:54.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918754
+05-16 05:05:54.683   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:54.683   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:55.050  1130  4069 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+05-16 05:05:55.051  1130  4069 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+05-16 05:05:55.051  1130  4069 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+05-16 05:05:55.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918755
+05-16 05:05:55.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:55.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:56.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918756
+05-16 05:05:56.680   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:56.680   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:57.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918757
+05-16 05:05:57.680   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:57.680   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:58.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918758
+05-16 05:05:58.680   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:58.680   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:05:59.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918759
+05-16 05:05:59.680   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:05:59.680   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:00.613  1130  2955 E FreecessController: can't read /proc/12361/comm/proc/12361/comm: open failed: ENOENT (No such file or directory)
+05-16 05:06:00.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918760
+05-16 05:06:00.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:00.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:01.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918761
+05-16 05:06:01.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:01.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:02.599   829   865 E BatteryDump: !@new_battery_dump : 4264,0,1800,2100,100,296,296,326,0,0,306,326,0,Full,NO_CHARGING,None,Good,USB,1,Normal,0,0,9420,0x0,0x30000,0x0,0,0000,0000,00000000,0,0,0,0,1253,4267,9980,978,0,
+05-16 05:06:02.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918762
+05-16 05:06:02.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:02.686   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:03.587 19180 19259 E GoogleApiManager: Failed to get service from broker. 
+05-16 05:06:03.587 19180 19259 E GoogleApiManager: java.lang.SecurityException: Unknown calling package name 'com.google.android.gms'.
+05-16 05:06:03.587 19180 19259 E GoogleApiManager: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3354)
+05-16 05:06:03.587 19180 19259 E GoogleApiManager: 	at android.os.Parcel.createException(Parcel.java:3338)
+05-16 05:06:03.587 19180 19259 E GoogleApiManager: 	at android.os.Parcel.readException(Parcel.java:3321)
+05-16 05:06:03.587 19180 19259 E GoogleApiManager: 	at android.os.Parcel.readException(Parcel.java:3263)
+05-16 05:06:03.587 19180 19259 E GoogleApiManager: 	at bjpr.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):36)
+05-16 05:06:03.587 19180 19259 E GoogleApiManager: 	at bjnn.z(:com.google.android.gms@261833035@26.18.33 (260400-913931251):143)
+05-16 05:06:03.587 19180 19259 E GoogleApiManager: 	at bitj.run(:com.google.android.gms@261833035@26.18.33 (260400-913931251):42)
+05-16 05:06:03.587 19180 19259 E GoogleApiManager: 	at android.os.Handler.handleCallback(Handler.java:995)
+05-16 05:06:03.587 19180 19259 E GoogleApiManager: 	at android.os.Handler.dispatchMessage(Handler.java:103)
+05-16 05:06:03.587 19180 19259 E GoogleApiManager: 	at dasm.mG(:com.google.android.gms@261833035@26.18.33 (260400-913931251):1)
+05-16 05:06:03.587 19180 19259 E GoogleApiManager: 	at dasm.dispatchMessage(:com.google.android.gms@261833035@26.18.33 (260400-913931251):5)
+05-16 05:06:03.587 19180 19259 E GoogleApiManager: 	at android.os.Looper.loopOnce(Looper.java:273)
+05-16 05:06:03.587 19180 19259 E GoogleApiManager: 	at android.os.Looper.loop(Looper.java:363)
+05-16 05:06:03.587 19180 19259 E GoogleApiManager: 	at android.os.HandlerThread.run(HandlerThread.java:85)
+05-16 05:06:03.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918763
+05-16 05:06:03.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:03.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:03.838  1130  1223 E Watchdog: !@Sync: 342 heap(MB): 177 / 180 FD: 1263 [2026-05-16 05:06:03.837]
+05-16 05:06:04.120  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918764120 lastDateWindow=1778918759000
+05-16 05:06:04.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918764
+05-16 05:06:04.683   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:04.683   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:05.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918765
+05-16 05:06:05.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:05.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:06.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918766
+05-16 05:06:06.686   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:06.686   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:07.160  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918767160 lastDateWindow=1778918759000
+05-16 05:06:07.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918767
+05-16 05:06:07.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:07.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:08.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918768
+05-16 05:06:08.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:08.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:09.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918769
+05-16 05:06:09.683   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:09.683   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:10.203  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918770202 lastDateWindow=1778918759000
+05-16 05:06:10.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918770
+05-16 05:06:10.683   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:10.683   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:11.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918771
+05-16 05:06:11.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:11.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:12.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918772
+05-16 05:06:12.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:12.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:13.218  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918773218 lastDateWindow=1778918759000
+05-16 05:06:13.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918773
+05-16 05:06:13.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:13.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:14.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918774
+05-16 05:06:14.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:14.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:15.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918775
+05-16 05:06:15.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:15.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:16.258  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918776257 lastDateWindow=1778918759000
+05-16 05:06:16.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918776
+05-16 05:06:16.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:16.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:17.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918777
+05-16 05:06:17.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:17.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:18.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918778
+05-16 05:06:18.687   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:18.687   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:19.336  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918779336 lastDateWindow=1778918759000
+05-16 05:06:19.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918779
+05-16 05:06:19.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:19.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:20.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918780
+05-16 05:06:20.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:20.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:21.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918781
+05-16 05:06:21.682   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:21.682   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:22.392  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918782392 lastDateWindow=1778918759000
+05-16 05:06:22.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918782
+05-16 05:06:22.680   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:22.680   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:23.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918783
+05-16 05:06:23.686   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:23.686   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:24.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918784
+05-16 05:06:24.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:24.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:25.481  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918785481 lastDateWindow=1778918759000
+05-16 05:06:25.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918785
+05-16 05:06:25.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:25.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:26.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918786
+05-16 05:06:26.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:26.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:27.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918787
+05-16 05:06:27.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:27.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:28.518  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918788518 lastDateWindow=1778918759000
+05-16 05:06:28.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918788
+05-16 05:06:28.680   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:28.680   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:29.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918789
+05-16 05:06:29.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:29.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:30.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918790
+05-16 05:06:30.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:30.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:31.580  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918791579 lastDateWindow=1778918759000
+05-16 05:06:31.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918791
+05-16 05:06:31.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:31.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:32.656   829   865 E BatteryDump: !@new_battery_dump : 4264,0,1800,2100,100,295,295,313,0,0,308,313,0,Full,NO_CHARGING,None,Good,USB,1,Normal,0,0,9420,0x0,0x30000,0x0,0,0000,0000,00000000,0,0,0,0,1253,4267,9980,978,0,
+05-16 05:06:32.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918792
+05-16 05:06:32.683   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:32.683   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:33.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918793
+05-16 05:06:33.684   841   875 E HeatmapThread: !@Entered the read from path function
+05-16 05:06:33.684   841   875 E HeatmapThread: !@Read Extended_heatmap from efs is: 28202 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1616 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1751 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1469 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1433 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1484 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1572 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1680 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1689 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1690 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1692 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 7411 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 9781 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 20004 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 20183 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 22900 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 21598 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 22816 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 11478 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 12020 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 12472 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 12994 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1619 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1779 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1683 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2
+05-16 05:06:33.685   841   875 E HeatmapThread: !@Write Extended Heatmap to efs is: 28203 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1616 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1751 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1469 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1433 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1484 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1572 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1680 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1689 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1690 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1692 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 7411 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 9781 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 20004 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 20183 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 22900 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 21598 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 22816 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 11478 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 12020 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 12472 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 12994 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1619 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1779 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1683 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 20
+05-16 05:06:33.686   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:33.686   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:33.843  1130  1223 E Watchdog: !@Sync: 343 heap(MB): 141 / 181 FD: 1261 [2026-05-16 05:06:33.843]
+05-16 05:06:34.655  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918794648 lastDateWindow=1778918759000
+05-16 05:06:34.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918794
+05-16 05:06:34.680   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:34.680   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:35.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918795
+05-16 05:06:35.682   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:35.682   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:36.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918796
+05-16 05:06:36.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:36.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:37.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918797
+05-16 05:06:37.682   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:37.682   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:37.693  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918797693 lastDateWindow=1778918759000
+05-16 05:06:38.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918798
+05-16 05:06:38.686   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:38.686   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:39.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918799
+05-16 05:06:39.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:39.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:40.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918800
+05-16 05:06:40.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:40.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:40.738  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918800738 lastDateWindow=1778918759000
+05-16 05:06:41.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918801
+05-16 05:06:41.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:41.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:41.772  5392  6836 E WM-WorkerWrapper: Didn't find WorkSpec for id 2451422d-965a-48f2-89e0-9a31f7ad7f0d
+05-16 05:06:42.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918802
+05-16 05:06:42.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:42.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:43.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918803
+05-16 05:06:43.686   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:43.686   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:43.790  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918803789 lastDateWindow=1778918759000
+05-16 05:06:44.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918804
+05-16 05:06:44.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:44.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:45.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918805
+05-16 05:06:45.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:45.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:46.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918806
+05-16 05:06:46.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:46.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:46.868  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918806867 lastDateWindow=1778918759000
+05-16 05:06:47.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918807
+05-16 05:06:47.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:47.686   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:48.517  1869 19382 E jyar    : *~*~*~ Previous channel {0} was garbage collected without being shut down! ~*~*~*
+05-16 05:06:48.517  1869 19382 E jyar    :     Make sure to call shutdown()/shutdownNow()
+05-16 05:06:48.517  1869 19382 E jyar    : java.lang.RuntimeException: ManagedChannel allocation site
+05-16 05:06:48.517  1869 19382 E jyar    : 	at jyaq.<init>(:com.google.android.gms@261833035@26.18.33 (260400-913931251):21)
+05-16 05:06:48.517  1869 19382 E jyar    : 	at jyar.<init>(:com.google.android.gms@261833035@26.18.33 (260400-913931251):10)
+05-16 05:06:48.517  1869 19382 E jyar    : 	at jyap.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):300)
+05-16 05:06:48.517  1869 19382 E jyar    : 	at jxih.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):5)
+05-16 05:06:48.517  1869 19382 E jyar    : 	at dbyo.h(:com.google.android.gms@261833035@26.18.33 (260400-913931251):154)
+05-16 05:06:48.517  1869 19382 E jyar    : 	at hqfl.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):142)
+05-16 05:06:48.517  1869 19382 E jyar    : 	at hdpj.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):17)
+05-16 05:06:48.517  1869 19382 E jyar    : 	at hmrj.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):3)
+05-16 05:06:48.517  1869 19382 E jyar    : 	at hmqk.run(:com.google.android.gms@261833035@26.18.33 (260400-913931251):19)
+05-16 05:06:48.517  1869 19382 E jyar    : 	at hmrl.run(:com.google.android.gms@261833035@26.18.33 (260400-913931251):5)
+05-16 05:06:48.517  1869 19382 E jyar    : 	at bkjq.c(:com.google.android.gms@261833035@26.18.33 (260400-913931251):50)
+05-16 05:06:48.517  1869 19382 E jyar    : 	at bkjq.run(:com.google.android.gms@261833035@26.18.33 (260400-913931251):66)
+05-16 05:06:48.517  1869 19382 E jyar    : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1156)
+05-16 05:06:48.517  1869 19382 E jyar    : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:651)
+05-16 05:06:48.517  1869 19382 E jyar    : 	at bkph.run(:com.google.android.gms@261833035@26.18.33 (260400-913931251):8)
+05-16 05:06:48.517  1869 19382 E jyar    : 	at java.lang.Thread.run(Thread.java:1119)
+05-16 05:06:48.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918808
+05-16 05:06:48.681   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:48.681   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:49.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918809
+05-16 05:06:49.680   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:49.680   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:49.896  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918809896 lastDateWindow=1778918759000
+05-16 05:06:50.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918810
+05-16 05:06:50.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:50.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:51.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918811
+05-16 05:06:51.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:51.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:52.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918812
+05-16 05:06:52.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:52.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:52.917  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918812917 lastDateWindow=1778918759000
+05-16 05:06:53.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918813
+05-16 05:06:53.683   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:53.683   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:54.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918814
+05-16 05:06:54.681   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:54.681   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:55.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918815
+05-16 05:06:55.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:55.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:55.969  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918815969 lastDateWindow=1778918759000
+05-16 05:06:56.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918816
+05-16 05:06:56.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:56.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:57.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918817
+05-16 05:06:57.682   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:57.682   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:58.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918818
+05-16 05:06:58.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:58.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:06:59.040  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918819039 lastDateWindow=1778918759000
+05-16 05:06:59.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918819
+05-16 05:06:59.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:06:59.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:00.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918820
+05-16 05:07:00.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:00.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:01.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918821
+05-16 05:07:01.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:01.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:02.067  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918822067 lastDateWindow=1778918759000
+05-16 05:07:02.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918822
+05-16 05:07:02.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:02.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:02.710   829   865 E BatteryDump: !@new_battery_dump : 4264,0,1800,2100,100,295,294,312,0,0,306,312,0,Full,NO_CHARGING,None,Good,USB,1,Normal,0,0,9420,0x0,0x30000,0x0,0,0000,0000,00000000,0,0,0,0,1253,4267,9980,978,0,
+05-16 05:07:03.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918823
+05-16 05:07:03.686   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:03.686   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:03.850  1130  1223 E Watchdog: !@Sync: 344 heap(MB): 148 / 181 FD: 1263 [2026-05-16 05:07:03.850]
+05-16 05:07:04.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918824
+05-16 05:07:04.682   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:04.682   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:05.112  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918825111 lastDateWindow=1778918759000
+05-16 05:07:05.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918825
+05-16 05:07:05.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:05.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:06.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918826
+05-16 05:07:06.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:06.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:07.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918827
+05-16 05:07:07.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:07.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:08.190  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918828190 lastDateWindow=1778918759000
+05-16 05:07:08.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918828
+05-16 05:07:08.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:08.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:09.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918829
+05-16 05:07:09.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:09.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:10.434 19116 19429 E WorkerUtils: [NewFaceService:2.0]  
+05-16 05:07:10.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918830
+05-16 05:07:10.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:10.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:11.242  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918831242 lastDateWindow=1778918759000
+05-16 05:07:11.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918831
+05-16 05:07:11.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:11.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:12.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918832
+05-16 05:07:12.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:12.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:13.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918833
+05-16 05:07:13.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:13.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:14.348  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918834348 lastDateWindow=1778918759000
+05-16 05:07:14.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918834
+05-16 05:07:14.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:14.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:15.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918835
+05-16 05:07:15.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:15.684   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:15.839 19431 19431 E app.samsungapps: Not starting debugger since process cannot load the jdwp agent.
+05-16 05:07:16.052 19431 19444 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.
+05-16 05:07:16.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918836
+05-16 05:07:16.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:16.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:17.367  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918837366 lastDateWindow=1778918759000
+05-16 05:07:17.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918837
+05-16 05:07:17.685   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:17.685   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:18.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918838
+05-16 05:07:18.683   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:18.683   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:19.678   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918839
+05-16 05:07:19.679   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:19.679   841   875 E HeatmapThread: !@ CAM is Working
+05-16 05:07:20.435  1130  1540 E SemWifiLinkQualityMonitor: Too old or invalid TMI: currentTime=1778918840435 lastDateWindow=1778918759000
+05-16 05:07:20.679   841   875 E HeatmapThread: ECT Thread time in milliseconds: 1778918840
+05-16 05:07:20.684   841   875 E HeatmapThread: !@ CAM New BSOH: 98
+05-16 05:07:20.684   841   875 E HeatmapThread: !@ CAM is Working

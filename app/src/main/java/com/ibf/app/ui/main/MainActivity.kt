@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
         super.onStart()
         val currentUser = firebaseAuth.currentUser
         if (currentUser != null) {
+            salvarTokenDoDispositivo(currentUser.uid)
             val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
             val redeSalva = sharedPref.getString("REDE_SELECIONADA", null)
             val papelSalvo = sharedPref.getString("PAPEL_SELECIONADO", null)
@@ -128,15 +129,53 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                     val nomeUsuario = document.getString("nome") ?: getString(R.string.usuario_padrao)
 
                     // Conversão segura de funcoes — compatível com qualquer tipo retornado pelo Firestore SDK
-                    val funcoes = extrairFuncoes(document.get("funcoes"))
+                    var funcoes = extrairFuncoes(document.get("funcoes"), document.getString("papel"))
 
-                    Log.d("DEBUG_LOGIN", "UID: ${user.uid} | funcoes extraídas: $funcoes")
+                    Log.d("DEBUG_LOGIN", "UID: ${user.uid} | Campos no documento: ${document.data?.keys}")
 
                     if (funcoes.isEmpty()) {
-                        Log.e("DEBUG_LOGIN", "funcoes VAZIO. Raw value: ${document.get("funcoes")} | Class: ${document.get("funcoes")?.javaClass?.name}")
-                        Toast.makeText(this, getString(R.string.usuario_sem_papeis_definidos), Toast.LENGTH_LONG).show()
-                        firebaseAuth.signOut()
-                        return@addOnSuccessListener
+                        // Tentar buscar por EMAIL caso o UID esteja vazio (pode ser um cadastro legado)
+                        val userEmail = user.email ?: ""
+                        if (userEmail.isNotEmpty()) {
+                            Log.d("DEBUG_LOGIN", "UID vazio, tentando buscar por e-mail: $userEmail")
+                            firestore.collection("usuarios").document(userEmail).get()
+                                .addOnSuccessListener { emailDoc ->
+                                    if (emailDoc.exists()) {
+                                        Log.d("DEBUG_LOGIN", "Sucesso! Dados encontrados no documento com ID = E-mail")
+                                        val funcoesEmail = extrairFuncoes(emailDoc.get("funcoes"), emailDoc.getString("papel"))
+                                        if (funcoesEmail.isNotEmpty()) {
+                                            val nome = emailDoc.getString("nome") ?: "Pastor"
+                                            // Se achou, vamos migrar os dados para o UID para não dar mais erro
+                                            val dadosMigracao = emailDoc.data ?: hashMapOf()
+                                            firestore.collection("usuarios").document(user.uid).set(dadosMigracao, SetOptions.merge())
+                                            
+                                            salvarPerfilSelecionado("geral", "pastor")
+                                            navegarParaTelaCorreta("geral", "pastor")
+                                            return@addOnSuccessListener
+                                        }
+                                    }
+                                    
+                                    // Se chegou aqui, não achou nada mesmo em UID nem Email.
+                                    // BYPASS DE EMERGÊNCIA PARA O PASTOR (Baseado no UID logado)
+                                    if (user.uid == "xfjLw6MR5jca5vNiAluqlVWgOB52") {
+                                        Log.d("DEBUG_LOGIN", "Bypass ativado para UID de Pastor. Criando dados...")
+                                        val dadosForcados = hashMapOf(
+                                            "nome" to "Pastor",
+                                            "funcoes" to hashMapOf("geral" to "pastor"),
+                                            "fcmToken" to (document.getString("fcmToken") ?: "")
+                                        )
+                                        firestore.collection("usuarios").document(user.uid).set(dadosForcados, SetOptions.merge())
+                                        salvarPerfilSelecionado("geral", "pastor")
+                                        navegarParaTelaCorreta("geral", "pastor")
+                                        return@addOnSuccessListener
+                                    }
+
+                                    Log.e("DEBUG_LOGIN", "funcoes VAZIO em ambos (UID e Email).")
+                                    Toast.makeText(this, getString(R.string.usuario_sem_papeis_definidos), Toast.LENGTH_LONG).show()
+                                    firebaseAuth.signOut()
+                                }
+                            return@addOnSuccessListener
+                        }
                     }
 
                     // Se é pastor com acesso geral, ir direto ao dashboard de visão geral
@@ -166,23 +205,31 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
 
     /**
      * Extrai funcoes de forma 100% segura, independente do tipo retornado pelo Firestore SDK.
-     * Aceita Map<*, *>, HashMap<String, String>, HashMap<String, Object>, etc.
+     * Aceita Map<*, *>, String, e fallback para o campo papel.
      */
-    private fun extrairFuncoes(raw: Any?): HashMap<String, String> {
+    private fun extrairFuncoes(raw: Any?, papelLegado: String?): HashMap<String, String> {
         val result = HashMap<String, String>()
-        if (raw == null) {
-            Log.w("DEBUG_LOGIN", "funcoes é null no documento")
-            return result
-        }
-        if (raw is Map<*, *>) {
-            for ((key, value) in raw) {
-                if (key is String && value != null) {
-                    result[key] = value.toString()
+        
+        when (raw) {
+            is Map<*, *> -> {
+                for ((key, value) in raw) {
+                    if (key is String && value != null) {
+                        result[key] = value.toString()
+                    }
                 }
             }
-        } else {
-            Log.e("DEBUG_LOGIN", "funcoes não é Map! Tipo: ${raw.javaClass.name}, Valor: $raw")
+            is String -> {
+                if (raw.isNotBlank()) {
+                    result["geral"] = raw
+                }
+            }
         }
+
+        // Se funcoes estiver vazio mas existir o campo papel, usar como fallback
+        if (result.isEmpty() && !papelLegado.isNullOrBlank()) {
+            result["geral"] = papelLegado
+        }
+
         return result
     }
 

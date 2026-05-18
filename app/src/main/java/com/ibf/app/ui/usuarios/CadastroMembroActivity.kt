@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ibf.app.R
+import com.ibf.app.utils.MaskUtils
 
 class CadastroMembroActivity : AppCompatActivity() {
 
@@ -21,6 +22,8 @@ class CadastroMembroActivity : AppCompatActivity() {
         firestore = FirebaseFirestore.getInstance()
         editTextNome = findViewById(R.id.edit_text_nome_membro)
         editTextCpf = findViewById(R.id.edit_text_cpf_membro)
+        
+        editTextCpf.addTextChangedListener(MaskUtils.applyMask(editTextCpf, MaskUtils.MASK_CPF))
 
         findViewById<Button>(R.id.button_cadastrar_membro).setOnClickListener {
             cadastrarNovoMembro()
@@ -31,7 +34,8 @@ class CadastroMembroActivity : AppCompatActivity() {
 
     private fun cadastrarNovoMembro() {
         val nome = editTextNome.text.toString().trim()
-        val cpf = editTextCpf.text.toString().trim()
+        val cpfComMascara = editTextCpf.text.toString().trim()
+        val cpf = cpfComMascara.replace(".", "").replace("-", "")
 
         if (nome.isEmpty()) {
             Toast.makeText(this, "O nome é obrigatório.", Toast.LENGTH_SHORT).show()
@@ -63,10 +67,12 @@ class CadastroMembroActivity : AppCompatActivity() {
     }
 
     private fun salvarMembroNoFirestore(nome: String, cpf: String) {
+        val rede = intent.getStringExtra("REDE_SELECIONADA") ?: ""
+        
         val novoMembro = hashMapOf(
             "nome" to nome,
             "cpf" to cpf,
-            "funcoes" to hashMapOf<String, String>()
+            "funcoes" to if (rede.isNotEmpty()) hashMapOf(rede to "Membro") else hashMapOf<String, String>()
         )
 
         firestore.collection("usuarios")

@@ -576,12 +576,19 @@
                         android:enabled="false"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Deseja função? Qual?"
+                    android:textColor="@color/accent"
+                    android:textSize="14sp"
+                    android:layout_marginTop="8dp"/>
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="80dp"
-                    android:hint="Deseja função? Qual?">
+                    android:layout_marginBottom="24dp"
+                    android:hint="">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/text_deseja_funcao"
                         android:layout_width="match_parent"
@@ -589,6 +596,30 @@
                          android:inputType="textMultiLine"
                         android:enabled="false"/>
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- SEÇÃO: HISTÓRICO DE DISCIPULADOS -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E0E0E0"
+                    android:layout_marginVertical="16dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Histórico de Discipulados"
+                    android:textColor="@color/accent"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_historico_discipulado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="100dp"
+                    tools:listitem="@layout/item_reuniao"
+                    android:nestedScrollingEnabled="false"/>
 
             </LinearLayout>
         </ScrollView>

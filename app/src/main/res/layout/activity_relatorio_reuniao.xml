@@ -83,33 +83,34 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Tab selector: Texto | Áudio -->
-            <LinearLayout
+            <!-- Tab selector using Toggle Group -->
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggle_group_relatorio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="@dimen/space_md">
+                android:layout_marginBottom="@dimen/space_md"
+                app:singleSelection="true"
+                app:selectionRequired="true"
+                app:checkedButton="@+id/tab_texto">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/tab_texto"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginEnd="@dimen/space_xs"
-                    android:text="Resumo em Texto"
-                    style="@style/IBF.Button.Primary"
-                    app:cornerRadius="@dimen/radius_sm" />
+                    android:text="Texto" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/tab_audio"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="@dimen/space_xs"
-                    android:text="Resumo em Áudio"
-                    style="@style/IBF.Button.Secondary"
-                    app:cornerRadius="@dimen/radius_sm" />
-            </LinearLayout>
+                    android:text="Áudio" />
+
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <!-- Text section -->
             <LinearLayout
@@ -203,6 +204,7 @@
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="@dimen/text_body_md" />
             </LinearLayout>
+
 
             <!-- Save button -->
             <com.google.android.material.button.MaterialButton

@@ -63,27 +63,45 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
             firestore.collection("usuarios").document(uid).get()
                 .addOnSuccessListener { document ->
                     if (document.exists()) {
-                        val nome = document.getString("nome") ?: getString(R.string.usuario_padrao)
-                        textGreeting.text = getString(R.string.ola_nome, nome)
+                        val nomeCompleto = document.getString("nome") ?: getString(R.string.usuario_padrao)
+                        val primeiroNome = nomeCompleto.split(" ").firstOrNull() ?: nomeCompleto
+                        textGreeting.text = primeiroNome
 
-                        val funcoesRaw = document.get("funcoes") as? Map<*, *>
-                        val funcoes = HashMap<String, String>()
-                        funcoesRaw?.forEach { (k, v) -> if (k is String && v != null) funcoes[k] = v.toString() }
+                        val funcoes = extrairFuncoes(document.get("funcoes"))
+                        
+                        // Fallback legado
+                        if (funcoes.isEmpty()) {
+                            document.getString("papel")?.let { funcoes["geral"] = it }
+                        }
+
                         papelUsuarioLogado = funcoes[redeSelecionada]
                         if (papelUsuarioLogado == null) {
                             papelUsuarioLogado = funcoes["geral"]
+                        }
+
+                        // Se papelUsuarioLogado continuar nulo, significa que a rede salva no cache foi removida do usuário.
+                        if (papelUsuarioLogado == null) {
+                            Toast.makeText(this@LiderDashboardActivity, "Sua permissão para esta rede foi revogada ou alterada.", Toast.LENGTH_LONG).show()
+                            val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                            sharedPref.edit().clear().apply()
+                            
+                            val intent = Intent(this@LiderDashboardActivity, MainActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                            finish()
+                            return@addOnSuccessListener
                         }
 
                         // --- CORREÇÃO APLICADA AQUI ---
                         // A configuração dos botões agora acontece aqui, DEPOIS que os dados chegaram.
                         configurarBotoesDoMenu()
                     } else {
-                        Toast.makeText(this, "Utilizador não encontrado no banco de dados.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@LiderDashboardActivity, "Utilizador não encontrado no banco de dados.", Toast.LENGTH_SHORT).show()
                     }
                 }
                 .addOnFailureListener { e ->
                     Log.e("LiderDashboard", "Erro ao buscar dados do utilizador: ${e.message}")
-                    Toast.makeText(this, getString(R.string.erro_carregar_dados_usuario), Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@LiderDashboardActivity, getString(R.string.erro_carregar_dados_usuario), Toast.LENGTH_LONG).show()
                 }
         }
     }
@@ -124,10 +142,6 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
             intent.putExtra("REDE_SELECIONADA", redeSelecionada)
             startActivity(intent)
         }
-
-        findViewById<MaterialCardView>(R.id.card_mudar_perfil).setOnClickListener {
-            abrirSeletorDePerfil()
-        }
     }
 
     private fun setupNavigation() {
@@ -152,15 +166,42 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         firestore.collection("usuarios").document(user.uid).get().addOnSuccessListener { document ->
             if (document != null && document.exists()) {
                 val nomeUsuario = document.getString("nome") ?: getString(R.string.usuario_padrao)
-                val funcoesRaw = document.get("funcoes") as? Map<*, *>
-                val funcoes = HashMap<String, String>()
-                funcoesRaw?.forEach { (k, v) -> if (k is String && v != null) funcoes[k] = v.toString() }
+                val funcoes = extrairFuncoes(document.get("funcoes"))
+                
+                // Fallback legado
+                if (funcoes.isEmpty()) {
+                    document.getString("papel")?.let { funcoes["geral"] = it }
+                }
+
                 if (funcoes.isNotEmpty()) {
                     val bottomSheet = SelecionarPerfilSheet.newInstance(funcoes, nomeUsuario)
                     bottomSheet.show(supportFragmentManager, "SelecionarPerfilSheet")
+                } else {
+                    Toast.makeText(this, "Nenhum papel definido para este usuário.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
+    }
+
+    private fun extrairFuncoes(raw: Any?): HashMap<String, String> {
+        val result = HashMap<String, String>()
+        if (raw == null) return result
+        
+        when (raw) {
+            is Map<*, *> -> {
+                for ((key, value) in raw) {
+                    if (key is String && value != null) {
+                        result[key] = value.toString()
+                    }
+                }
+            }
+            is String -> {
+                if (raw.isNotEmpty()) {
+                    result["geral"] = raw
+                }
+            }
+        }
+        return result
     }
 
     @SuppressLint("StringFormatMatches")

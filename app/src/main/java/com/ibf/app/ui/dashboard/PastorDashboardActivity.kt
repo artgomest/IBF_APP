@@ -58,7 +58,10 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
         val diaDaSemana: Int?,
         var totalMembros: Int = 0,
         var ultimoRelatorio: String? = null,
-        var relatorioEmDia: Boolean = false
+        var relatorioEmDia: Boolean = false,
+        var presencaMedia: Int = 0,
+        var totalOfertas: Double = 0.0,
+        var totalVisitantes: Int = 0
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,11 +92,31 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
         auth.currentUser?.uid?.let { uid ->
             firestore.collection("usuarios").document(uid).get()
                 .addOnSuccessListener { doc ->
-                    val nome = doc.getString("nome") ?: getString(R.string.pastor_padrao)
-                    greetingText.text = getString(R.string.ola_pastor_nome, nome)
+                    val nomeCompleto = doc.getString("nome") ?: getString(R.string.pastor_padrao)
+                    val primeiroNome = nomeCompleto.split(" ").firstOrNull() ?: nomeCompleto
+                    greetingText.text = "Pastor $primeiroNome"
+
+                    val funcoes = extrairFuncoes(doc.get("funcoes"))
+                    // Fallback legado
+                    if (funcoes.isEmpty()) {
+                        doc.getString("papel")?.let { funcoes["geral"] = it }
+                    }
+
+                    // Segurança: se não tiver o papel de pastor geral
+                    val papelGeral = funcoes["geral"]
+                    if (papelGeral != "pastor" && papelGeral != "admin") {
+                        Toast.makeText(this@PastorDashboardActivity, "Sua permissão de pastor foi revogada ou alterada.", Toast.LENGTH_LONG).show()
+                        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                        sharedPref.edit().clear().apply()
+                        
+                        val intent = Intent(this@PastorDashboardActivity, MainActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                        finish()
+                    }
                 }
                 .addOnFailureListener {
-                    greetingText.text = getString(R.string.ola_pastor_nome_placeholder)
+                    greetingText.text = "Pastor"
                 }
         }
     }
@@ -122,14 +145,13 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
                             doc.toObject(Relatorio::class.java).apply { id = doc.id }
                         }
 
-                        // Passo 3: Carregar todos os membros
+                        // Passo 3: Carregar todos os usuários para métricas de membros
                         firestore.collection("usuarios").get()
                             .addOnSuccessListener { usuariosDocs ->
-                                processarDados(redes, todosRelatorios, usuariosDocs.size())
+                                processarDados(redes, todosRelatorios, usuariosDocs)
                                 swipeRefresh.isRefreshing = false
                             }
                             .addOnFailureListener {
-                                processarDados(redes, todosRelatorios, 0)
                                 swipeRefresh.isRefreshing = false
                             }
                     }
@@ -150,7 +172,7 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
     private fun processarDados(
         redes: List<RedeInfo>,
         todosRelatorios: List<Relatorio>,
-        totalUsuarios: Int
+        usuariosDocs: com.google.firebase.firestore.QuerySnapshot
     ) {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val currencyFormat = DecimalFormat("R$ #,##0.00")
@@ -185,10 +207,19 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
         val presencaMedia = if (totalRelatoriosRecentes > 0) somaPresencas / totalRelatoriosRecentes else 0
 
         // Atualizar cards de métricas
-        textTotalMembros.text = totalUsuarios.toString()
+        textTotalMembros.text = usuariosDocs.size().toString()
         textPresencaMedia.text = presencaMedia.toString()
         textTotalOfertas.text = currencyFormat.format(somaOfertas)
         textTotalVisitantes.text = somaVisitantes.toString()
+
+        // Mapear usuários por rede para contagem eficiente
+        val usuariosPorRede = mutableMapOf<String, Int>()
+        for (userDoc in usuariosDocs) {
+            val redeNome = userDoc.getString("rede") ?: ""
+            if (redeNome.isNotEmpty()) {
+                usuariosPorRede[redeNome] = (usuariosPorRede[redeNome] ?: 0) + 1
+            }
+        }
 
         // Processar status por rede
         val redesComStatus = redes.map { rede ->
@@ -217,13 +248,36 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
             }
             ultimaData = ultimoEnviado?.dataReuniao
 
-            // Contar membros da rede
-            val totalMembrosRede = relatoriosDaRede.map { it.autorUid }.distinct().size
+            // Contar membros da rede (usando o mapa de usuários)
+            val countMembros = usuariosPorRede[rede.nome] ?: 0
+
+            // Calcular métricas das últimas 8 semanas para a rede
+            val relatoriosRecentesRede = relatoriosDaRede.filter {
+                try {
+                    val dt = sdf.parse(it.dataReuniao)
+                    dt != null && dt.after(oitoSemanasAtras)
+                } catch (_: Exception) { false }
+            }
+
+            var somaPresencasRede = 0
+            var somaOfertasRede = 0.0
+            var somaVisitantesRede = 0
+
+            for (r in relatoriosRecentesRede) {
+                somaPresencasRede += r.totalPessoas
+                somaOfertasRede += r.valorOferta
+                somaVisitantesRede += r.totalVisitantes
+            }
+
+            val mediaPresencaRede = if (relatoriosRecentesRede.isNotEmpty()) somaPresencasRede / relatoriosRecentesRede.size else 0
 
             rede.copy(
                 relatorioEmDia = emDia,
                 ultimoRelatorio = ultimaData,
-                totalMembros = totalMembrosRede
+                totalMembros = countMembros,
+                presencaMedia = mediaPresencaRede,
+                totalOfertas = somaOfertasRede,
+                totalVisitantes = somaVisitantesRede
             )
         }
 
@@ -244,6 +298,11 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
             val textMembros = cardView.findViewById<TextView>(R.id.text_membros_count)
             val textUltimo = cardView.findViewById<TextView>(R.id.text_ultimo_relatorio)
             val statusDot = cardView.findViewById<View>(R.id.view_status_indicator)
+            
+            val textPresencaMediaRede = cardView.findViewById<TextView>(R.id.text_presenca_media_rede)
+            val textVisitantesRede = cardView.findViewById<TextView>(R.id.text_visitantes_rede)
+            val textOfertasRede = cardView.findViewById<TextView>(R.id.text_ofertas_rede)
+            val btnAcessarRede = cardView.findViewById<View>(R.id.btn_acessar_rede)
 
             textNome.text = rede.nome
 
@@ -265,10 +324,18 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
                 textUltimo.text = "Sem relatórios"
             }
 
-            textMembros.visibility = View.GONE // Simplificar por agora
+            textMembros.text = rede.totalMembros.toString()
+            textPresencaMediaRede.text = rede.presencaMedia.toString()
+            textVisitantesRede.text = rede.totalVisitantes.toString()
+            
+            val currencyFormat = DecimalFormat("R$ #,##0.00")
+            textOfertasRede.text = currencyFormat.format(rede.totalOfertas)
 
-            // Clique no card → navegar para detalhes da rede
+            // Clique no card e botão → navegar para detalhes da rede
             cardView.setOnClickListener {
+                mostrarOpcoesRede(rede.nome)
+            }
+            btnAcessarRede.setOnClickListener {
                 mostrarOpcoesRede(rede.nome)
             }
 
@@ -277,7 +344,7 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
     }
 
     private fun mostrarOpcoesRede(nomeRede: String) {
-        val opcoes = arrayOf("Relatórios", "Gráficos", "Membros", "Configurações")
+        val opcoes = arrayOf("Relatórios", "Gráficos", "Membros", "Agenda", "Configurações")
         android.app.AlertDialog.Builder(this)
             .setTitle(nomeRede)
             .setItems(opcoes) { _, which ->
@@ -299,6 +366,12 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
                         startActivity(intent)
                     }
                     3 -> {
+                        val intent = Intent(this, AgendaActivity::class.java)
+                        intent.putExtra("REDE_SELECIONADA", nomeRede)
+                        intent.putExtra("MODO_PASTOR", true)
+                        startActivity(intent)
+                    }
+                    4 -> {
                         val intent = Intent(this, ConfiguracoesRedeActivity::class.java)
                         intent.putExtra("REDE_SELECIONADA", nomeRede)
                         intent.putExtra("PAPEL_USUARIO_LOGADO", "pastor")
@@ -311,28 +384,15 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
 
     private fun setupAcoes() {
         findViewById<MaterialCardView>(R.id.card_agenda).setOnClickListener {
-            // Agenda geral — usar primeira rede disponível ou buscar dinâmico
-            firestore.collection("redes").get().addOnSuccessListener { docs ->
-                val primeiraRede = docs.documents.firstOrNull()?.getString("nome")
-                if (primeiraRede != null) {
-                    val intent = Intent(this, AgendaActivity::class.java)
-                    intent.putExtra("REDE_SELECIONADA", primeiraRede)
-                    startActivity(intent)
-                }
-            }
-        }
-
-        findViewById<MaterialCardView>(R.id.card_mudar_perfil).setOnClickListener {
-            abrirSeletorDePerfil()
+            val intent = Intent(this, AgendaActivity::class.java)
+            intent.putExtra("MODO_PASTOR", true)
+            startActivity(intent)
         }
     }
 
     private fun setupNavigation() {
-        val profileImage = findViewById<ImageView>(R.id.image_profile)
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNav.selectedItemId = R.id.navigation_home
-
-        profileImage.setOnClickListener { abrirSeletorDePerfil() }
 
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -352,19 +412,46 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
         firestore.collection("usuarios").document(user.uid).get().addOnSuccessListener { document ->
             if (document != null && document.exists()) {
                 val nomeUsuario = document.getString("nome") ?: getString(R.string.usuario_padrao)
-                val funcoesRaw = document.get("funcoes") as? Map<*, *>
-                val funcoes = HashMap<String, String>()
-                funcoesRaw?.forEach { (k, v) -> if (k is String && v != null) funcoes[k] = v.toString() }
+                val funcoes = extrairFuncoes(document.get("funcoes"))
+                
+                // Fallback para campo legado 'papel'
+                if (funcoes.isEmpty()) {
+                    document.getString("papel")?.let { funcoes["geral"] = it }
+                }
+
                 if (funcoes.isNotEmpty()) {
-                    if (funcoes.containsKey("geral") && funcoes["geral"] == "pastor") {
+                    if (funcoes.containsKey("geral") && (funcoes["geral"] == "pastor" || funcoes["geral"] == "admin")) {
                         expandirRedesParaPastor(funcoes, nomeUsuario)
                     } else {
                         val bottomSheet = SelecionarPerfilSheet.newInstance(funcoes, nomeUsuario)
                         bottomSheet.show(supportFragmentManager, "SelecionarPerfilSheet")
                     }
+                } else {
+                    Toast.makeText(this, "Nenhum papel definido para este usuário.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
+    }
+
+    private fun extrairFuncoes(raw: Any?): HashMap<String, String> {
+        val result = HashMap<String, String>()
+        if (raw == null) return result
+        
+        when (raw) {
+            is Map<*, *> -> {
+                for ((key, value) in raw) {
+                    if (key is String && value != null) {
+                        result[key] = value.toString()
+                    }
+                }
+            }
+            is String -> {
+                if (raw.isNotEmpty()) {
+                    result["geral"] = raw
+                }
+            }
+        }
+        return result
     }
 
     private fun expandirRedesParaPastor(funcoesOriginais: HashMap<String, String>, nomeUsuario: String) {

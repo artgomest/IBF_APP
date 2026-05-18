@@ -42,6 +42,15 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/icon_cadastro_status"
+            android:layout_width="@dimen/icon_md"
+            android:layout_height="@dimen/icon_md"
+            android:layout_marginEnd="@dimen/space_sm"
+            android:src="@drawable/ic_warning"
+            android:contentDescription="@null"
+            app:tint="?attr/colorError" />
+
+        <ImageView
             android:layout_width="@dimen/icon_md"
             android:layout_height="@dimen/icon_md"
             android:src="@drawable/ic_arrow_forward"

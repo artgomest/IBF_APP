@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import android.util.Log
+import com.google.firebase.Timestamp
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -105,18 +107,18 @@ class PastorRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnItemCli
                             doc.toObject(Relatorio::class.java).apply { id = doc.id }
                         }
                         val statusFinal = mutableListOf<StatusRelatorio>()
-                        val semanasParaVerificar = 8
+                        
+                        val calLoop = Calendar.getInstance()
+                        // Ajustar para o dia da semana da rede
+                        calLoop.set(Calendar.DAY_OF_WEEK, diaDaSemana)
+                        
+                        // Se a data ajustada for no futuro, voltar uma semana
+                        if (calLoop.time.after(Date())) {
+                            calLoop.add(Calendar.WEEK_OF_YEAR, -1)
+                        }
 
-                        for (i in 0 until semanasParaVerificar) {
-                            val dataEsperadaCal = Calendar.getInstance()
-                            dataEsperadaCal.add(Calendar.WEEK_OF_YEAR, -i)
-                            dataEsperadaCal.set(Calendar.DAY_OF_WEEK, diaDaSemana)
-
-                            if (dataEsperadaCal.time.before(dataInicio) || dataEsperadaCal.time.after(Date())) {
-                                continue
-                            }
-
-                            val dataEsperadaStr = sdf.format(dataEsperadaCal.time)
+                        while (!calLoop.time.before(dataInicio)) {
+                            val dataEsperadaStr = sdf.format(calLoop.time)
                             val relatorioEncontrado = relatoriosEnviados.find { it.dataReuniao == dataEsperadaStr }
 
                             if (relatorioEncontrado != null) {
@@ -124,6 +126,8 @@ class PastorRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnItemCli
                             } else {
                                 statusFinal.add(StatusRelatorio.Faltante(dataEsperadaStr, redeAtiva))
                             }
+                            
+                            calLoop.add(Calendar.WEEK_OF_YEAR, -1)
                         }
 
                         listaDeStatus.clear()
@@ -155,7 +159,7 @@ class PastorRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnItemCli
     override fun onItemClick(status: StatusRelatorio) {
         when (status) {
             is StatusRelatorio.Enviado -> {
-                // Pastor abre em modo visualização (read-only)
+                // Pastor abre em modo visualização (read-only) sem disparar cobranças
                 val intent = Intent(this, FormularioRedeActivity::class.java)
                 intent.putExtra("REDE_SELECIONADA", status.relatorio.idRede)
                 intent.putExtra("RELATORIO_ID", status.relatorio.id)
@@ -164,8 +168,34 @@ class PastorRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnItemCli
                 startActivity(intent)
             }
             is StatusRelatorio.Faltante -> {
-                Toast.makeText(this, "Relatório pendente para ${status.dataEsperada}. Aguardando envio pelo líder/secretário.", Toast.LENGTH_SHORT).show()
+                androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Cobrar Relatório")
+                    .setMessage("Deseja enviar uma notificação de cobrança imediata para os líderes e secretários da ${status.nomeRede} referente ao dia ${status.dataEsperada}?")
+                    .setPositiveButton("Enviar") { _, _ ->
+                        registrarCobranca(status.nomeRede, status.dataEsperada)
+                    }
+                    .setNegativeButton("Cancelar", null)
+                    .show()
             }
         }
+    }
+
+    private fun registrarCobranca(nomeRede: String, dataEsperada: String) {
+        val uid = auth.currentUser?.uid ?: return
+        val cobranca = hashMapOf(
+            "idRede" to nomeRede,
+            "dataReuniao" to dataEsperada,
+            "pastorUid" to uid,
+            "criadoEm" to Timestamp.now()
+        )
+        firestore.collection("cobrancasManual")
+            .add(cobranca)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Notificação de cobrança enviada com sucesso!", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Log.e("PastorRelatorios", "Erro ao registrar cobrança", e)
+                Toast.makeText(this, "Erro ao enviar cobrança: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 }

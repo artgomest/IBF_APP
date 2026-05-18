@@ -9,11 +9,18 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
+import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ibf.app.R
+import com.ibf.app.ui.dashboard.LiderDashboardActivity
+import com.ibf.app.ui.dashboard.PastorDashboardActivity
+import com.ibf.app.ui.dashboard.SecretarioDashboardActivity
+import com.ibf.app.ui.main.MainActivity
+import com.ibf.app.ui.shared.SelecionarPerfilSheet
 
-class PerfilActivity : AppCompatActivity() {
+class PerfilActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionadoListener {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
@@ -66,6 +73,60 @@ class PerfilActivity : AppCompatActivity() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
             AppCompatDelegate.setDefaultNightMode(newMode)
+        }
+        
+        findViewById<Button>(R.id.button_mudar_perfil).setOnClickListener {
+            abrirSeletorDePerfil()
+        }
+    }
+
+    private fun abrirSeletorDePerfil() {
+        val user = auth.currentUser ?: return
+        firestore.collection("usuarios").document(user.uid).get().addOnSuccessListener { document ->
+            if (document != null && document.exists()) {
+                val nomeUsuario = document.getString("nome") ?: getString(R.string.usuario_padrao)
+                val funcoesRaw = document.get("funcoes") as? Map<*, *>
+                val funcoes = HashMap<String, String>()
+                funcoesRaw?.forEach { (k, v) -> if (k is String && v != null) funcoes[k] = v.toString() }
+                if (funcoes.isNotEmpty()) {
+                    val bottomSheet = SelecionarPerfilSheet.newInstance(funcoes, nomeUsuario)
+                    bottomSheet.show(supportFragmentManager, "SelecionarPerfilSheet")
+                } else {
+                    Toast.makeText(this, "Nenhum perfil encontrado.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    override fun onPerfilSelecionado(rede: String, papel: String) {
+        navegarParaTelaCorreta(rede, papel)
+    }
+
+    override fun onLogoutSelecionado() {
+        auth.signOut()
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        sharedPref.edit { clear() }
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+    }
+
+    private fun navegarParaTelaCorreta(rede: String, papel: String?) {
+        val intent = when (papel) {
+            "pastor" -> Intent(this, PastorDashboardActivity::class.java)
+            "lider" -> Intent(this, LiderDashboardActivity::class.java)
+            "secretario" -> Intent(this, SecretarioDashboardActivity::class.java)
+            else -> null
+        }
+
+        if (intent != null) {
+            intent.putExtra("REDE_SELECIONADA", rede)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        } else {
+            Toast.makeText(this, "Papel desconhecido: $papel", Toast.LENGTH_SHORT).show()
         }
     }
 

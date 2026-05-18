@@ -35,6 +35,14 @@ class UsuarioRedeAdapter(
         val papelFormatado = usuario.papel.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
         holder.papel.text = holder.itemView.context.getString(R.string.papel_usuario_label_format, papelFormatado)
 
+        if (usuario.cadastroCompleto) {
+            holder.iconCadastroStatus.setImageResource(R.drawable.ic_check_circle)
+            holder.iconCadastroStatus.setColorFilter(android.graphics.Color.parseColor("#4CAF50")) // Green
+        } else {
+            holder.iconCadastroStatus.setImageResource(R.drawable.ic_warning)
+            holder.iconCadastroStatus.setColorFilter(android.graphics.Color.parseColor("#F44336")) // Red
+        }
+
         holder.itemView.setOnClickListener {
             listener.onItemClick(usuario)
         }
@@ -49,5 +57,6 @@ class UsuarioRedeAdapter(
     class UsuarioViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nome: TextView = itemView.findViewById(R.id.text_nome_usuario)
         val papel: TextView = itemView.findViewById(R.id.text_papel_usuario)
+        val iconCadastroStatus: android.widget.ImageView = itemView.findViewById(R.id.icon_cadastro_status)
     }
 }

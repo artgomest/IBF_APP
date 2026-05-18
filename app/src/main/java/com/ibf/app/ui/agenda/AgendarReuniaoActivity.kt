@@ -1,7 +1,5 @@
 package com.ibf.app.ui.agenda
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.provider.CalendarContract
@@ -9,10 +7,15 @@ import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,7 +23,7 @@ import com.ibf.app.R
 import com.ibf.app.data.models.Reuniao
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
+import java.util.TimeZone
 import java.util.Locale
 
 class AgendarReuniaoActivity : AppCompatActivity() {
@@ -29,16 +32,17 @@ class AgendarReuniaoActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
 
     private lateinit var autoCompleteMembro: AutoCompleteTextView
+    private lateinit var inputData: TextInputEditText
+    private lateinit var inputHora: TextInputEditText
     private lateinit var inputLocal: TextInputEditText
     private lateinit var inputObservacoes: TextInputEditText
-    private lateinit var textData: android.widget.TextView
     private lateinit var btnSalvar: MaterialButton
     private lateinit var btnWhatsapp: MaterialButton
     private lateinit var btnAdicionarAgenda: MaterialButton
+    private lateinit var containerSucesso: LinearLayout
 
     private val calendar = Calendar.getInstance()
     private val membrosMap = mutableMapOf<String, String>() // Nome -> UID
-    private val membrosCelularMap = mutableMapOf<String, String>() // Nome -> Celular
     private val membrosEmailMap = mutableMapOf<String, String>() // Nome -> Email
 
     private var redeSelecionada: String? = null
@@ -52,11 +56,13 @@ class AgendarReuniaoActivity : AppCompatActivity() {
 
         firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
+        
         redeSelecionada = intent.getStringExtra("REDE_SELECIONADA")
         membroPreSelecionadoNome = intent.getStringExtra("MEMBRO_PRE_SELECIONADO_NOME")
         membroPreSelecionadoId = intent.getStringExtra("MEMBRO_PRE_SELECIONADO_ID")
         membroPreSelecionadoEmail = intent.getStringExtra("MEMBRO_PRE_SELECIONADO_EMAIL")
 
+        setupToolbar()
         initViews()
         carregarMembros()
 
@@ -65,65 +71,58 @@ class AgendarReuniaoActivity : AppCompatActivity() {
         btnAdicionarAgenda.setOnClickListener { abrirGoogleAgenda() }
     }
 
+    private fun setupToolbar() {
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        toolbar.setNavigationOnClickListener { finish() }
+    }
+
     private fun initViews() {
         autoCompleteMembro = findViewById(R.id.autoCompleteMembro)
+        inputData = findViewById(R.id.input_data)
+        inputHora = findViewById(R.id.input_hora)
         inputLocal = findViewById(R.id.input_local)
         inputObservacoes = findViewById(R.id.input_observacoes)
-        textData = findViewById(R.id.text_data_selecionada)
         btnSalvar = findViewById(R.id.btn_salvar_reuniao)
         btnWhatsapp = findViewById(R.id.btn_convidar_whatsapp)
         btnAdicionarAgenda = findViewById(R.id.btn_adicionar_agenda)
+        containerSucesso = findViewById(R.id.container_sucesso)
 
-        findViewById<MaterialButton>(R.id.btn_data).setOnClickListener { pickDate() }
-        findViewById<MaterialButton>(R.id.btn_hora).setOnClickListener { pickTime() }
+        inputData.setOnClickListener { showDatePicker() }
+        inputHora.setOnClickListener { showTimePicker() }
 
-        updateDateText()
+        // Inicializar com data/hora atual
+        updateDisplayDateTime()
     }
 
     private fun carregarMembros() {
-        // Load members of the leader's network to populate the dropdown
         val uid = auth.currentUser?.uid ?: return
         
-        // Assuming current user is leader and we list members where 'liderId' == uid
-        // Or using the 'rede' logic if that's how it's structured. 
-        // For MVP, checking members in the same 'rede' or assigned to this leader.
-        // Let's reuse logic similar to MembrosRedeActivity but keeping it simple: fetch all users where map 'lider' equals current user or check 'rede'.
-        // To be safe and broadly compatible, let's query users in the same network context.
-        
-        val query = firestore.collection("usuarios")
-        // If we strictly follow hierarchy, we filter by liderUid. If flat network, by rede.
-        // Using 'rede' if available, otherwise fallback.
-        if (redeSelecionada != null) {
-            query.whereEqualTo("rede", redeSelecionada)
+        val query = if (redeSelecionada != null) {
+            firestore.collection("usuarios")
+                .whereGreaterThan(com.google.firebase.firestore.FieldPath.of("funcoes", redeSelecionada!!), "")
         } else {
-            // Fallback: This might be too broad if not careful, but for now filtering locally or by a known field is safest.
-            // Let's assume we want all users for now and filter in memory if needed, or better, query by liderUid if that field exists on members.
-            // Based on previous files, 'rede' seems the key.
-             query.whereEqualTo("rede", redeSelecionada) // This might be null, handling below.
+            firestore.collection("usuarios")
         }
 
         query.get().addOnSuccessListener { documents ->
             val nomes = mutableListOf<String>()
             membrosMap.clear()
-            membrosCelularMap.clear()
             membrosEmailMap.clear()
 
             for (doc in documents) {
                  val nome = doc.getString("nome") ?: "Sem Nome"
                  val id = doc.id
-                 val celular = doc.getString("celular") ?: ""
                  val email = doc.getString("email") ?: ""
 
-                 // Don't list yourself
                  if (id != uid) {
                      nomes.add(nome)
                      membrosMap[nome] = id
-                     membrosCelularMap[nome] = celular
                      membrosEmailMap[nome] = email
                  }
             }
 
-            // Se veio com membro pré-selecionado, garante que está no mapa
             membroPreSelecionadoNome?.let { nome ->
                 membroPreSelecionadoId?.let { id ->
                     if (!membrosMap.containsKey(nome)) {
@@ -143,40 +142,50 @@ class AgendarReuniaoActivity : AppCompatActivity() {
         }
     }
 
-    private fun pickDate() {
-        val datePickerDialog = DatePickerDialog(
-            this,
-            { _, year, month, day ->
-                calendar.set(Calendar.YEAR, year)
-                calendar.set(Calendar.MONTH, month)
-                calendar.set(Calendar.DAY_OF_MONTH, day)
-                updateDateText()
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-        datePickerDialog.show()
+    private fun showDatePicker() {
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Selecione a Data")
+            .setSelection(calendar.timeInMillis)
+            .build()
+
+        datePicker.addOnPositiveButtonClickListener { selection ->
+            val utcCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+            utcCalendar.timeInMillis = selection
+            
+            // Usar set com 3 argumentos para ser atômico e evitar bugs de virada de mês
+            calendar.set(
+                utcCalendar.get(Calendar.YEAR),
+                utcCalendar.get(Calendar.MONTH),
+                utcCalendar.get(Calendar.DAY_OF_MONTH)
+            )
+            
+            updateDisplayDateTime()
+        }
+        datePicker.show(supportFragmentManager, "DATE_PICKER")
     }
 
-    private fun pickTime() {
-        val timePickerDialog = TimePickerDialog(
-            this,
-            { _, hour, minute ->
-                calendar.set(Calendar.HOUR_OF_DAY, hour)
-                calendar.set(Calendar.MINUTE, minute)
-                updateDateText()
-            },
-            calendar.get(Calendar.HOUR_OF_DAY),
-            calendar.get(Calendar.MINUTE),
-            true
-        )
-        timePickerDialog.show()
+    private fun showTimePicker() {
+        val timePicker = MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_24H)
+            .setHour(calendar.get(Calendar.HOUR_OF_DAY))
+            .setMinute(calendar.get(Calendar.MINUTE))
+            .setTitleText("Selecione a Hora")
+            .build()
+
+        timePicker.addOnPositiveButtonClickListener {
+            calendar.set(Calendar.HOUR_OF_DAY, timePicker.hour)
+            calendar.set(Calendar.MINUTE, timePicker.minute)
+            updateDisplayDateTime()
+        }
+        timePicker.show(supportFragmentManager, "TIME_PICKER")
     }
 
-    private fun updateDateText() {
-        val format = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale("pt", "BR"))
-        textData.text = format.format(calendar.time)
+    private fun updateDisplayDateTime() {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
+        val timeFormat = SimpleDateFormat("HH:mm", Locale("pt", "BR"))
+        
+        inputData.setText(dateFormat.format(calendar.time))
+        inputHora.setText(timeFormat.format(calendar.time))
     }
 
     private fun salvarReuniao() {
@@ -189,6 +198,11 @@ class AgendarReuniaoActivity : AppCompatActivity() {
         }
 
         val local = inputLocal.text.toString()
+        if (local.isEmpty()) {
+            Toast.makeText(this, "Informe o local do encontro", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val obs = inputObservacoes.text.toString()
         val dataHora = Timestamp(calendar.time)
 
@@ -204,20 +218,19 @@ class AgendarReuniaoActivity : AppCompatActivity() {
         )
 
         btnSalvar.isEnabled = false
-        btnSalvar.text = "Agendando..."
+        btnSalvar.text = "Processando..."
 
         firestore.collection("reunioes")
             .add(reuniao)
             .addOnSuccessListener {
-                Toast.makeText(this, "Agenda criada com sucesso!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Agenda confirmada!", Toast.LENGTH_SHORT).show()
                 btnSalvar.visibility = View.GONE
-                btnWhatsapp.visibility = View.VISIBLE
-                btnAdicionarAgenda.visibility = View.VISIBLE
+                containerSucesso.visibility = View.VISIBLE
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Erro ao agendar: ${it.message}", Toast.LENGTH_SHORT).show()
                 btnSalvar.isEnabled = true
-                btnSalvar.text = "Agendar Discipulado"
+                btnSalvar.text = "Confirmar Agendamento"
             }
     }
 
@@ -227,11 +240,12 @@ class AgendarReuniaoActivity : AppCompatActivity() {
         val dataStr = format.format(calendar.time)
         val local = inputLocal.text.toString()
         val message = "Olá $nomeMembro, marquei nosso discipulado para $dataStr no local: $local. Confirma?"
+        
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, message)
         }
-        startActivity(Intent.createChooser(intent, "Convidar via..."))
+        startActivity(Intent.createChooser(intent, "Compartilhar convite..."))
     }
 
     private fun abrirGoogleAgenda() {
@@ -241,7 +255,7 @@ class AgendarReuniaoActivity : AppCompatActivity() {
         val emailMembro = membrosEmailMap[nomeMembro] ?: ""
 
         val startMs = calendar.timeInMillis
-        val endMs = startMs + 60 * 60 * 1000L // duração padrão de 1 hora
+        val endMs = startMs + 60 * 60 * 1000L // 1 hora padrão
 
         try {
             val intent = Intent(Intent.ACTION_INSERT).apply {
@@ -257,7 +271,7 @@ class AgendarReuniaoActivity : AppCompatActivity() {
             }
             startActivity(intent)
         } catch (e: Exception) {
-            Toast.makeText(this, "Nenhum app de calendário encontrado.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Nenhum app de calendário disponível.", Toast.LENGTH_SHORT).show()
         }
     }
 }

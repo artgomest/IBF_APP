@@ -21,6 +21,7 @@ viewpager2 = "1.1.0"
 
 # Versões de outras bibliotecas
 mpandroidchart = "v3.1.0"
+glide = "4.16.0"
 
 [libraries]
 # --- Firebase ---
@@ -49,6 +50,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 
 # --- Outras bibliotecas ---
 mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version.ref = "mpandroidchart" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

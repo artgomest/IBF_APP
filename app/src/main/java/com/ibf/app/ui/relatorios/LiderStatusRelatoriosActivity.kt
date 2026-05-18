@@ -125,19 +125,18 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
                     .addOnSuccessListener { relatoriosDocs ->
                         val relatoriosEnviados = relatoriosDocs.mapNotNull { doc -> doc.toObject(Relatorio::class.java).apply { id = doc.id } }
                         val statusFinal = mutableListOf<StatusRelatorio>()
-                        val semanasParaVerificar = 8
+                        
+                        val calLoop = Calendar.getInstance()
+                        // Ajustar para o dia da semana da rede
+                        calLoop.set(Calendar.DAY_OF_WEEK, diaDaSemana)
+                        
+                        // Se a data ajustada for no futuro, voltar uma semana
+                        if (calLoop.time.after(Date())) {
+                            calLoop.add(Calendar.WEEK_OF_YEAR, -1)
+                        }
 
-                        for (i in 0 until semanasParaVerificar) {
-                            val dataEsperadaCal = Calendar.getInstance()
-                            dataEsperadaCal.add(Calendar.WEEK_OF_YEAR, -i)
-                            dataEsperadaCal.set(Calendar.DAY_OF_WEEK, diaDaSemana)
-
-                            // 2. Adicionamos a condição para ignorar datas anteriores a Julho
-                            if (dataEsperadaCal.time.before(dataInicio) || dataEsperadaCal.time.after(Date())) {
-                                continue
-                            }
-
-                            val dataEsperadaStr = sdf.format(dataEsperadaCal.time)
+                        while (!calLoop.time.before(dataInicio)) {
+                            val dataEsperadaStr = sdf.format(calLoop.time)
                             val relatorioEncontrado = relatoriosEnviados.find { it.dataReuniao == dataEsperadaStr }
 
                             if (relatorioEncontrado != null) {
@@ -145,6 +144,8 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
                             } else {
                                 statusFinal.add(StatusRelatorio.Faltante(dataEsperadaStr, redeAtiva))
                             }
+                            
+                            calLoop.add(Calendar.WEEK_OF_YEAR, -1)
                         }
 
                         listaDeStatus.clear()

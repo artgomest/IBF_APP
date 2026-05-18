@@ -107,10 +107,21 @@ class AgendaActivity : AppCompatActivity() {
 
     private fun carregarReunioes() {
         val uid = auth.currentUser?.uid ?: return
+        val modoPastor = intent.getBooleanExtra("MODO_PASTOR", false)
+        val redeSelecionada = intent.getStringExtra("REDE_SELECIONADA")
 
-        firestore.collection("reunioes")
-            .whereEqualTo("liderUid", uid)
-            .get()
+        var query = firestore.collection("reunioes").limit(500)
+
+        if (!modoPastor) {
+            // Modo normal: Ver apenas reuniões do líder
+            query = query.whereEqualTo("liderUid", uid)
+        } else if (redeSelecionada != null) {
+            // Modo pastor filtrado por rede
+            query = query.whereEqualTo("rede", redeSelecionada)
+        }
+        // Se for modo pastor sem rede, traz as últimas 500 de todas (geral)
+
+        query.get()
             .addOnSuccessListener { documents ->
                 allReunioes.clear()
                 for (doc in documents) {
@@ -132,9 +143,11 @@ class AgendaActivity : AppCompatActivity() {
     }
 
     private fun getMeetingDateStrings(): Set<String> {
-        return allReunioes.mapNotNull { r ->
-            r.dataHora?.toDate()?.let { dateFmt.format(it) }
-        }.toSet()
+        return allReunioes
+            .filter { it.status == "Agendada" }
+            .mapNotNull { r ->
+                r.dataHora?.toDate()?.let { dateFmt.format(it) }
+            }.toSet()
     }
 
     private fun buildCalendar() {

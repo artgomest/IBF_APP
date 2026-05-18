@@ -37,14 +37,17 @@
         </RelativeLayout>
 
         <!-- Calendar Card -->
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="4dp"
+            app:cardBackgroundColor="?attr/colorSurface"
             app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
+            app:cardElevation="4dp"
+            app:strokeColor="?attr/colorOutlineVariant"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -114,7 +117,7 @@
                     android:columnCount="7" />
 
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Filter label -->
         <TextView

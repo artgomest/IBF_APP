@@ -16,10 +16,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
+import android.net.Uri
 import com.ibf.app.R
 import com.ibf.app.data.models.Reuniao
 import java.io.File
@@ -37,11 +39,11 @@ class RelatorioReuniaoActivity : AppCompatActivity() {
     private var reuniaoId: String? = null
     private var reuniao: com.ibf.app.data.models.Reuniao? = null
 
-    // UI
     private lateinit var textInfoMembro: TextView
     private lateinit var textInfoData: TextView
     private lateinit var tabTexto: MaterialButton
     private lateinit var tabAudio: MaterialButton
+    private lateinit var toggleGroup: MaterialButtonToggleGroup
     private lateinit var sectionTexto: View
     private lateinit var sectionAudio: View
     private lateinit var inputResumo: TextInputEditText
@@ -58,7 +60,9 @@ class RelatorioReuniaoActivity : AppCompatActivity() {
     private var isRecording = false
     private var countDownTimer: CountDownTimer? = null
     private val maxAudioSeconds = 120L
-    private var isAudioMode = false
+    private var currentMode: ReportMode = ReportMode.TEXTO
+
+    enum class ReportMode { TEXTO, AUDIO }
 
     private val AUDIO_PERMISSION_REQUEST = 102
 
@@ -71,16 +75,18 @@ class RelatorioReuniaoActivity : AppCompatActivity() {
         reuniaoId = intent.getStringExtra("REUNIAO_ID")
 
         if (reuniaoId == null) { finish(); return }
-
+        
         initViews()
         carregarInfoReuniao()
     }
+
 
     private fun initViews() {
         textInfoMembro = findViewById(R.id.text_info_membro)
         textInfoData = findViewById(R.id.text_info_data)
         tabTexto = findViewById(R.id.tab_texto)
         tabAudio = findViewById(R.id.tab_audio)
+        toggleGroup = findViewById(R.id.toggle_group_relatorio)
         sectionTexto = findViewById(R.id.section_texto)
         sectionAudio = findViewById(R.id.section_audio)
         inputResumo = findViewById(R.id.input_resumo)
@@ -93,39 +99,30 @@ class RelatorioReuniaoActivity : AppCompatActivity() {
 
         findViewById<ImageView>(R.id.button_back).setOnClickListener { finish() }
 
-        tabTexto.setOnClickListener { setTab(audioMode = false) }
-        tabAudio.setOnClickListener { setTab(audioMode = true) }
+        toggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    R.id.tab_texto -> setTab(ReportMode.TEXTO)
+                    R.id.tab_audio -> setTab(ReportMode.AUDIO)
+                }
+            }
+        }
 
         btnGravarAudio.setOnClickListener { startAudioRecording() }
         btnPararAudio.setOnClickListener { stopAudioRecording() }
         btnSalvar.setOnClickListener { salvarRelatorio() }
 
-        setTab(audioMode = false)
+        setTab(ReportMode.TEXTO)
+        toggleGroup.check(R.id.tab_texto)
+        
     }
 
-    private fun setTab(audioMode: Boolean) {
-        isAudioMode = audioMode
-        val accentColor = ContextCompat.getColor(this, R.color.accent)
-        val secondaryColor = ContextCompat.getColor(this, R.color.ibf_on_surface_variant)
-
-        if (!audioMode) {
-            // Text tab selected
-            sectionTexto.visibility = View.VISIBLE
-            sectionAudio.visibility = View.GONE
-            tabTexto.backgroundTintList = android.content.res.ColorStateList.valueOf(accentColor)
-            tabTexto.setTextColor(Color.WHITE)
-            tabAudio.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.TRANSPARENT)
-            tabAudio.setTextColor(secondaryColor)
-        } else {
-            // Audio tab selected
-            sectionTexto.visibility = View.GONE
-            sectionAudio.visibility = View.VISIBLE
-            tabAudio.backgroundTintList = android.content.res.ColorStateList.valueOf(accentColor)
-            tabAudio.setTextColor(Color.WHITE)
-            tabTexto.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.TRANSPARENT)
-            tabTexto.setTextColor(secondaryColor)
-        }
+    private fun setTab(mode: ReportMode) {
+        currentMode = mode
+        sectionTexto.visibility = if (mode == ReportMode.TEXTO) View.VISIBLE else View.GONE
+        sectionAudio.visibility = if (mode == ReportMode.AUDIO) View.VISIBLE else View.GONE
     }
+
 
     private fun carregarInfoReuniao() {
         reuniaoId?.let { id ->
@@ -216,23 +213,27 @@ class RelatorioReuniaoActivity : AppCompatActivity() {
     }
 
     private fun salvarRelatorio() {
-        if (isAudioMode) {
-            val file = audioFile
-            if (file == null || !file.exists()) {
-                Toast.makeText(this, "Grave um áudio primeiro.", Toast.LENGTH_SHORT).show()
-                return
+        when (currentMode) {
+            ReportMode.AUDIO -> {
+                val file = audioFile
+                if (file == null || !file.exists()) {
+                    Toast.makeText(this, "Grave um áudio primeiro.", Toast.LENGTH_SHORT).show()
+                    return
+                }
+                if (isRecording) stopAudioRecording()
+                uploadAudioAndSave(file)
             }
-            if (isRecording) stopAudioRecording()
-            uploadAudioAndSave(file)
-        } else {
-            val resumo = inputResumo.text?.toString()?.trim() ?: ""
-            if (resumo.isEmpty()) {
-                inputResumo.error = "Preencha o resumo do discipulado."
-                return
+            ReportMode.TEXTO -> {
+                val resumo = inputResumo.text?.toString()?.trim() ?: ""
+                if (resumo.isEmpty()) {
+                    inputResumo.error = "Preencha o resumo do discipulado."
+                    return
+                }
+                salvarTextoFirestore(resumo)
             }
-            salvarTextoFirestore(resumo)
         }
     }
+
 
     private fun uploadAudioAndSave(file: File) {
         btnSalvar.isEnabled = false
@@ -269,6 +270,7 @@ class RelatorioReuniaoActivity : AppCompatActivity() {
                 inputStream.close()
                 ref.downloadUrl
                     .addOnSuccessListener { downloadUri ->
+                        reuniao?.membroUid?.let { uid -> atualizarMembroComDataDiscipulado(uid) }
                         salvarComAudioFirestore(downloadUri.toString())
                     }
                     .addOnFailureListener { e ->
@@ -299,6 +301,7 @@ class RelatorioReuniaoActivity : AppCompatActivity() {
         firestore.collection("reunioes").document(reuniaoId!!)
             .update(updates)
             .addOnSuccessListener {
+                reuniao?.membroUid?.let { uid -> atualizarMembroComDataDiscipulado(uid) }
                 Toast.makeText(this, "Relatório salvo!", Toast.LENGTH_SHORT).show()
                 finish()
             }
@@ -325,6 +328,18 @@ class RelatorioReuniaoActivity : AppCompatActivity() {
                 Toast.makeText(this, "Erro ao salvar: ${it.message}", Toast.LENGTH_SHORT).show()
                 btnSalvar.isEnabled = true
                 btnSalvar.text = "Salvar Relatório"
+            }
+    }
+
+    private fun atualizarMembroComDataDiscipulado(membroUid: String) {
+        val dataAtual = com.google.firebase.Timestamp.now()
+        firestore.collection("usuarios").document(membroUid)
+            .update("dataUltimoDiscipulado", dataAtual)
+            .addOnSuccessListener {
+                Log.d("RelatorioReuniao", "Data do último discipulado atualizada no membro.")
+            }
+            .addOnFailureListener { e ->
+                Log.e("RelatorioReuniao", "Erro ao atualizar data no membro: ${e.message}")
             }
     }
 

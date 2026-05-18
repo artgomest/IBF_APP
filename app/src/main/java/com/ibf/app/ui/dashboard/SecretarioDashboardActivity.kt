@@ -37,6 +37,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
 
     private var redeSelecionada: String? = null
     private lateinit var greetingText: TextView
+    private lateinit var textRedeAtual: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +47,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
         firestore = FirebaseFirestore.getInstance()
 
         greetingText = findViewById(R.id.text_greeting)
+        textRedeAtual = findViewById(R.id.text_rede_dashboard)
 
         val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val redeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
@@ -58,12 +60,42 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
             return
         }
 
-        greetingText.text = getString(R.string.relatorios_da_rede, redeSelecionada)
+        textRedeAtual.text = getString(R.string.rede_dashboard_label, redeSelecionada)
 
         setupRecyclerView()
         setupNavigation()
 
+        buscarDadosUsuario()
         carregarStatusDosRelatorios()
+    }
+
+    private fun buscarDadosUsuario() {
+        val user = auth.currentUser ?: return
+        firestore.collection("usuarios").document(user.uid).get().addOnSuccessListener { document ->
+            if (document != null && document.exists()) {
+                val nomeCompleto = document.getString("nome") ?: getString(R.string.usuario_padrao)
+                val primeiroNome = nomeCompleto.split(" ").firstOrNull() ?: nomeCompleto
+                greetingText.text = primeiroNome
+
+                val funcoes = extrairFuncoes(document.get("funcoes"))
+                // Fallback legado
+                if (funcoes.isEmpty()) {
+                    document.getString("papel")?.let { funcoes["geral"] = it }
+                }
+
+                // Segurança: Se a rede do cache não existir mais no perfil e não tiver acesso geral
+                if (funcoes[redeSelecionada] == null && funcoes["geral"] == null) {
+                    Toast.makeText(this@SecretarioDashboardActivity, "Sua permissão para esta rede foi revogada ou alterada.", Toast.LENGTH_LONG).show()
+                    val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                    sharedPref.edit().clear().apply()
+                    
+                    val intent = Intent(this@SecretarioDashboardActivity, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish()
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -73,7 +105,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
 
         if (currentRedeInPrefs != null && currentRedeInPrefs != redeSelecionada) {
             redeSelecionada = currentRedeInPrefs
-            greetingText.text = getString(R.string.relatorios_da_rede, redeSelecionada)
+            textRedeAtual.text = getString(R.string.rede_dashboard_label, redeSelecionada)
             carregarStatusDosRelatorios()
         } else {
             carregarStatusDosRelatorios()
@@ -110,7 +142,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
                     putString("REDE_SELECIONADA", rede)
                 }
                 this.redeSelecionada = rede
-                greetingText.text = getString(R.string.relatorios_da_rede, redeSelecionada)
+                textRedeAtual.text = getString(R.string.rede_dashboard_label, redeSelecionada)
                 carregarStatusDosRelatorios()
                 Toast.makeText(this, getString(R.string.exibindo_relatorios_da_rede, rede), Toast.LENGTH_SHORT).show()
             } else {
@@ -128,10 +160,14 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
         recyclerView.layoutManager = LinearLayoutManager(this)
         relatorioAdapter = RelatorioAdapter(listaDeStatus, this)
         recyclerView.adapter = relatorioAdapter
+
+        val swipeRefresh = findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.swipe_refresh)
+        swipeRefresh.setOnRefreshListener {
+            carregarStatusDosRelatorios()
+        }
     }
 
     private fun setupNavigation() {
-        val profileImage = findViewById<ImageView>(R.id.image_profile)
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNav.selectedItemId = R.id.navigation_home
 
@@ -149,7 +185,6 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
                 else -> false
             }
         }
-        profileImage.setOnClickListener { abrirSeletorDePerfil() }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -165,7 +200,10 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
         }.time
 
         firestore.collection("redes").whereEqualTo("nome", redeAtiva).get().addOnSuccessListener { redesDocs ->
-            if (redesDocs.isEmpty) { return@addOnSuccessListener }
+            if (redesDocs.isEmpty) {
+                findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.swipe_refresh)?.isRefreshing = false
+                return@addOnSuccessListener
+            }
             val diaDaSemana = redesDocs.documents.first().getLong("diaDaSemana")?.toInt() ?: return@addOnSuccessListener
 
             firestore.collection("relatorios")
@@ -209,6 +247,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
                     }
                     listaDeStatus.addAll(sortedList)
                     relatorioAdapter.notifyDataSetChanged()
+                    findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.swipe_refresh)?.isRefreshing = false
                 }
         }
     }
@@ -218,15 +257,42 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
         firestore.collection("usuarios").document(user.uid).get().addOnSuccessListener { document ->
             if (document != null && document.exists()) {
                 val nomeUsuario = document.getString("nome") ?: getString(R.string.usuario_padrao)
-                val funcoesRaw = document.get("funcoes") as? Map<*, *>
-                val funcoes = HashMap<String, String>()
-                funcoesRaw?.forEach { (k, v) -> if (k is String && v != null) funcoes[k] = v.toString() }
+                val funcoes = extrairFuncoes(document.get("funcoes"))
+                
+                // Fallback legado
+                if (funcoes.isEmpty()) {
+                    document.getString("papel")?.let { funcoes["geral"] = it }
+                }
+
                 if (funcoes.isNotEmpty()) {
                     val bottomSheet = SelecionarPerfilSheet.newInstance(funcoes, nomeUsuario)
                     bottomSheet.show(supportFragmentManager, "SelecionarPerfilSheet")
+                } else {
+                    Toast.makeText(this, "Nenhum papel definido para este usuário.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
+    }
+
+    private fun extrairFuncoes(raw: Any?): HashMap<String, String> {
+        val result = HashMap<String, String>()
+        if (raw == null) return result
+        
+        when (raw) {
+            is Map<*, *> -> {
+                for ((key, value) in raw) {
+                    if (key is String && value != null) {
+                        result[key] = value.toString()
+                    }
+                }
+            }
+            is String -> {
+                if (raw.isNotEmpty()) {
+                    result["geral"] = raw
+                }
+            }
+        }
+        return result
     }
 
     private fun fazerLogout() {
@@ -253,7 +319,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
                         putString("REDE_SELECIONADA", rede)
                     }
                     this.redeSelecionada = rede
-                    greetingText.text = getString(R.string.relatorios_da_rede, redeSelecionada)
+                    textRedeAtual.text = getString(R.string.rede_dashboard_label, redeSelecionada)
                     carregarStatusDosRelatorios()
                     Toast.makeText(this, getString(R.string.exibindo_relatorios_da_rede, rede), Toast.LENGTH_SHORT).show()
                 }

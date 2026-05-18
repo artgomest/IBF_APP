@@ -197,6 +197,8 @@ memberForm.addEventListener('submit', async (e) => {
         if (el) dataToSave[id] = el.checked;
     });
 
+    dataToSave['cadastroCompleto'] = true;
+
     try {
         await setDoc(doc(db, "usuarios", currentMemberId), dataToSave, { merge: true });
         showFeedback("Dados salvos com sucesso!", "success");

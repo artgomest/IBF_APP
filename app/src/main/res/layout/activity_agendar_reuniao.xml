@@ -1,157 +1,258 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
+    android:background="?android:attr/windowBackground"
     tools:context=".ui.agenda.AgendarReuniaoActivity">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="24dp"
-            android:text="Agendar Discipulado"
-            android:textColor="?attr/colorOnBackground"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <!-- Seleção de Membro -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/IBF.TextInputLayout"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="Membro">
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_arrow_back">
 
-            <AutoCompleteTextView
-                android:id="@+id/autoCompleteMembro"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="none"
+                android:text="Novo Agendamento"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface" />
-        </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Data -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Data e Hora"
-            android:textColor="?attr/colorOnSurfaceVariant" />
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_data"
-                android:layout_width="0dp"
+            <!-- Card de Identificação -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:text="Data"
-                style="@style/IBF.Button.Secondary" />
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_hora"
-                android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Informações Básicas"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorPrimary"
+                        android:layout_marginBottom="16dp"/>
+
+                    <!-- Membro -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutMembro"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:hint="Com quem?"
+                        app:startIconDrawable="@drawable/ic_profile">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/autoCompleteMembro"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <!-- Data -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layoutData"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:hint="Data"
+                            app:startIconDrawable="@drawable/ic_calendar">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/input_data"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:focusable="false"
+                                android:inputType="none" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <!-- Hora -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layoutHora"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:hint="Hora"
+                            app:startIconDrawable="@drawable/ic_time">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/input_hora"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:focusable="false"
+                                android:inputType="none" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Card de Detalhes -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:text="Hora"
-                style="@style/IBF.Button.Secondary" />
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Onde e Extras"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorPrimary"
+                        android:layout_marginBottom="16dp"/>
+
+                    <!-- Local -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:hint="Local do encontro"
+                        app:startIconDrawable="@drawable/ic_location">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/input_local"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Observações -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Observações (Opcional)"
+                        app:startIconDrawable="@drawable/ic_notes">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/input_observacoes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"
+                            android:minLines="3"
+                            android:gravity="top|start" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Botão Principal -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_salvar_reuniao"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="Confirmar Agendamento"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="16dp"
+                android:layout_marginBottom="16dp"
+                style="@style/IBF.Button.Accent" />
+
+            <!-- Container de Sucesso (Oculto inicialmente) -->
+            <LinearLayout
+                android:id="@+id/container_sucesso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Agendado com sucesso! Compartilhe agora:"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="16dp"
+                    android:textSize="14sp"
+                    android:textColor="?attr/colorOnSurfaceVariant" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_convidar_whatsapp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:text="Enviar Convite (WhatsApp)"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:textColor="#25D366"
+                    app:strokeColor="#25D366"
+                    app:icon="@drawable/ic_share"
+                    app:iconTint="#25D366"
+                    app:cornerRadius="12dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_adicionar_agenda"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Google Agenda"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:textColor="#4285F4"
+                    app:strokeColor="#4285F4"
+                    app:icon="@drawable/ic_calendar"
+                    app:iconTint="#4285F4"
+                    app:cornerRadius="12dp" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/text_data_selecionada"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:gravity="center"
-            android:text="Nenhuma data selecionada"
-            android:textColor="?attr/colorOnSurface"
-            android:textStyle="bold" />
+    </androidx.core.widget.NestedScrollView>
 
-        <!-- Local -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/IBF.TextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="Local">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/input_local"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSurface" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Observações -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/IBF.TextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:hint="Observações (Opcional)">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/input_observacoes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:minLines="3"
-                android:gravity="top|start"
-                android:textColor="?attr/colorOnSurface" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Actions -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_salvar_reuniao"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:text="Agendar Discipulado"
-            style="@style/IBF.Button.Accent" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_convidar_whatsapp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:text="Convidar via WhatsApp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:textColor="#25D366"
-            app:strokeColor="#25D366"
-            app:icon="@drawable/ic_share"
-            app:iconTint="#25D366"
-            app:cornerRadius="8dp"
-            android:layout_marginBottom="8dp"
-            android:visibility="gone" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_adicionar_agenda"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:text="Adicionar ao Google Agenda"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:textColor="#4285F4"
-            app:strokeColor="#4285F4"
-            app:icon="@drawable/ic_calendar"
-            app:iconTint="#4285F4"
-            app:cornerRadius="8dp"
-            android:visibility="gone" />
-
-    </LinearLayout>
-</ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
