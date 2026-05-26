@@ -196,7 +196,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
         // --- CORREÇÃO APLICADA AQUI ---
         // 1. Definimos a nossa data de início
         val dataInicio = Calendar.getInstance().apply {
-            set(2025, Calendar.JULY, 1, 0, 0, 0)
+            set(2026, Calendar.JANUARY, 1, 0, 0, 0)
         }.time
 
         firestore.collection("redes").whereEqualTo("nome", redeAtiva).get().addOnSuccessListener { redesDocs ->
@@ -207,24 +207,19 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
             val diaDaSemana = redesDocs.documents.first().getLong("diaDaSemana")?.toInt() ?: return@addOnSuccessListener
 
             firestore.collection("relatorios")
-                .whereEqualTo("autorUid", usuarioAtual.uid)
                 .whereEqualTo("idRede", redeAtiva)
                 .get().addOnSuccessListener { relatoriosDocs ->
                     val relatoriosEnviados = relatoriosDocs.mapNotNull { doc -> doc.toObject(Relatorio::class.java).apply { id = doc.id } }
                     val statusFinal = mutableListOf<StatusRelatorio>()
-                    val semanasParaVerificar = 8
+                    val calLoop = Calendar.getInstance()
+                    calLoop.set(Calendar.DAY_OF_WEEK, diaDaSemana)
+                    
+                    if (calLoop.time.after(Date())) {
+                        calLoop.add(Calendar.WEEK_OF_YEAR, -1)
+                    }
 
-                    for (i in 0 until semanasParaVerificar) {
-                        val dataEsperadaCal = Calendar.getInstance()
-                        dataEsperadaCal.add(Calendar.WEEK_OF_YEAR, -i)
-                        dataEsperadaCal.set(Calendar.DAY_OF_WEEK, diaDaSemana)
-
-                        // 2. Adicionamos a condição para ignorar datas anteriores a Julho
-                        if (dataEsperadaCal.time.before(dataInicio) || dataEsperadaCal.time.after(Date())) {
-                            continue
-                        }
-
-                        val dataEsperadaStr = sdf.format(dataEsperadaCal.time)
+                    while (!calLoop.time.before(dataInicio)) {
+                        val dataEsperadaStr = sdf.format(calLoop.time)
                         val relatorioEncontrado = relatoriosEnviados.find { it.dataReuniao == dataEsperadaStr }
 
                         if (relatorioEncontrado != null) {
@@ -232,6 +227,8 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
                         } else {
                             statusFinal.add(StatusRelatorio.Faltante(dataEsperadaStr, redeAtiva))
                         }
+                        
+                        calLoop.add(Calendar.WEEK_OF_YEAR, -1)
                     }
 
                     listaDeStatus.clear()

@@ -41,7 +41,8 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
         }
 
         findViewById<ImageView>(R.id.button_back).setOnClickListener { finish() }
-        findViewById<TextView>(R.id.text_page_title).text = "Membros da $redeSelecionada"
+        val pageTitle = if (redeSelecionada == "TODAS") "Todos os Membros" else "Membros da $redeSelecionada"
+        findViewById<TextView>(R.id.text_page_title).text = pageTitle
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
 
         setupRecyclerView()
@@ -87,9 +88,14 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
             return
         }
 
-        firestore.collection("usuarios")
-            .whereGreaterThan(com.google.firebase.firestore.FieldPath.of("funcoes", redeSelecionada!!), "")
-            .get()
+        val query = if (redeSelecionada == "TODAS") {
+            firestore.collection("usuarios")
+        } else {
+            firestore.collection("usuarios")
+                .whereGreaterThan(com.google.firebase.firestore.FieldPath.of("funcoes", redeSelecionada!!), "")
+        }
+
+        query.get()
             .addOnSuccessListener { documents ->
                 val usuariosDaRede = mutableListOf<UsuarioRede>()
                 for (document in documents) {
@@ -97,7 +103,22 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
                     val nome = document.getString("nome") ?: "Nome Desconhecido"
 
                     val funcoesRaw = document.get("funcoes") as? Map<*, *>
-                    val papelNaRede = funcoesRaw?.get(redeSelecionada)?.toString()
+                    
+                    val papelNaRede = if (redeSelecionada == "TODAS") {
+                        val papelGeral = document.getString("papel") ?: "Membro"
+                        if (funcoesRaw != null && funcoesRaw.isNotEmpty()) {
+                            val primeiraRede = funcoesRaw.keys.firstOrNull { it != "geral" }?.toString()
+                            if (primeiraRede != null) {
+                                "${funcoesRaw[primeiraRede]} ($primeiraRede)"
+                            } else {
+                                funcoesRaw["geral"]?.toString() ?: papelGeral
+                            }
+                        } else {
+                            papelGeral
+                        }
+                    } else {
+                        funcoesRaw?.get(redeSelecionada)?.toString()
+                    }
 
                     if (papelNaRede != null) {
                         val cadastroCompleto = document.getBoolean("cadastroCompleto") ?: false
@@ -119,6 +140,7 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
         val intent = Intent(this, FichaMembroActivity::class.java)
         intent.putExtra("MEMBRO_ID", usuario.uid)
         intent.putExtra("REDE_SELECIONADA", redeSelecionada)
+        intent.putExtra("PAPEL_USUARIO_LOGADO", papelUsuarioLogado)
         startActivity(intent)
     }
 

@@ -8,14 +8,13 @@
     android:gravity="center"
     tools:context=".ui.main.HomeActivity">
 
-    <ImageView
-        android:layout_width="160dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="@dimen/space_xxl"
-        android:contentDescription="@string/app_logo_content_description"
-        android:src="@drawable/logobranca"
-        android:scaleType="fitCenter"
-        app:tint="?attr/colorOnBackground" />
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="@dimen/space_xxl"
+            android:contentDescription="@string/app_logo_content_description"
+            android:src="@drawable/care_logo"
+            android:scaleType="fitCenter" />
 
     <TextView
         android:layout_width="wrap_content"

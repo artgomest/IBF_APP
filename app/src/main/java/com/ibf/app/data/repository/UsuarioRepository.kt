@@ -22,7 +22,7 @@ class UsuarioRepository {
     fun adicionarFuncao(uid: String, novaRede: String, novoPapel: String): Task<Void> {
         val updates = hashMapOf<String, Any>(
             "funcoes.$novaRede" to novoPapel,
-            "redes" to FieldValue.arrayUnion(novaRede)
+            "cadastroCompleto" to true
         )
         return collectionRef.document(uid).update(updates)
     }

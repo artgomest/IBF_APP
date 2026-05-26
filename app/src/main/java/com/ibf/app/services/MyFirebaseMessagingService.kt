@@ -2,8 +2,6 @@ package com.ibf.app.services
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
@@ -15,7 +13,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.ibf.app.R
-import com.ibf.app.ui.main.MainActivity
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
@@ -34,7 +31,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
 
         if (titulo != null || corpo != null) {
-            mostrarNotificacao(titulo, corpo, remoteMessage.data)
+            mostrarNotificacao(titulo, corpo)
         }
     }
 
@@ -54,7 +51,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .addOnFailureListener { e -> Log.w(TAG, "Erro ao salvar token FCM para o usuário $userId", e) }
     }
 
-    private fun mostrarNotificacao(titulo: String?, corpo: String?, data: Map<String, String>) {
+    private fun mostrarNotificacao(titulo: String?, corpo: String?) {
         val channelId = "canal_padrao_ibf_v2"
         val channelName = "Notificações Gerais"
 
@@ -67,32 +64,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        val intent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            for ((key, value) in data) {
-                putExtra(key, value)
-            }
-        }
-
-        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        } else {
-            PendingIntent.FLAG_UPDATE_CURRENT
-        }
-        val pendingIntent = PendingIntent.getActivity(
-            this,
-            System.currentTimeMillis().toInt(),
-            intent,
-            flags
-        )
-
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_home) // Substitua por um ícone seu
             .setContentTitle(titulo)
             .setContentText(corpo)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
-            .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {

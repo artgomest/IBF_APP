@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Membro | IBF</title>
+    <meta name="description" content="Cadastre-se como membro da Igreja Batista da Fé. Formulário rápido e seguro.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/cadastro.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- ============================================================= -->
+        <!-- LANDING — Escolha inicial                                     -->
+        <!-- ============================================================= -->
+        <div id="landing-container" class="glass-card" style="max-width:540px; margin:6vh auto 0;">
+            <div class="logo-area">
+                <h1>IBF <span class="highlight">App</span></h1>
+                <p>Bem-vindo à Igreja Batista da Fé</p>
+            </div>
+
+            <div class="landing-options">
+                <a id="btn-start-cadastro" class="landing-option" href="#">
+                    <div class="option-icon">✦</div>
+                    <div class="option-text">
+                        <h3>Quero me cadastrar</h3>
+                        <p>Iniciar meu cadastro como membro da igreja</p>
+                    </div>
+                </a>
+
+                <a class="landing-option secondary" href="index.html">
+                    <div class="option-icon">→</div>
+                    <div class="option-text">
+                        <h3>Já tenho cadastro</h3>
+                        <p>Acessar minha ficha existente com CPF</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- ============================================================= -->
+        <!-- WIZARD — Formulário por etapas                                -->
+        <!-- ============================================================= -->
+        <div id="wizard-container" class="glass-card hidden">
+            <header>
+                <div class="logo-area" style="margin-bottom:0; text-align:left;">
+                    <h1>Cadastro de <span class="highlight">Membro</span></h1>
+                </div>
+                <button type="button" id="btn-wizard-back-landing" class="btn-text">Voltar</button>
+            </header>
+
+            <!-- Progress Stepper -->
+            <div class="wizard-progress" id="wizard-progress">
+                <div class="wizard-step-indicator active" data-step="0">
+                    <div class="step-circle">
+                        <span class="step-number">1</span>
+                        <span class="step-check">✓</span>
+                        <span class="step-label">Pessoal</span>
+                    </div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="wizard-step-indicator" data-step="1">
+                    <div class="step-circle">
+                        <span class="step-number">2</span>
+                        <span class="step-check">✓</span>
+                        <span class="step-label">Contato</span>
+                    </div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="wizard-step-indicator" data-step="2">
+                    <div class="step-circle">
+                        <span class="step-number">3</span>
+                        <span class="step-check">✓</span>
+                        <span class="step-label">Endereço</span>
+                    </div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="wizard-step-indicator" data-step="3">
+                    <div class="step-circle">
+                        <span class="step-number">4</span>
+                        <span class="step-check">✓</span>
+                        <span class="step-label">Família</span>
+                    </div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="wizard-step-indicator" data-step="4">
+                    <div class="step-circle">
+                        <span class="step-number">5</span>
+                        <span class="step-check">✓</span>
+                        <span class="step-label">Igreja</span>
+                    </div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="wizard-step-indicator" data-step="5">
+                    <div class="step-circle">
+                        <span class="step-number">6</span>
+                        <span class="step-check">✓</span>
+                        <span class="step-label">Filhos</span>
+                    </div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="wizard-step-indicator" data-step="6">
+                    <div class="step-circle">
+                        <span class="step-number">7</span>
+                        <span class="step-check">✓</span>
+                        <span class="step-label">Revisão</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========= STEP 0: Dados Pessoais ========= -->
+            <div class="wizard-panel active" data-panel="0">
+                <section style="border:0; padding:0;">
+                    <h3>Dados Pessoais</h3>
+
+                    <div class="input-group">
+                        <label for="w-nome">Nome Completo *</label>
+                        <input type="text" id="w-nome" required>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="w-dataNascimento">Data de Nascimento *</label>
+                            <input type="date" id="w-dataNascimento" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="w-sexo">Sexo *</label>
+                            <select id="w-sexo" required>
+                                <option value="">Selecione</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Feminino">Feminino</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="w-cpf">CPF *</label>
+                            <input type="text" id="w-cpf" placeholder="000.000.000-00" maxlength="14" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="w-escolaridade">Escolaridade</label>
+                            <select id="w-escolaridade">
+                                <option value="">Selecione</option>
+                                <option value="Ensino Fundamental">Ensino Fundamental</option>
+                                <option value="Ensino Médio">Ensino Médio</option>
+                                <option value="Ensino Superior">Ensino Superior</option>
+                                <option value="Pós-Graduação">Pós-Graduação</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="w-rg">RG</label>
+                            <input type="text" id="w-rg">
+                        </div>
+                        <div class="input-group">
+                            <label for="w-orgaoExpeditor">Órgão Expeditor</label>
+                            <input type="text" id="w-orgaoExpeditor">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="w-naturalidade">Naturalidade (Cidade/Estado)</label>
+                        <input type="text" id="w-naturalidade">
+                    </div>
+                </section>
+            </div>
+
+            <!-- ========= STEP 1: Contato ========= -->
+            <div class="wizard-panel" data-panel="1">
+                <section style="border:0; padding:0;">
+                    <h3>Dados de Contato</h3>
+
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="w-celular">Celular (WhatsApp) *</label>
+                            <input type="tel" id="w-celular" placeholder="(00) 00000-0000" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="w-telefoneFixo">Telefone Fixo</label>
+                            <input type="tel" id="w-telefoneFixo" placeholder="(00) 0000-0000">
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ========= STEP 2: Endereço ========= -->
+            <div class="wizard-panel" data-panel="2">
+                <section style="border:0; padding:0;">
+                    <h3>Endereço</h3>
+
+                    <div class="grid-3">
+                        <div class="input-group">
+                            <label for="w-cep">CEP</label>
+                            <input type="text" id="w-cep" placeholder="00000-000" maxlength="9">
+                        </div>
+                        <div class="input-group">
+                            <label for="w-cidade">Cidade</label>
+                            <input type="text" id="w-cidade">
+                        </div>
+                        <div class="input-group">
+                            <label for="w-bairro">Bairro</label>
+                            <input type="text" id="w-bairro">
+                        </div>
+                    </div>
+
+                    <div class="grid-2" style="grid-template-columns: 3fr 1fr;">
+                        <div class="input-group">
+                            <label for="w-rua">Logradouro (Rua, Av...)</label>
+                            <input type="text" id="w-rua">
+                        </div>
+                        <div class="input-group">
+                            <label for="w-numero">Número</label>
+                            <input type="text" id="w-numero">
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ========= STEP 3: Família ========= -->
+            <div class="wizard-panel" data-panel="3">
+                <section style="border:0; padding:0;">
+                    <h3>Dados Familiares</h3>
+
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="w-estadoCivil">Estado Civil *</label>
+                            <select id="w-estadoCivil" required>
+                                <option value="">Selecione</option>
+                                <option value="Solteiro(a)">Solteiro(a)</option>
+                                <option value="Casado(a)">Casado(a)</option>
+                                <option value="União Estável">União Estável</option>
+                                <option value="Viúvo(a)">Viúvo(a)</option>
+                                <option value="Divorciado(a)">Divorciado(a)</option>
+                            </select>
+                        </div>
+                        <div class="input-group" id="w-group-data-casamento" style="display:none;">
+                            <label for="w-dataCasamento">Data Casamento</label>
+                            <input type="date" id="w-dataCasamento">
+                        </div>
+                    </div>
+
+                    <div class="input-group" id="w-group-conjuge" style="display:none;">
+                        <label for="w-conjuge">Nome do Cônjuge</label>
+                        <input type="text" id="w-conjuge">
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="w-pai">Nome do Pai</label>
+                            <input type="text" id="w-pai">
+                        </div>
+                        <div class="input-group">
+                            <label for="w-mae">Nome da Mãe</label>
+                            <input type="text" id="w-mae">
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ========= STEP 4: Dados Eclesiásticos ========= -->
+            <div class="wizard-panel" data-panel="4">
+                <section style="border:0; padding:0;">
+                    <h3>Dados Eclesiásticos</h3>
+
+                    <div class="grid-2">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="w-batizado">
+                            <label for="w-batizado">É Batizado?</label>
+                        </div>
+                        <div class="input-group" id="w-group-data-batismo" style="display:none;">
+                            <label for="w-dataBatismo">Data do Batismo</label>
+                            <input type="date" id="w-dataBatismo">
+                        </div>
+                    </div>
+
+                    <div class="input-group" id="w-group-igreja-batismo" style="display:none;">
+                        <label for="w-igrejaBatismo">Igreja onde foi Batizado</label>
+                        <input type="text" id="w-igrejaBatismo">
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="w-tipoMembro">Tipo de Vínculo *</label>
+                            <select id="w-tipoMembro" required>
+                                <option value="">Selecione</option>
+                                <option value="Membro">Membro</option>
+                                <option value="Congregado">Congregado</option>
+                                <option value="Visitante">Visitante</option>
+                            </select>
+                        </div>
+                        <div class="input-group" id="w-group-aceito-por" style="display:none;">
+                            <label for="w-aceitoPor">Aceito Por</label>
+                            <select id="w-aceitoPor">
+                                <option value="">Selecione</option>
+                                <option value="Aclamação">Aclamação</option>
+                                <option value="Batismo">Batismo</option>
+                                <option value="Transferência">Transferência</option>
+                                <option value="Reconciliação">Reconciliação</option>
+                                <option value="Restauração">Restauração</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid-2" id="w-group-igreja-anterior" style="display:none;">
+                        <div class="input-group">
+                            <label for="w-igrejaAnterior">Igreja Anterior</label>
+                            <input type="text" id="w-igrejaAnterior">
+                        </div>
+                        <div class="input-group">
+                            <label for="w-pastorAnterior">Pastor Anterior</label>
+                            <input type="text" id="w-pastorAnterior">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="w-cargosExercidos">Cargos já exercidos</label>
+                        <input type="text" id="w-cargosExercidos">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="w-talentosMinisterios">Talentos / Ministérios</label>
+                        <input type="text" id="w-talentosMinisterios" placeholder="Ex: Música, Dança, Ensino...">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="w-desejaFuncao">Deseja exercer alguma função?</label>
+                        <input type="text" id="w-desejaFuncao">
+                    </div>
+                </section>
+            </div>
+
+            <!-- ========= STEP 5: Filhos ========= -->
+            <div class="wizard-panel" data-panel="5">
+                <section style="border:0; padding:0;">
+                    <h3>Filhos</h3>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="w-temFilhos">
+                        <label for="w-temFilhos">Possui filhos?</label>
+                    </div>
+
+                    <div class="children-panel" id="w-group-filhos" style="display:none;">
+                        <div class="children-header">
+                            <div>
+                                <h4>Cadastro dos filhos</h4>
+                                <p>Informe os dados para vincular cada filho à rede correta.</p>
+                            </div>
+                            <button type="button" class="btn-secondary" id="w-btn-add-child">Adicionar filho</button>
+                        </div>
+
+                        <div class="child-form hidden" id="w-child-form">
+                            <div class="input-group">
+                                <label for="w-child-name">Nome do filho</label>
+                                <input type="text" id="w-child-name">
+                            </div>
+                            <div class="grid-2">
+                                <div class="input-group">
+                                    <label for="w-child-birth">Data de nascimento</label>
+                                    <input type="date" id="w-child-birth">
+                                </div>
+                                <div class="input-group">
+                                    <label for="w-child-sex">Sexo</label>
+                                    <select id="w-child-sex">
+                                        <option value="">Selecione</option>
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Feminino">Feminino</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="child-actions">
+                                <button type="button" class="btn-secondary" id="w-btn-save-child">Salvar filho</button>
+                                <button type="button" class="btn-text" id="w-btn-cancel-child">Cancelar</button>
+                            </div>
+                        </div>
+
+                        <div class="children-list" id="w-children-list"></div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ========= STEP 6: Revisão e Confirmação ========= -->
+            <div class="wizard-panel" data-panel="6">
+                <section style="border:0; padding:0;">
+                    <h3>Revisão dos dados</h3>
+                    <p style="color: var(--muted); margin-bottom:18px;">
+                        Confira seus dados antes de finalizar. Após o cadastro, sua rede será atribuída automaticamente.
+                    </p>
+
+                    <div id="review-content"></div>
+
+                    <div class="consent-box">
+                        <p>Ao finalizar o cadastro, você declara que as informações prestadas são verdadeiras e autoriza a Igreja Batista da Fé a utilizar esses dados para fins de organização interna e acompanhamento pastoral.</p>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="w-aceite">
+                            <label for="w-aceite">Li e concordo com o uso dos meus dados conforme descrito acima.</label>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Feedback Message -->
+            <div id="w-feedback-msg" class="feedback"></div>
+
+            <!-- Navigation -->
+            <div class="wizard-nav">
+                <button type="button" class="btn-back" id="btn-prev" style="visibility:hidden;">← Anterior</button>
+                <button type="button" class="btn-next" id="btn-next">Próximo →</button>
+            </div>
+        </div>
+
+        <!-- ============================================================= -->
+        <!-- SUCCESS — Cadastro concluído                                  -->
+        <!-- ============================================================= -->
+        <div id="success-container" class="glass-card hidden" style="max-width:560px; margin:8vh auto 0;">
+            <div class="success-screen">
+                <div class="success-icon">✓</div>
+                <h2>Cadastro Realizado!</h2>
+                <p id="success-name"></p>
+                <p style="color: var(--muted);">Você foi classificado na rede:</p>
+                <div id="success-rede"></div>
+                <p style="margin-top:18px; font-size:0.88rem; color: var(--muted);">
+                    Seu líder e secretário serão notificados.<br>
+                    Em breve, eles entrarão em contato com você.
+                </p>
+                <a href="cadastro.html" class="btn-primary" style="display:inline-block; margin-top:24px; text-decoration:none;">Voltar ao início</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/cadastro.js"></script>
+
+</body>
+
+</html>

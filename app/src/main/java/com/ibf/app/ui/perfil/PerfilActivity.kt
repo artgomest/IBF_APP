@@ -55,15 +55,18 @@ class PerfilActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecion
             }
         }
 
-        // Listeners para os botões futuros que ainda não têm função
         findViewById<Button>(R.id.button_estatisticas).setOnClickListener {
             val intent = Intent(this, EstatisticasActivity::class.java)
             intent.putExtra("REDE_SELECIONADA", redeSelecionada) // Passa a rede para a tela de estatísticas
             startActivity(intent)
         }
 
-        findViewById<Button>(R.id.button_notificacoes).setOnClickListener { Toast.makeText(this, getString(R.string.em_breve), Toast.LENGTH_SHORT).show() }
-        findViewById<Button>(R.id.button_ajuda).setOnClickListener { Toast.makeText(this, getString(R.string.em_breve), Toast.LENGTH_SHORT).show() }
+        findViewById<Button>(R.id.button_ajuda).setOnClickListener { 
+            val url = "https://api.whatsapp.com/send?phone=5531987006343"
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = android.net.Uri.parse(url)
+            startActivity(intent)
+        }
 
         findViewById<Button>(R.id.button_alternar_tema).setOnClickListener {
             val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK

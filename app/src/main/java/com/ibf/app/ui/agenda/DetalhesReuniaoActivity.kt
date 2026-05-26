@@ -188,15 +188,9 @@ class DetalhesReuniaoActivity : AppCompatActivity() {
                 btnPreencherRelatorio.visibility = View.GONE
                 textRelatorioOk.visibility = View.VISIBLE
             } else {
-                // Mandatory photo check
-                if (r.fotoUrl.isNotEmpty()) {
-                    btnPreencherRelatorio.visibility = View.VISIBLE
-                    btnPreencherRelatorio.isEnabled = true
-                } else {
-                    btnPreencherRelatorio.visibility = View.VISIBLE
-                    btnPreencherRelatorio.isEnabled = false
-                    btnPreencherRelatorio.text = "Tire a foto para liberar"
-                }
+                btnPreencherRelatorio.visibility = View.VISIBLE
+                btnPreencherRelatorio.isEnabled = true
+                btnPreencherRelatorio.text = "Preencher Relatório"
                 textRelatorioOk.visibility = View.GONE
             }
         } else {

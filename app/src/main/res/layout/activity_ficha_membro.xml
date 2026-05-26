@@ -349,12 +349,13 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:hint="Estado Civil"
-                         android:layout_marginEnd="4dp">
-                        <com.google.android.material.textfield.TextInputEditText
+                        android:layout_marginEnd="4dp"
+                        app:endIconMode="dropdown_menu">
+                        <AutoCompleteTextView
                             android:id="@+id/text_estado_civil"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="text"
+                            android:inputType="none"
                             android:enabled="false"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -420,6 +421,7 @@
                     android:enabled="false"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_filhos_legado"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Filhos (Nome e Data de Nascimento)"
@@ -432,6 +434,30 @@
                         android:minLines="2"
                         android:enabled="false"/>
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_cadastro_filhos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:id="@+id/container_filhos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_adicionar_filho"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Adicionar filho"
+                        android:enabled="false" />
+                </LinearLayout>
 
 
                 <!-- SEÇÃO: DADOS ECLESIÁSTICOS -->
@@ -498,12 +524,13 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:hint="Tipo (Membro/Visitante)"
-                         android:layout_marginEnd="4dp">
-                        <com.google.android.material.textfield.TextInputEditText
+                        android:layout_marginEnd="4dp"
+                        app:endIconMode="dropdown_menu">
+                        <AutoCompleteTextView
                             android:id="@+id/text_tipo_membro"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                             android:inputType="text"
+                            android:inputType="none"
                             android:enabled="false"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -513,12 +540,13 @@
                         android:layout_weight="1"
                          android:layout_marginStart="4dp"
                         android:hint="Aceito por"
-                        app:helperText="Ex: Aclamação, Transferência">
-                        <com.google.android.material.textfield.TextInputEditText
+                        app:helperText="Ex: Aclamação, Transferência"
+                        app:endIconMode="dropdown_menu">
+                        <AutoCompleteTextView
                             android:id="@+id/text_aceito_por"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                             android:inputType="text"
+                            android:inputType="none"
                             android:enabled="false"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
@@ -638,6 +666,19 @@
         app:backgroundTint="@color/accent" />
 
     <!-- Botão de Edição (inicialmente visível) -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_excluir_membro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="88dp"
+        android:src="@drawable/ic_delete"
+        android:contentDescription="Excluir membro"
+        android:visibility="gone"
+        app:tint="@color/white"
+        app:backgroundTint="#D32F2F" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_editar_membro"
         android:layout_width="wrap_content"

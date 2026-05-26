@@ -17,11 +17,11 @@
     <color name="chumbo_faint">#9E9E9E</color>
 
     <!-- Accent -->
-    <color name="accent">#1DB954</color>
-    <color name="accent_pressed">#17A046</color>
-    <color name="accent_container">#E8F5E9</color>
-    <color name="accent_primary">#1DB954</color>
-    <color name="accent_secondary">#1DB954</color>
+    <color name="accent">#0A0A0A</color>
+    <color name="accent_pressed">#2C2C2C</color>
+    <color name="accent_container">#E8E5E1</color>
+    <color name="accent_primary">#0A0A0A</color>
+    <color name="accent_secondary">#0A0A0A</color>
 
     <!-- =========================================== -->
     <!--   LIGHT MODE tokens                         -->

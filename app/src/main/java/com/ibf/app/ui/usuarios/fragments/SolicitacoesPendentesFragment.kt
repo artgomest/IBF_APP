@@ -115,7 +115,7 @@ class SolicitacoesPendentesFragment : Fragment(), SolicitacoesAdapter.Solicitaca
             "nome" to solicitacao.nome,
             "email" to solicitacao.email,
             "funcoes" to funcoesMap,
-            "redes" to listOf(solicitacao.redeId)
+            "cadastroCompleto" to true
         )
         batch.set(novoUsuarioRef, userData)
 

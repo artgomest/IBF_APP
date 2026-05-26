@@ -138,9 +138,6 @@ class CadastroUsuarioActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     task.result?.user?.let { newUser ->
                         salvarDadosNovoUsuarioNoFirestore(newUser, nome, email, papel, rede)
-                        // O Firebase Auth loga automaticamente o novo usuário.
-                        // Como não temos Cloud Functions ainda, a solução paliativa é deslogar e pedir login.
-                        tempAuth.signOut()
                     }
                 } else {
                     val exception = task.exception
@@ -157,10 +154,11 @@ class CadastroUsuarioActivity : AppCompatActivity() {
     private fun salvarDadosNovoUsuarioNoFirestore(newUser: FirebaseUser, nome: String, email: String, papel: String, rede: String) {
         val funcoesMap = hashMapOf(rede to papel)
         val userData = hashMapOf(
-            "nome" to nome, "email" to email, "funcoes" to funcoesMap, "redes" to listOf(rede)
+            "nome" to nome, "email" to email, "funcoes" to funcoesMap, "cadastroCompleto" to true
         )
         repository.salvarNovoUsuario(newUser.uid, userData)
             .addOnSuccessListener {
+                FirebaseAuth.getInstance().signOut() // Desloga do usuário recém criado
                 Toast.makeText(this, "Usuário criado! Por segurança, faça login novamente.", Toast.LENGTH_LONG).show()
                 
                 // Redireciona para a tela de Login, pois a sessão do criador foi perdida
@@ -173,6 +171,7 @@ class CadastroUsuarioActivity : AppCompatActivity() {
                 Toast.makeText(this, getString(R.string.falha_salvar_dados_firestore, e.message), Toast.LENGTH_SHORT).show()
                 // Tenta deletar o usuário criado se falhar o firestore, para não ficar inconsistente
                 newUser.delete()
+                FirebaseAuth.getInstance().signOut() // Desloga do usuário recém criado
                 buttonCadastrarUsuario.isEnabled = true
             }
     }

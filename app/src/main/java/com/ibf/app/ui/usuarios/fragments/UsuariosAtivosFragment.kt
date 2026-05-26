@@ -88,7 +88,7 @@ class UsuariosAtivosFragment : Fragment(), UsuarioRedeAdapter.OnItemClickListene
         swipeRefreshLayout.isRefreshing = true
 
         firestore.collection("usuarios")
-            .whereArrayContains("redes", redeId!!)
+            .whereGreaterThan(com.google.firebase.firestore.FieldPath.of("funcoes", redeId!!), "")
             .get()
             .addOnSuccessListener { documents ->
                 val usuariosDaRede = mutableListOf<UsuarioRede>()
@@ -99,9 +99,10 @@ class UsuariosAtivosFragment : Fragment(), UsuarioRedeAdapter.OnItemClickListene
                     // Correção de Cast Seguro
                     val funcoesRaw = document.get("funcoes") as? Map<*, *>
                     val papelNaRede = funcoesRaw?.get(redeId)?.toString()
+                    val cadastroCompleto = document.getBoolean("cadastroCompleto") ?: false
 
-                    if (papelNaRede != null) {
-                        usuariosDaRede.add(UsuarioRede(uid, nome, papelNaRede))
+                    if (papelNaRede != null && cadastroCompleto) {
+                        usuariosDaRede.add(UsuarioRede(uid, nome, papelNaRede, cadastroCompleto = true))
                     }
                 }
                 adapter.atualizarLista(usuariosDaRede.sortedBy { it.nome })

@@ -8,6 +8,10 @@
     ],
     "rewrites": [
       {
+        "source": "/cadastro",
+        "destination": "/cadastro.html"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

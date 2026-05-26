@@ -1,0 +1,392 @@
+/* =========================================================================
+   CADASTRO.CSS — Estilos adicionais para o wizard de cadastro público
+   ========================================================================= */
+
+/* Herda tudo de style.css — este arquivo adiciona apenas o que é novo */
+
+/* ---------- Progress Stepper ---------- */
+.wizard-progress {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 28px;
+    padding: 0 4px;
+    overflow-x: auto;
+}
+
+.wizard-step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+.wizard-step-indicator:last-child .step-line {
+    display: none;
+}
+
+.step-circle {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--line-strong);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 260ms ease;
+    position: relative;
+}
+
+.step-circle .step-check {
+    display: none;
+}
+
+.step-line {
+    flex: 1;
+    height: 2px;
+    background: var(--line);
+    min-width: 8px;
+    transition: background 260ms ease;
+}
+
+/* Active step */
+.wizard-step-indicator.active .step-circle {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 0 0 4px var(--focus);
+}
+
+/* Completed step */
+.wizard-step-indicator.completed .step-circle {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #fff;
+}
+
+.wizard-step-indicator.completed .step-circle .step-number {
+    display: none;
+}
+
+.wizard-step-indicator.completed .step-circle .step-check {
+    display: block;
+}
+
+.wizard-step-indicator.completed .step-line {
+    background: var(--accent);
+}
+
+/* ---------- Step Label (below circle on larger screens) ---------- */
+.step-label {
+    display: none;
+}
+
+@media (min-width: 761px) {
+    .step-label {
+        display: block;
+        position: absolute;
+        top: 38px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.7rem;
+        color: var(--muted);
+        white-space: nowrap;
+        font-weight: 600;
+    }
+    .wizard-step-indicator.active .step-label {
+        color: var(--primary-strong);
+    }
+    .wizard-step-indicator.completed .step-label {
+        color: var(--accent);
+    }
+    .wizard-progress {
+        margin-bottom: 56px;
+    }
+}
+
+/* ---------- Wizard Panels ---------- */
+.wizard-panel {
+    display: none;
+    animation: fadeIn 220ms ease-out;
+}
+
+.wizard-panel.active {
+    display: block;
+}
+
+/* ---------- Navigation Buttons ---------- */
+.wizard-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+}
+
+.wizard-nav .btn-back {
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+    color: var(--text);
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 160ms ease;
+}
+
+.wizard-nav .btn-back:hover {
+    background: var(--surface-soft);
+    border-color: var(--muted);
+}
+
+.wizard-nav .btn-next {
+    border: 0;
+    background: var(--primary);
+    color: #fff;
+    padding: 12px 32px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 160ms ease;
+}
+
+.wizard-nav .btn-next:hover {
+    background: var(--primary-strong);
+}
+
+.wizard-nav .btn-next:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ---------- Landing Page (Escolha Inicial) ---------- */
+.landing-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.landing-option {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    border: 2px solid var(--line);
+    border-radius: 12px;
+    background: var(--surface-soft);
+    cursor: pointer;
+    transition: all 200ms ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.landing-option:hover {
+    border-color: var(--primary);
+    background: #fff7f2;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201, 79, 36, 0.1);
+}
+
+.landing-option .option-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 12px;
+    background: var(--primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+
+.landing-option.secondary .option-icon {
+    background: var(--accent);
+}
+
+.landing-option .option-text h3 {
+    text-transform: none;
+    color: var(--text);
+    font-size: 1rem;
+    margin-bottom: 2px;
+}
+
+.landing-option .option-text p {
+    color: var(--muted);
+    font-size: 0.88rem;
+}
+
+/* ---------- Review Panel ---------- */
+.review-section {
+    margin-bottom: 18px;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface-soft);
+}
+
+.review-section h4 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--primary-strong);
+    margin-bottom: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.review-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    font-size: 0.92rem;
+    border-bottom: 1px solid var(--line);
+}
+
+.review-row:last-child {
+    border-bottom: none;
+}
+
+.review-row .review-label {
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.review-row .review-value {
+    color: var(--text);
+    text-align: right;
+    max-width: 60%;
+    word-break: break-word;
+}
+
+/* ---------- Network Badge ---------- */
+.rede-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    margin: 12px 0;
+}
+
+.rede-badge.rede-jovens { background: #eef2ff; color: #3b58c8; }
+.rede-badge.rede-homens { background: #e8f5e9; color: #2e7d32; }
+.rede-badge.rede-mulheres { background: #fce4ec; color: #c2185b; }
+.rede-badge.rede-criancas { background: #fff8e1; color: #f57f17; }
+.rede-badge.rede-juniores { background: #e0f7fa; color: #00838f; }
+
+.rede-info {
+    padding: 14px 18px;
+    border-radius: 10px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+    font-size: 0.92rem;
+    margin-bottom: 16px;
+}
+
+.rede-info strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* ---------- Consent section ---------- */
+.consent-box {
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fffbf5;
+    margin-top: 16px;
+}
+
+.consent-box p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+/* ---------- Success Screen ---------- */
+.success-screen {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.success-screen .success-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin: 0 auto 20px;
+    animation: scaleIn 400ms ease;
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.success-screen h2 {
+    color: var(--text);
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+}
+
+.success-screen p {
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+}
+
+.success-screen .rede-badge {
+    margin: 20px 0;
+}
+
+/* ---------- Error inline ---------- */
+.field-error {
+    color: var(--danger);
+    font-size: 0.82rem;
+    margin-top: 4px;
+    font-weight: 600;
+}
+
+input.has-error,
+select.has-error {
+    border-color: var(--danger) !important;
+    box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.12) !important;
+}
+
+/* ---------- Mobile responsive adjustments ---------- */
+@media (max-width: 760px) {
+    .wizard-nav {
+        flex-direction: column-reverse;
+    }
+    .wizard-nav .btn-back,
+    .wizard-nav .btn-next {
+        width: 100%;
+        text-align: center;
+    }
+    .review-row {
+        flex-direction: column;
+        gap: 2px;
+    }
+    .review-row .review-value {
+        max-width: 100%;
+        text-align: left;
+    }
+}

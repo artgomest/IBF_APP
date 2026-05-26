@@ -402,6 +402,73 @@
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
+                    <!-- Todos os Membros -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/card_todos_membros"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        app:cardBackgroundColor="?attr/colorSurface"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="?attr/colorOutlineVariant"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="18dp"
+                            android:gravity="center_vertical">
+
+                            <LinearLayout
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/bg_icon_container_green"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/ic_user_group"
+                                    app:tint="@color/accent" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_marginStart="16dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Todos os Membros"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:textColor="?attr/colorOnSurface" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Buscar e gerenciar cadastros"
+                                    android:textSize="13sp"
+                                    android:textColor="?attr/colorOnSurfaceVariant"
+                                    android:layout_marginTop="2dp" />
+
+                            </LinearLayout>
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:src="@drawable/ic_arrow_right"
+                                app:tint="?attr/colorOnSurfaceVariant" />
+
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
                 </LinearLayout>
             </ScrollView>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

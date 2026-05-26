@@ -101,7 +101,7 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
         // --- CORREÇÃO APLICADA AQUI ---
         // 1. Definimos a nossa data de início
         val dataInicio = Calendar.getInstance().apply {
-            set(2025, Calendar.JULY, 1, 0, 0, 0)
+            set(2026, Calendar.JANUARY, 1, 0, 0, 0)
         }.time
 
         firestore.collection("redes").whereEqualTo("nome", redeAtiva).get()
@@ -119,7 +119,6 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
                 }
 
                 firestore.collection("relatorios")
-                    .whereEqualTo("autorUid", usuarioAtual.uid)
                     .whereEqualTo("idRede", redeAtiva)
                     .get()
                     .addOnSuccessListener { relatoriosDocs ->

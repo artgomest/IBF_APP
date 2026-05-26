@@ -93,8 +93,10 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
             firestore.collection("usuarios").document(uid).get()
                 .addOnSuccessListener { doc ->
                     val nomeCompleto = doc.getString("nome") ?: getString(R.string.pastor_padrao)
+                    val sexo = doc.getString("sexo") ?: ""
+                    val prefixo = if (sexo.contains("feminino", ignoreCase = true)) "Pra." else "Pr."
                     val primeiroNome = nomeCompleto.split(" ").firstOrNull() ?: nomeCompleto
-                    greetingText.text = "Pastor $primeiroNome"
+                    greetingText.text = "$prefixo $primeiroNome"
 
                     val funcoes = extrairFuncoes(doc.get("funcoes"))
                     // Fallback legado
@@ -206,8 +208,20 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
 
         val presencaMedia = if (totalRelatoriosRecentes > 0) somaPresencas / totalRelatoriosRecentes else 0
 
+        // Contar quantos não são pastores
+        var totalMembrosSemPastores = 0
+        for (userDoc in usuariosDocs) {
+            val papelGeral = userDoc.getString("papel")
+            val funcoesRaw = userDoc.get("funcoes") as? Map<*, *>
+            val papelNoMapa = funcoesRaw?.get("geral")?.toString()
+            
+            if (papelGeral != "pastor" && papelNoMapa != "pastor") {
+                totalMembrosSemPastores++
+            }
+        }
+
         // Atualizar cards de métricas
-        textTotalMembros.text = usuariosDocs.size().toString()
+        textTotalMembros.text = totalMembrosSemPastores.toString()
         textPresencaMedia.text = presencaMedia.toString()
         textTotalOfertas.text = currencyFormat.format(somaOfertas)
         textTotalVisitantes.text = somaVisitantes.toString()
@@ -215,9 +229,19 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
         // Mapear usuários por rede para contagem eficiente
         val usuariosPorRede = mutableMapOf<String, Int>()
         for (userDoc in usuariosDocs) {
-            val redeNome = userDoc.getString("rede") ?: ""
-            if (redeNome.isNotEmpty()) {
-                usuariosPorRede[redeNome] = (usuariosPorRede[redeNome] ?: 0) + 1
+            val funcoesRaw = userDoc.get("funcoes") as? Map<*, *>
+            if (funcoesRaw != null) {
+                for (redeKey in funcoesRaw.keys) {
+                    if (redeKey is String && redeKey != "geral") {
+                        usuariosPorRede[redeKey] = (usuariosPorRede[redeKey] ?: 0) + 1
+                    }
+                }
+            } else {
+                // Fallback para quem ainda tiver o campo "rede" legado
+                val redeNome = userDoc.getString("rede") ?: ""
+                if (redeNome.isNotEmpty()) {
+                    usuariosPorRede[redeNome] = (usuariosPorRede[redeNome] ?: 0) + 1
+                }
             }
         }
 
@@ -386,6 +410,13 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
         findViewById<MaterialCardView>(R.id.card_agenda).setOnClickListener {
             val intent = Intent(this, AgendaActivity::class.java)
             intent.putExtra("MODO_PASTOR", true)
+            startActivity(intent)
+        }
+
+        findViewById<MaterialCardView>(R.id.card_todos_membros).setOnClickListener {
+            val intent = Intent(this, MembrosRedeActivity::class.java)
+            intent.putExtra("REDE_SELECIONADA", "TODAS")
+            intent.putExtra("PAPEL_USUARIO_LOGADO", "pastor")
             startActivity(intent)
         }
     }

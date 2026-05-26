@@ -52,6 +52,12 @@
     <color name="status_green">@color/ibf_success</color>
     <color name="status_red">@color/ibf_error</color>
     <color name="bottom_nav_unselected">@color/ibf_on_surface_variant</color>
-    <color name="accent_container">#1B3A2A</color>
+
+    <!-- Accent Overrides -->
+    <color name="accent">#EBE1D5</color>
+    <color name="accent_pressed">#D2C5B5</color>
+    <color name="accent_container">#26201C</color>
+    <color name="accent_primary">#EBE1D5</color>
+    <color name="accent_secondary">#EBE1D5</color>
 
 </resources>
