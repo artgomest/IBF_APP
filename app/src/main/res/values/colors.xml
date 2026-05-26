@@ -2,50 +2,60 @@
 <resources>
 
     <!-- =========================================== -->
-    <!--   IBF APP — Design System Color Tokens      -->
-    <!--   Paleta: Off-white · Preto · Chumbo        -->
+    <!--   ALABASTER OBSIDIAN - Design System        -->
+    <!--   Paleta: Surface Warm · Obsidian           -->
     <!-- =========================================== -->
 
     <!-- Base Palette -->
-    <color name="black">#FF000000</color>
+    <color name="obsidian">#0A0A0A</color>
+    <color name="obsidian_light">#1C1B1B</color>
+    <color name="surface_warm">#FCF9F5</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="off_white">#F5F2EE</color>
-    <color name="near_black">#0A0A0A</color>
-    <color name="chumbo_dark">#2C2C2C</color>
-    <color name="chumbo_medium">#3D3D3D</color>
-    <color name="chumbo_light">#5C5C5C</color>
-    <color name="chumbo_faint">#9E9E9E</color>
+    <color name="black">#FF000000</color>
+    
+    <color name="gray_100">#F0EDE9</color>
+    <color name="gray_200">#E5E2DE</color>
+    <color name="gray_300">#DCDAD6</color>
+    <color name="gray_400">#C4C7C7</color>
+    <color name="gray_500">#8C827B</color>
+    <color name="gray_600">#747878</color>
+    <color name="gray_700">#444748</color>
+    <color name="gray_800">#31302E</color>
+    <color name="gray_900">#1C1C1A</color>
 
-    <!-- Accent -->
-    <color name="accent">#0A0A0A</color>
-    <color name="accent_pressed">#2C2C2C</color>
-    <color name="accent_container">#E8E5E1</color>
-    <color name="accent_primary">#0A0A0A</color>
-    <color name="accent_secondary">#0A0A0A</color>
+    <!-- Accent / Primary -->
+    <color name="accent">@color/obsidian</color>
+    <color name="near_black">@color/obsidian</color>
+    <color name="off_white">@color/surface_warm</color>
+    
+    <color name="chumbo_dark">@color/obsidian_light</color>
+    <color name="chumbo_medium">@color/gray_800</color>
+    <color name="chumbo_light">@color/gray_700</color>
+    <color name="chumbo_faint">@color/gray_400</color>
 
     <!-- =========================================== -->
     <!--   LIGHT MODE tokens                         -->
     <!-- =========================================== -->
-    <color name="ibf_background">#F5F2EE</color>
-    <color name="ibf_surface">#FFFFFF</color>
-    <color name="ibf_surface_variant">#EBEBEB</color>
-    <color name="ibf_on_background">#0A0A0A</color>
-    <color name="ibf_on_surface">#0A0A0A</color>
-    <color name="ibf_on_surface_variant">#5C5C5C</color>
-    <color name="ibf_outline">#D0CCC7</color>
-    <color name="ibf_outline_variant">#E8E5E1</color>
-    <color name="ibf_divider">#1A0A0A0A</color>
-    <color name="ibf_scrim">#33000000</color>
+    <color name="ibf_background">@color/surface_warm</color>
+    <color name="ibf_surface">@color/white</color> <!-- Cards are pure white to pop against surface_warm -->
+    <color name="ibf_surface_variant">@color/gray_200</color>
+    <color name="ibf_on_background">@color/gray_900</color>
+    <color name="ibf_on_surface">@color/gray_900</color>
+    <color name="ibf_on_surface_variant">@color/gray_700</color>
+    <color name="ibf_outline">@color/gray_600</color>
+    <color name="ibf_outline_variant">@color/gray_400</color>
+    <color name="ibf_divider">#1A000000</color>
+    <color name="ibf_scrim">#40000000</color>
 
-    <!-- Status Colors (Light) -->
-    <color name="ibf_error">#C62828</color>
+    <!-- Status Colors (Alabaster Obsidian) -->
+    <color name="ibf_error">#BA1A1A</color>
     <color name="ibf_on_error">#FFFFFF</color>
-    <color name="ibf_error_container">#FFEBEE</color>
-    <color name="ibf_success">#2E7D32</color>
+    <color name="ibf_error_container">#FFDAD6</color>
+    <color name="ibf_success">#2D3A2E</color> <!-- status-active -->
     <color name="ibf_on_success">#FFFFFF</color>
     <color name="ibf_success_container">#E8F5E9</color>
-    <color name="ibf_warning">#E65100</color>
-    <color name="ibf_warning_container">#FFF3E0</color>
+    <color name="ibf_warning">#7D746D</color> <!-- status-pending -->
+    <color name="ibf_warning_container">#F0EDE9</color>
 
     <!-- =========================================== -->
     <!--   Legacy aliases (compatibilidade)          -->
@@ -56,30 +66,6 @@
     <color name="app_card_background">@color/ibf_surface</color>
     <color name="app_button_text">@color/white</color>
     <color name="app_divider">@color/ibf_divider</color>
-
-    <color name="light_background">@color/ibf_background</color>
-    <color name="light_text_icons">@color/ibf_on_background</color>
-
-    <color name="dark_background">#0A0A0A</color>
-    <color name="dark_text">#F0EDE8</color>
-    <color name="dark_icons">#F0EDE8</color>
-    <color name="dark_card_background">#1A1A1A</color>
-    <color name="dark_text_primary">#F0EDE8</color>
-    <color name="dark_text_secondary">#9E9E9E</color>
-    <color name="dark_accent">@color/accent</color>
-    <color name="dark_divider">#1AFFFFFF</color>
-    <color name="dark_surface">#1A1A1A</color>
-
-    <color name="status_green">@color/ibf_success</color>
-    <color name="status_red">@color/ibf_error</color>
-    <color name="status_green_dark_theme">#4CAF50</color>
-    <color name="status_red_dark_theme">#EF5350</color>
-
-    <color name="bottom_nav_selected">@color/accent</color>
-    <color name="bottom_nav_unselected">@color/ibf_on_surface_variant</color>
-
-    <color name="design_default_color_primary">@color/ibf_on_background</color>
-    <color name="design_default_color_secondary">@color/ibf_on_surface_variant</color>
 
     <!-- Semantic aliases (Light, used in layouts) -->
     <color name="semantic_background">@color/ibf_background</color>
@@ -92,4 +78,11 @@
     <color name="semantic_accent">@color/accent</color>
     <color name="semantic_divider">@color/ibf_divider</color>
 
+    <color name="status_green">@color/ibf_success</color>
+    <color name="status_red">@color/ibf_error</color>
+    <color name="status_green_dark_theme">#81C784</color>
+    <color name="status_red_dark_theme">#FFB4AB</color>
+
+    <color name="bottom_nav_selected">@color/accent</color>
+    <color name="bottom_nav_unselected">@color/ibf_on_surface_variant</color>
 </resources>

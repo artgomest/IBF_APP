@@ -30,9 +30,14 @@
         <item name="colorOnError">@color/ibf_on_error</item>
         <item name="colorErrorContainer">@color/ibf_error_container</item>
         <item name="android:statusBarColor">@color/ibf_background</item>
-        <item name="android:navigationBarColor">@color/ibf_surface</item>
+        <item name="android:navigationBarColor">@color/ibf_background</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
         <item name="android:windowBackground">@color/ibf_background</item>
+        
+        <!-- Application Typography -->
+        <item name="fontFamily">@font/outfit</item>
+        <item name="android:fontFamily">@font/outfit</item>
     </style>
 
     <!-- =========================================== -->
@@ -49,8 +54,8 @@
         <item name="colorSecondaryContainer">@color/chumbo_dark</item>
         <item name="colorOnSecondaryContainer">@color/off_white</item>
         <item name="colorTertiary">@color/accent</item>
-        <item name="colorOnTertiary">@color/white</item>
-        <item name="colorTertiaryContainer">#1B3A2A</item>
+        <item name="colorOnTertiary">@color/obsidian</item>
+        <item name="colorTertiaryContainer">@color/chumbo_dark</item>
         <item name="colorOnTertiaryContainer">@color/off_white</item>
         <item name="android:colorBackground">@color/ibf_background</item>
         <item name="colorOnBackground">@color/ibf_on_background</item>
@@ -64,16 +69,20 @@
         <item name="colorOnError">@color/ibf_on_error</item>
         <item name="colorErrorContainer">@color/ibf_error_container</item>
         <item name="android:statusBarColor">@color/ibf_background</item>
-        <item name="android:navigationBarColor">@color/ibf_surface</item>
+        <item name="android:navigationBarColor">@color/ibf_background</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
         <item name="android:windowBackground">@color/ibf_background</item>
+
+        <item name="fontFamily">@font/outfit</item>
+        <item name="android:fontFamily">@font/outfit</item>
     </style>
 
     <!-- =========================================== -->
     <!--   Reusable Component Styles                 -->
     <!-- =========================================== -->
 
-    <!-- Base styles (required for dot-notation inheritance) -->
+    <!-- Base styles -->
     <style name="IBF" parent="" />
     <style name="IBF.Text" parent="IBF" />
 
@@ -99,31 +108,35 @@
     <!-- Buttons -->
     <style name="IBF.Button.Primary" parent="Widget.Material3.Button">
         <item name="backgroundTint">@color/near_black</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="cornerRadius">@dimen/radius_md</item>
+        <item name="android:textColor">@color/off_white</item>
+        <item name="cornerRadius">@dimen/radius_sm</item>
         <item name="android:minHeight">@dimen/btn_height_md</item>
         <item name="android:textSize">15sp</item>
         <item name="android:letterSpacing">0.01</item>
+        <item name="android:fontFamily">@font/outfit</item>
     </style>
 
     <style name="IBF.Button.Accent" parent="Widget.Material3.Button">
         <item name="backgroundTint">@color/accent</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="cornerRadius">@dimen/radius_md</item>
+        <item name="android:textColor">@color/off_white</item>
+        <item name="cornerRadius">@dimen/radius_sm</item>
         <item name="android:minHeight">@dimen/btn_height_md</item>
         <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">@font/outfit</item>
     </style>
 
     <style name="IBF.Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
-        <item name="strokeColor">?attr/colorOutline</item>
+        <item name="strokeColor">?attr/colorOutlineVariant</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
-        <item name="cornerRadius">@dimen/radius_md</item>
+        <item name="cornerRadius">@dimen/radius_sm</item>
         <item name="android:minHeight">@dimen/btn_height_md</item>
+        <item name="android:fontFamily">@font/outfit</item>
     </style>
 
     <style name="IBF.Button.Text" parent="Widget.Material3.Button.TextButton">
         <item name="android:textColor">@color/accent</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/outfit</item>
     </style>
 
     <!-- TextInputLayout -->
@@ -147,6 +160,7 @@
 
     <!-- Typography -->
     <style name="IBF.Text.Display">
+        <item name="android:fontFamily">@font/outfit</item>
         <item name="android:textSize">@dimen/text_display</item>
         <item name="android:textColor">?attr/colorOnBackground</item>
         <item name="android:textStyle">bold</item>
@@ -154,44 +168,52 @@
     </style>
 
     <style name="IBF.Text.HeadlineLg">
+        <item name="android:fontFamily">@font/outfit</item>
         <item name="android:textSize">@dimen/text_headline_lg</item>
         <item name="android:textColor">?attr/colorOnBackground</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="IBF.Text.HeadlineMd">
+        <item name="android:fontFamily">@font/outfit</item>
         <item name="android:textSize">@dimen/text_headline_md</item>
         <item name="android:textColor">?attr/colorOnBackground</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="IBF.Text.TitleLg">
+        <item name="android:fontFamily">@font/outfit</item>
         <item name="android:textSize">@dimen/text_title_lg</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="IBF.Text.TitleMd">
+        <item name="android:fontFamily">@font/outfit</item>
         <item name="android:textSize">@dimen/text_title_md</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="IBF.Text.Body">
+        <item name="android:fontFamily">@font/outfit</item>
         <item name="android:textSize">@dimen/text_body_md</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
     <style name="IBF.Text.Caption">
+        <item name="android:fontFamily">@font/outfit</item>
         <item name="android:textSize">@dimen/text_caption</item>
         <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
     </style>
 
     <style name="IBF.Text.Label">
+        <item name="android:fontFamily">@font/outfit</item>
         <item name="android:textSize">@dimen/text_label</item>
         <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:letterSpacing">0.08</item>
+        <item name="android:letterSpacing">0.05</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <!-- Shape Appearances -->
@@ -251,6 +273,7 @@
     </style>
 
     <style name="LoginEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:fontFamily">@font/outfit</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">14dp</item>

@@ -1,34 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- =========================================== -->
-    <!--   IBF APP — Dark Mode Color Overrides       -->
-    <!--   Paleta: Preto · Off-white · Chumbo        -->
+    <!--   ALABASTER OBSIDIAN - Inverted (Dark Mode) -->
+    <!--   Paleta: Obsidian · Surface Warm           -->
     <!-- =========================================== -->
 
-    <!-- DARK MODE tokens -->
-    <color name="ibf_background">#0A0A0A</color>
-    <color name="ibf_surface">#1A1A1A</color>
-    <color name="ibf_surface_variant">#2C2C2C</color>
-    <color name="ibf_on_background">#F0EDE8</color>
-    <color name="ibf_on_surface">#F0EDE8</color>
-    <color name="ibf_on_surface_variant">#9E9E9E</color>
-    <color name="ibf_outline">#3A3A3A</color>
-    <color name="ibf_outline_variant">#2A2A2A</color>
-    <color name="ibf_divider">#1AFFFFFF</color>
-    <color name="ibf_scrim">#66000000</color>
+    <!-- Base Palette Overrides -->
+    <color name="accent">@color/surface_warm</color>
+    <color name="near_black">@color/surface_warm</color>
+    <color name="off_white">@color/obsidian</color>
+    
+    <!-- =========================================== -->
+    <!--   DARK MODE tokens                          -->
+    <!-- =========================================== -->
+    <color name="ibf_background">@color/obsidian</color>
+    <color name="ibf_surface">@color/obsidian_light</color> <!-- Cards appear slightly elevated against pure black -->
+    <color name="ibf_surface_variant">@color/gray_800</color>
+    <color name="ibf_on_background">@color/surface_warm</color>
+    <color name="ibf_on_surface">@color/surface_warm</color>
+    <color name="ibf_on_surface_variant">@color/gray_300</color>
+    <color name="ibf_outline">@color/gray_500</color>
+    <color name="ibf_outline_variant">@color/gray_700</color>
+    
+    <color name="ibf_divider">#33FFFFFF</color>
+    <color name="ibf_scrim">#80000000</color>
 
-    <!-- Status Colors (Dark) -->
-    <color name="ibf_error">#EF5350</color>
-    <color name="ibf_on_error">#FFFFFF</color>
-    <color name="ibf_error_container">#4A1212</color>
-    <color name="ibf_success">#4CAF50</color>
-    <color name="ibf_on_success">#FFFFFF</color>
-    <color name="ibf_success_container">#1B3A1D</color>
-    <color name="ibf_warning">#FF9800</color>
-    <color name="ibf_warning_container">#3E2600</color>
+    <!-- Status Colors (Inverted Alabaster Obsidian) -->
+    <color name="ibf_error">#FFB4AB</color>
+    <color name="ibf_on_error">#690005</color>
+    <color name="ibf_error_container">#93000A</color>
+    
+    <color name="ibf_success">#81C784</color>
+    <color name="ibf_on_success">#003314</color>
+    <color name="ibf_success_container">#1A2E20</color>
+    
+    <color name="ibf_warning">#BCAAA4</color>
+    <color name="ibf_warning_container">#3E3531</color>
+    
+    <!-- =========================================== -->
+    <!--   Semantic aliases                          -->
+    <!-- =========================================== -->
+    <color name="app_background">@color/ibf_background</color>
+    <color name="app_text">@color/ibf_on_background</color>
+    <color name="app_icon">@color/ibf_on_background</color>
+    <color name="app_card_background">@color/ibf_surface</color>
+    <color name="app_button_text">@color/obsidian</color>
+    <color name="app_divider">@color/ibf_divider</color>
 
-    <!-- Semantic aliases (Dark overrides) -->
     <color name="semantic_background">@color/ibf_background</color>
     <color name="semantic_text_primary">@color/ibf_on_background</color>
     <color name="semantic_text_secondary">@color/ibf_on_surface_variant</color>
@@ -36,28 +54,12 @@
     <color name="semantic_input_background">@color/ibf_surface</color>
     <color name="semantic_icon_tint">@color/ibf_on_background</color>
     <color name="semantic_stroke">@color/ibf_outline</color>
+    <color name="semantic_accent">@color/accent</color>
     <color name="semantic_divider">@color/ibf_divider</color>
 
-    <!-- Legacy dark overrides -->
-    <color name="app_background">@color/ibf_background</color>
-    <color name="app_text">@color/ibf_on_background</color>
-    <color name="app_icon">@color/ibf_on_background</color>
-    <color name="app_card_background">@color/ibf_surface</color>
-    <color name="light_background">@color/ibf_background</color>
-    <color name="light_text_icons">@color/ibf_on_background</color>
-    <color name="dark_text_primary">@color/ibf_on_background</color>
-    <color name="dark_text_secondary">@color/ibf_on_surface_variant</color>
-    <color name="dark_card_background">@color/ibf_surface</color>
-    <color name="dark_background">@color/ibf_background</color>
     <color name="status_green">@color/ibf_success</color>
     <color name="status_red">@color/ibf_error</color>
+
+    <color name="bottom_nav_selected">@color/accent</color>
     <color name="bottom_nav_unselected">@color/ibf_on_surface_variant</color>
-
-    <!-- Accent Overrides -->
-    <color name="accent">#EBE1D5</color>
-    <color name="accent_pressed">#D2C5B5</color>
-    <color name="accent_container">#26201C</color>
-    <color name="accent_primary">#EBE1D5</color>
-    <color name="accent_secondary">#EBE1D5</color>
-
 </resources>
