@@ -25,6 +25,10 @@
 
     <!-- Accent / Primary -->
     <color name="accent">@color/obsidian</color>
+    <color name="accent_container">#E5E2DE</color>
+    <color name="accent_pressed">@color/obsidian_light</color>
+    <color name="accent_primary">@color/obsidian</color>
+    <color name="accent_secondary">@color/obsidian</color>
     <color name="near_black">@color/obsidian</color>
     <color name="off_white">@color/surface_warm</color>
     
@@ -85,4 +89,20 @@
 
     <color name="bottom_nav_selected">@color/accent</color>
     <color name="bottom_nav_unselected">@color/ibf_on_surface_variant</color>
+
+    <!-- Legacy dark/light aliases (used by layouts) -->
+    <color name="light_background">@color/ibf_background</color>
+    <color name="light_text_icons">@color/ibf_on_background</color>
+    <color name="dark_background">@color/obsidian</color>
+    <color name="dark_text">@color/surface_warm</color>
+    <color name="dark_icons">@color/surface_warm</color>
+    <color name="dark_card_background">@color/obsidian_light</color>
+    <color name="dark_text_primary">@color/surface_warm</color>
+    <color name="dark_text_secondary">@color/gray_400</color>
+    <color name="dark_accent">@color/accent</color>
+    <color name="dark_divider">#1AFFFFFF</color>
+    <color name="dark_surface">@color/obsidian_light</color>
+
+    <color name="design_default_color_primary">@color/ibf_on_background</color>
+    <color name="design_default_color_secondary">@color/ibf_on_surface_variant</color>
 </resources>
