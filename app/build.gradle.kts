@@ -16,8 +16,8 @@ android {
         applicationId = "com.ibf.app"
         minSdk = 24
         targetSdk = 35
-        versionCode = 20
-        versionName = "4.7"
+        versionCode = 21
+        versionName = "5.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

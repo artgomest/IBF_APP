@@ -56,7 +56,7 @@ class ConfiguracoesRedeActivity : AppCompatActivity() {
         val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val currentRedeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
-        if (currentRedeInPrefs != null && currentRedeInPrefs != redeSelecionada) {
+        if (redeSelecionada == null && currentRedeInPrefs != null) {
             redeSelecionada = currentRedeInPrefs
             textRedeAtualConfig.text = getString(R.string.rede_selecionada_label, redeSelecionada)
             Toast.makeText(this, getString(R.string.rede_atualizada_para, redeSelecionada), Toast.LENGTH_SHORT).show()

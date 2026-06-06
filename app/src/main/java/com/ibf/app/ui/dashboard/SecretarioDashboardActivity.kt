@@ -52,7 +52,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
         val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val redeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
-        redeSelecionada = redeInPrefs ?: intent.getStringExtra("REDE_SELECIONADA")
+        redeSelecionada = intent.getStringExtra("REDE_SELECIONADA") ?: redeInPrefs
 
         if (redeSelecionada == null) {
             Toast.makeText(this, getString(R.string.erro_rede_nao_selecionada_logout), Toast.LENGTH_LONG).show()
@@ -104,7 +104,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
         val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val currentRedeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
-        if (currentRedeInPrefs != null && currentRedeInPrefs != redeSelecionada) {
+        if (redeSelecionada == null && currentRedeInPrefs != null) {
             redeSelecionada = currentRedeInPrefs
             textRedeAtual.text = getString(R.string.rede_dashboard_label, redeSelecionada)
             carregarStatusDosRelatorios()
