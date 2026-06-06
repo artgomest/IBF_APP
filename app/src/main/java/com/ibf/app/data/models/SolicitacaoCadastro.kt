@@ -5,7 +5,7 @@ import java.util.Date
 
 data class SolicitacaoCadastro(
     @JvmField var id: String = "", // O ID do documento no Firestore
-    @JvmField val uid: String = "", // O UID do usuário criado no Firebase Auth
+    @JvmField var uid: String = "", // O UID do usuário criado no Firebase Auth
     @JvmField val nome: String = "",
     @JvmField val email: String = "",
     @JvmField val redeId: String = "", // A rede para a qual o usuário está sendo solicitado

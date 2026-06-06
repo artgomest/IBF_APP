@@ -9,6 +9,7 @@
     <color name="accent">@color/surface_warm</color>
     <color name="near_black">@color/surface_warm</color>
     <color name="off_white">@color/obsidian</color>
+    <color name="accent_container">@color/gray_800</color>
     
     <!-- =========================================== -->
     <!--   DARK MODE tokens                          -->
@@ -26,11 +27,11 @@
     <color name="ibf_scrim">#80000000</color>
 
     <!-- Status Colors (Inverted Alabaster Obsidian) -->
-    <color name="ibf_error">#FFB4AB</color>
+    <color name="ibf_error">#93000A</color>
     <color name="ibf_on_error">#690005</color>
     <color name="ibf_error_container">#93000A</color>
     
-    <color name="ibf_success">#81C784</color>
+    <color name="ibf_success">#43A047</color>
     <color name="ibf_on_success">#003314</color>
     <color name="ibf_success_container">#1A2E20</color>
     
@@ -56,6 +57,9 @@
     <color name="semantic_stroke">@color/ibf_outline</color>
     <color name="semantic_accent">@color/accent</color>
     <color name="semantic_divider">@color/ibf_divider</color>
+
+    <color name="text_on_accent">@color/obsidian</color>
+    <color name="text_on_accent_secondary">#B30A0A0A</color>
 
     <color name="status_green">@color/ibf_success</color>
     <color name="status_red">@color/ibf_error</color>

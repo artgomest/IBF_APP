@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
+import android.widget.AutoCompleteTextView
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
@@ -26,7 +28,7 @@ class CadastroUsuarioActivity : AppCompatActivity() {
     private val repository = UsuarioRepository()
 
     private lateinit var textRedeCadastro: TextView
-    private lateinit var editTextNome: TextInputEditText
+    private lateinit var editTextNome: AutoCompleteTextView
     private lateinit var editTextEmail: TextInputEditText
     private lateinit var editTextSenha: TextInputEditText
     private lateinit var spinnerPapel: Spinner
@@ -34,6 +36,8 @@ class CadastroUsuarioActivity : AppCompatActivity() {
 
     private var redeSelecionada: String? = null
     private var papelUsuarioLogado: String? = null
+    
+    private val membrosMap = mutableMapOf<String, String>() // Nome -> UID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,8 +66,36 @@ class CadastroUsuarioActivity : AppCompatActivity() {
 
         textRedeCadastro.text = getString(R.string.cadastrando_na_rede_label, redeSelecionada)
 
+        carregarMembros()
         configurarSpinnerDePapel()
         configurarBotaoCadastrar()
+    }
+
+    private fun carregarMembros() {
+        val firestore = FirebaseFirestore.getInstance()
+        val query = if (redeSelecionada != null) {
+            firestore.collection("membros")
+                .whereGreaterThan(com.google.firebase.firestore.FieldPath.of("funcoes", redeSelecionada!!), "")
+        } else {
+            firestore.collection("membros")
+        }
+
+        query.get().addOnSuccessListener { documents ->
+            val nomes = mutableListOf<String>()
+            membrosMap.clear()
+
+            for (doc in documents) {
+                val nome = doc.getString("nome") ?: "Sem Nome"
+                val id = doc.id
+                nomes.add(nome)
+                membrosMap[nome] = id
+            }
+
+            val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, nomes)
+            editTextNome.setAdapter(adapter)
+        }.addOnFailureListener {
+            // Log error silently
+        }
     }
 
     private fun configurarBotaoCadastrar() {
@@ -153,9 +185,46 @@ class CadastroUsuarioActivity : AppCompatActivity() {
 
     private fun salvarDadosNovoUsuarioNoFirestore(newUser: FirebaseUser, nome: String, email: String, papel: String, rede: String) {
         val funcoesMap = hashMapOf(rede to papel)
-        val userData = hashMapOf(
-            "nome" to nome, "email" to email, "funcoes" to funcoesMap, "cadastroCompleto" to true
-        )
+        
+        val membroIdExistente = membrosMap[nome]
+        
+        if (membroIdExistente != null) {
+            // Vincula a um membro existente
+            val userData = hashMapOf<String, Any>(
+                "nome" to nome, "email" to email, "funcoes" to funcoesMap, "cadastroCompleto" to true, "membroId" to membroIdExistente
+            )
+            FirebaseFirestore.getInstance().collection("membros").document(membroIdExistente)
+                .update("funcoes.$rede", papel)
+                .addOnSuccessListener {
+                    concluirSalvamentoUsuario(newUser, userData)
+                }
+                .addOnFailureListener {
+                    // Fallback to still create user if member update fails
+                    concluirSalvamentoUsuario(newUser, userData)
+                }
+        } else {
+            // Cria um novo membro
+            val novoMembroData = hashMapOf(
+                "nome" to nome,
+                "cadastroCompleto" to false,
+                "funcoes" to hashMapOf(rede to "Membro")
+            )
+            FirebaseFirestore.getInstance().collection("membros").add(novoMembroData)
+                .addOnSuccessListener { docRef ->
+                    val userData = hashMapOf<String, Any>(
+                        "nome" to nome, "email" to email, "funcoes" to funcoesMap, "cadastroCompleto" to true, "membroId" to docRef.id
+                    )
+                    concluirSalvamentoUsuario(newUser, userData)
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Erro ao criar membro base.", Toast.LENGTH_SHORT).show()
+                    newUser.delete()
+                    buttonCadastrarUsuario.isEnabled = true
+                }
+        }
+    }
+
+    private fun concluirSalvamentoUsuario(newUser: FirebaseUser, userData: HashMap<String, Any>) {
         repository.salvarNovoUsuario(newUser.uid, userData)
             .addOnSuccessListener {
                 FirebaseAuth.getInstance().signOut() // Desloga do usuário recém criado
@@ -195,7 +264,8 @@ class CadastroUsuarioActivity : AppCompatActivity() {
                         Toast.makeText(this, "Este usuário já possui um papel nesta rede.", Toast.LENGTH_LONG).show()
                         buttonCadastrarUsuario.isEnabled = true
                     } else {
-                        mostrarDialogoAdicionarFuncao(doc.id, doc.getString("nome") ?: nomeFormulario, email, novoPapel, novaRede)
+                        val membroIdExistente = doc.getString("membroId")
+                        mostrarDialogoAdicionarFuncao(doc.id, doc.getString("nome") ?: nomeFormulario, email, novoPapel, novaRede, membroIdExistente)
                     }
                 } else {
                     Toast.makeText(this, getString(R.string.erro_email_cadastrado_sem_dados), Toast.LENGTH_LONG).show()
@@ -208,12 +278,12 @@ class CadastroUsuarioActivity : AppCompatActivity() {
             }
     }
 
-    private fun mostrarDialogoAdicionarFuncao(uid: String, nome: String, email: String, novoPapel: String, novaRede: String) {
+    private fun mostrarDialogoAdicionarFuncao(uid: String, nome: String, email: String, novoPapel: String, novaRede: String, membroId: String?) {
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.dialogo_usuario_existente_titulo))
             .setMessage(getString(R.string.dialogo_adicionar_funcao_mensagem, email, nome, novoPapel, novaRede))
             .setPositiveButton(getString(R.string.sim_adicionar_funcao)) { _, _ ->
-                adicionarFuncaoAUsuarioExistente(uid, novoPapel, novaRede, nome)
+                adicionarFuncaoAUsuarioExistente(uid, novoPapel, novaRede, nome, membroId)
             }
             .setNegativeButton(getString(R.string.nao_cancelar)) { _, _ ->
                 buttonCadastrarUsuario.isEnabled = true
@@ -221,9 +291,13 @@ class CadastroUsuarioActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun adicionarFuncaoAUsuarioExistente(uid: String, novoPapel: String, novaRede: String, nome: String) {
+    private fun adicionarFuncaoAUsuarioExistente(uid: String, novoPapel: String, novaRede: String, nome: String, membroId: String?) {
         repository.adicionarFuncao(uid, novaRede, novoPapel)
             .addOnSuccessListener {
+                membroId?.let { id ->
+                    FirebaseFirestore.getInstance().collection("membros").document(id)
+                        .update("funcoes.$novaRede", novoPapel)
+                }
                 Toast.makeText(this, getString(R.string.funcao_adicionada_sucesso, novoPapel, novaRede, nome), Toast.LENGTH_LONG).show()
                 finish()
             }

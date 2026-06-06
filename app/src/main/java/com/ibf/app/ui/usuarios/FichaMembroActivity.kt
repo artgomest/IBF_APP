@@ -138,6 +138,32 @@ class FichaMembroActivity : AppCompatActivity() {
         configurarBotoes()
         setupHistorico()
         carregarDadosDoMembro()
+        simplificarFormularioParaCriancas()
+    }
+
+    private fun simplificarFormularioParaCriancas() {
+        val isCrianca = redeSelecionada == "Rede de Crianças"
+        if (!isCrianca) return
+
+        val viewsToHide = listOf(
+            textRg, textOrgaoExpeditor, textCpf, textNaturalidade, textEscolaridade,
+            textEmail, textCelular, textFixo, textCep, textCidade, textRua, textNumero, textBairro,
+            textEstadoCivil, textDataCasamento, textConjuge, checkTemFilhos, layoutFilhosLegado, layoutCadastroFilhos,
+            textCargos, textTalentos, textDesejaFuncao
+        )
+
+        viewsToHide.forEach { view ->
+            // Try to hide the TextInputLayout wrapping the EditText
+            val parent = view.parent as? View
+            if (parent != null && parent.javaClass.simpleName.contains("TextInputLayout")) {
+                parent.visibility = View.GONE
+            } else {
+                view.visibility = View.GONE
+            }
+        }
+        
+        // Hide the title for contact if needed
+        findViewById<TextView>(R.id.title_contato)?.visibility = View.GONE
     }
 
     private fun setupHistorico() {
@@ -575,7 +601,7 @@ class FichaMembroActivity : AppCompatActivity() {
         nome: String,
         dadosMap: HashMap<String, Any>
     ) {
-        val responsavelRef = firestore.collection("usuarios").document(id)
+        val responsavelRef = firestore.collection("membros").document(id)
         val batch = firestore.batch()
         val filhosPersistidos = mutableListOf<Map<String, Any?>>()
 
@@ -583,12 +609,12 @@ class FichaMembroActivity : AppCompatActivity() {
             filhosCadastro.forEach { filho ->
                 val filhoRef = filho.id
                     ?.takeIf { it.isNotBlank() }
-                    ?.let { firestore.collection("usuarios").document(it) }
-                    ?: firestore.collection("usuarios").document()
+                    ?.let { firestore.collection("membros").document(it) }
+                    ?: firestore.collection("membros").document()
 
                 val idade = calcularIdade(filho.dataNascimento) ?: 0
                 val redeFilho = calcularRedeDoFilho(filho)
-                val dadosFilho = hashMapOf<String, Any?>(
+                val dadosFilho = hashMapOf(
                     "nome" to filho.nome,
                     "dataNascimento" to filho.dataNascimento,
                     "sexo" to filho.sexo,
@@ -642,7 +668,7 @@ class FichaMembroActivity : AppCompatActivity() {
 
     private fun carregarDadosDoMembro() {
         membroId?.let { id ->
-            firestore.collection("usuarios").document(id).get()
+            firestore.collection("membros").document(id).get()
                 .addOnSuccessListener { document ->
                     if (document != null && document.exists()) {
                         
@@ -676,6 +702,14 @@ class FichaMembroActivity : AppCompatActivity() {
                         textConjuge.setText(document.getString("conjuge"))
                         textMae.setText(document.getString("mae"))
                         textPai.setText(document.getString("pai"))
+                        
+                        // Auto-fill parent name if registered by a parent and both fields are empty
+                        val isCrianca = redeSelecionada == "Rede de Crianças" || document.getString("tipoCadastro") == "filho"
+                        val responsavelNome = document.getString("responsavelNome")
+                        if (isCrianca && textPai.text.isNullOrEmpty() && textMae.text.isNullOrEmpty() && !responsavelNome.isNullOrEmpty()) {
+                            textPai.setText(responsavelNome)
+                        }
+
                         checkTemFilhos.isChecked = document.getBoolean("temFilhos") ?: false
                         textFilhos.setText(document.getString("filhosDetalhes"))
                         carregarFilhosDoDocumento(document.get("filhos"))
@@ -939,7 +973,7 @@ class FichaMembroActivity : AppCompatActivity() {
     private fun excluirMembro() {
         val id = membroId ?: return
 
-        firestore.collection("usuarios")
+        firestore.collection("membros")
             .whereEqualTo("responsavelUid", id)
             .get()
             .addOnSuccessListener { filhosDocs ->
@@ -949,7 +983,7 @@ class FichaMembroActivity : AppCompatActivity() {
                     batch.delete(filhoDoc.reference)
                 }
 
-                batch.delete(firestore.collection("usuarios").document(id))
+                batch.delete(firestore.collection("membros").document(id))
 
                 batch.commit()
                     .addOnSuccessListener {

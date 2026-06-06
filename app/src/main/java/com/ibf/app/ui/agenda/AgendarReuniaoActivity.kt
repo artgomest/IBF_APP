@@ -100,10 +100,10 @@ class AgendarReuniaoActivity : AppCompatActivity() {
         val uid = auth.currentUser?.uid ?: return
         
         val query = if (redeSelecionada != null) {
-            firestore.collection("usuarios")
+            firestore.collection("membros")
                 .whereGreaterThan(com.google.firebase.firestore.FieldPath.of("funcoes", redeSelecionada!!), "")
         } else {
-            firestore.collection("usuarios")
+            firestore.collection("membros")
         }
 
         query.get().addOnSuccessListener { documents ->

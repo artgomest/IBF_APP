@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -41,6 +43,9 @@ class FormularioRedeActivity : AppCompatActivity() {
     private lateinit var editTextValorOferta: EditText
     private lateinit var editTextComentarios: EditText
     private lateinit var buttonEnviar: Button
+    
+    private lateinit var checkboxCancelada: CheckBox
+    private lateinit var containerCampos: LinearLayout
 
     private val currencyFormatter = NumberFormat.getCurrencyInstance(Locale("pt", "BR")) as DecimalFormat
 
@@ -59,6 +64,12 @@ class FormularioRedeActivity : AppCompatActivity() {
         editTextValorOferta = findViewById(R.id.formOferta)
         editTextComentarios = findViewById(R.id.formComentarios)
         buttonEnviar = findViewById(R.id.buttonEnviar)
+        checkboxCancelada = findViewById(R.id.checkboxCancelada)
+        containerCampos = findViewById(R.id.containerCampos)
+
+        checkboxCancelada.setOnCheckedChangeListener { _, isChecked ->
+            containerCampos.visibility = if (isChecked) View.GONE else View.VISIBLE
+        }
 
         findViewById<TextView>(R.id.text_page_title)?.text = getString(R.string.form_title)
         findViewById<ImageView>(R.id.button_back)?.setOnClickListener { finish() }
@@ -132,27 +143,30 @@ class FormularioRedeActivity : AppCompatActivity() {
         editTextTotalVisitantes.isEnabled = false
         editTextValorOferta.isEnabled = false
         editTextComentarios.isEnabled = false
+        checkboxCancelada.isEnabled = false
         buttonEnviar.visibility = View.GONE
         findViewById<TextView>(R.id.text_page_title)?.text = "Visualizar Relatório"
     }
 
     private fun coletarDadosDoFormulario(): Map<String, Any> {
-        val totalPessoas = editTextTotalPessoas.text.toString().toIntOrNull() ?: 0
-        val totalVisitantes = editTextTotalVisitantes.text.toString().toIntOrNull() ?: 0
+        val isCancelada = checkboxCancelada.isChecked
+        val comentarios = if (isCancelada) "" else editTextComentarios.text.toString().trim()
+        val descricao = if (isCancelada) "Rede Cancelada" else editTextDescricao.text.toString().trim()
+        val totalPessoas = if (isCancelada) 0 else editTextTotalPessoas.text.toString().toIntOrNull() ?: 0
+        val totalVisitantes = if (isCancelada) 0 else editTextTotalVisitantes.text.toString().toIntOrNull() ?: 0
 
         val valorOfertaString = editTextValorOferta.text.toString()
-        val valorOferta = try {
+        val valorOferta = if (isCancelada) 0.0 else try {
             currencyFormatter.parse(valorOfertaString)?.toDouble() ?: 0.0
         } catch (e: ParseException) {
             Log.e("FormularioRede", "Erro ao parsear valor da oferta: $valorOfertaString", e)
             0.0
         }
 
-        val comentarios = editTextComentarios.text.toString().trim()
-        val descricao = editTextDescricao.text.toString().trim()
         val nomeAutor = editTextNome.text.toString().trim()
 
         return hashMapOf(
+            "foiCancelada" to isCancelada,
             "totalPessoas" to totalPessoas,
             "totalVisitantes" to totalVisitantes,
             "valorOferta" to valorOferta,
@@ -176,6 +190,9 @@ class FormularioRedeActivity : AppCompatActivity() {
                     editTextValorOferta.setText(currencyFormatter.format(valorOfertaDouble))
 
                     editTextComentarios.setText(document.getString("comentarios") ?: "")
+                    
+                    val foiCancelada = document.getBoolean("foiCancelada") ?: false
+                    checkboxCancelada.isChecked = foiCancelada
 
                 } else {
                     Toast.makeText(this, getString(R.string.relatorio_nao_encontrado_edicao), Toast.LENGTH_SHORT).show()

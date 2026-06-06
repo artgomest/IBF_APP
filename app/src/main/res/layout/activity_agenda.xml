@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -153,10 +154,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
+        android:layout_margin="20dp"
         android:contentDescription="Agendar Reunião"
-        app:srcCompat="@drawable/ic_add"
-        app:backgroundTint="@color/accent"
-        app:tint="@android:color/white" />
+        app:srcCompat="@drawable/ic_calendar"
+        app:backgroundTint="@color/accent_container"
+        app:tint="@color/accent" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

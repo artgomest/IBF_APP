@@ -36,8 +36,9 @@
         <item name="android:windowBackground">@color/ibf_background</item>
         
         <!-- Application Typography -->
-        <item name="fontFamily">@font/outfit</item>
-        <item name="android:fontFamily">@font/outfit</item>
+        <!-- outfit_medium como padrão garante peso 500 em TODOS os dispositivos (API 24+) -->
+        <item name="fontFamily">@font/outfit_medium</item>
+        <item name="android:fontFamily">@font/outfit_medium</item>
     </style>
 
     <!-- =========================================== -->
@@ -45,8 +46,8 @@
     <!-- =========================================== -->
 
     <style name="Theme.IBFAPP.Dark" parent="Theme.Material3.Dark.NoActionBar">
-        <item name="colorPrimary">@color/off_white</item>
-        <item name="colorOnPrimary">@color/near_black</item>
+        <item name="colorPrimary">@color/near_black</item>
+        <item name="colorOnPrimary">@color/off_white</item>
         <item name="colorPrimaryContainer">@color/chumbo_dark</item>
         <item name="colorOnPrimaryContainer">@color/off_white</item>
         <item name="colorSecondary">@color/chumbo_faint</item>
@@ -74,8 +75,8 @@
         <item name="android:windowLightNavigationBar">false</item>
         <item name="android:windowBackground">@color/ibf_background</item>
 
-        <item name="fontFamily">@font/outfit</item>
-        <item name="android:fontFamily">@font/outfit</item>
+        <item name="fontFamily">@font/outfit_medium</item>
+        <item name="android:fontFamily">@font/outfit_medium</item>
     </style>
 
     <!-- =========================================== -->
@@ -160,7 +161,7 @@
 
     <!-- Typography -->
     <style name="IBF.Text.Display">
-        <item name="android:fontFamily">@font/outfit</item>
+        <item name="android:fontFamily">@font/outfit_bold</item>
         <item name="android:textSize">@dimen/text_display</item>
         <item name="android:textColor">?attr/colorOnBackground</item>
         <item name="android:textStyle">bold</item>
@@ -168,41 +169,41 @@
     </style>
 
     <style name="IBF.Text.HeadlineLg">
-        <item name="android:fontFamily">@font/outfit</item>
+        <item name="android:fontFamily">@font/outfit_bold</item>
         <item name="android:textSize">@dimen/text_headline_lg</item>
         <item name="android:textColor">?attr/colorOnBackground</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="IBF.Text.HeadlineMd">
-        <item name="android:fontFamily">@font/outfit</item>
+        <item name="android:fontFamily">@font/outfit_bold</item>
         <item name="android:textSize">@dimen/text_headline_md</item>
         <item name="android:textColor">?attr/colorOnBackground</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="IBF.Text.TitleLg">
-        <item name="android:fontFamily">@font/outfit</item>
+        <item name="android:fontFamily">@font/outfit_bold</item>
         <item name="android:textSize">@dimen/text_title_lg</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="IBF.Text.TitleMd">
-        <item name="android:fontFamily">@font/outfit</item>
+        <item name="android:fontFamily">@font/outfit_bold</item>
         <item name="android:textSize">@dimen/text_title_md</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="IBF.Text.Body">
-        <item name="android:fontFamily">@font/outfit</item>
+        <item name="android:fontFamily">@font/outfit_medium</item>
         <item name="android:textSize">@dimen/text_body_md</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
     <style name="IBF.Text.Caption">
-        <item name="android:fontFamily">@font/outfit</item>
+        <item name="android:fontFamily">@font/outfit_medium</item>
         <item name="android:textSize">@dimen/text_caption</item>
         <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
     </style>

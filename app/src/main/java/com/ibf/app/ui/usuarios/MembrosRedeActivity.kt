@@ -89,9 +89,9 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
         }
 
         val query = if (redeSelecionada == "TODAS") {
-            firestore.collection("usuarios")
+            firestore.collection("membros")
         } else {
-            firestore.collection("usuarios")
+            firestore.collection("membros")
                 .whereGreaterThan(com.google.firebase.firestore.FieldPath.of("funcoes", redeSelecionada!!), "")
         }
 
@@ -193,7 +193,7 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
     }
 
     private fun verificarCpfEGerarLink(cpf: String) {
-        firestore.collection("usuarios").whereEqualTo("cpf", cpf).get()
+        firestore.collection("membros").whereEqualTo("cpf", cpf).get()
             .addOnSuccessListener { documents ->
                 if (documents.isEmpty) {
                     val novoMembro = hashMapOf(
@@ -202,7 +202,7 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
                         "cadastroCompleto" to false,
                         "funcoes" to if (redeSelecionada != null) hashMapOf(redeSelecionada!! to "Membro") else hashMapOf<String, String>()
                     )
-                    firestore.collection("usuarios").add(novoMembro).addOnSuccessListener {
+                    firestore.collection("membros").add(novoMembro).addOnSuccessListener {
                         mostrarDialogoWhatsApp()
                         carregarMembrosDaRede()
                     }
@@ -222,7 +222,7 @@ class MembrosRedeActivity : AppCompatActivity(), UsuarioRedeAdapter.OnItemClickL
         builder.setMessage("Membro preparado! Envie o link do portal web pelo WhatsApp para que ele possa completar o cadastro.")
 
         builder.setPositiveButton("Enviar pelo WhatsApp") { _, _ ->
-            val link = "https://ibfapp-c4078.web.app"
+            val link = "https://ibfapp-c4078.web.app/cadastro"
             val mensagem = "Olá! Por favor, conclua seu cadastro acessando o link: $link \n\nUtilize seu CPF para acessar."
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"

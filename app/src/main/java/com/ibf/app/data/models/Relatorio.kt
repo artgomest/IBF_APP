@@ -14,5 +14,6 @@ data class Relatorio(
     @JvmField val totalPessoas: Int = 0,
     @JvmField val totalVisitantes: Int = 0,
     @JvmField val valorOferta: Double = 0.0,
+    @JvmField val foiCancelada: Boolean = false,
     @ServerTimestamp @JvmField val timestamp: Date? = null
 )

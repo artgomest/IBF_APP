@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -40,88 +41,96 @@
             android:layout_height="@dimen/icon_xl" />
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="@dimen/screen_padding_horizontal"
-        android:paddingTop="@dimen/space_md">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
-        <!-- Nome da rede -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/IBF.TextInputLayout"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/editar_rede_nome_hint"
-            android:layout_marginBottom="@dimen/space_md">
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/screen_padding_horizontal"
+            android:paddingTop="@dimen/space_md"
+            android:paddingBottom="@dimen/space_xl">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_text_nome_rede"
+            <!-- Nome da rede -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/IBF.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapWords"
-                android:textColor="?attr/colorOnSurface" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="@string/editar_rede_nome_hint"
+                android:layout_marginBottom="@dimen/space_md">
 
-        <!-- Dia da semana label -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/editar_rede_dia_label"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="@dimen/text_body_md"
-            android:layout_marginBottom="@dimen/space_sm" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_nome_rede"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:textColor="?attr/colorOnSurface" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Spinner dia da semana -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_xl"
-            style="@style/IBF.Card">
+            <!-- Dia da semana label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/editar_rede_dia_label"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="@dimen/text_body_md"
+                android:layout_marginBottom="@dimen/space_sm" />
 
-            <Spinner
-                android:id="@+id/spinner_dia_semana"
+            <!-- Spinner dia da semana -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/spinner_background"
-                android:minHeight="52dp"
-                android:spinnerMode="dropdown"
-                android:padding="@dimen/space_md" />
-        </com.google.android.material.card.MaterialCardView>
+                android:layout_marginBottom="@dimen/space_xl"
+                style="@style/IBF.Card">
 
-        <!-- Horário da reunião label -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Horário da reunião"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="@dimen/text_body_md"
-            android:layout_marginBottom="@dimen/space_sm" />
+                <Spinner
+                    android:id="@+id/spinner_dia_semana"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner_background"
+                    android:minHeight="52dp"
+                    android:spinnerMode="dropdown"
+                    android:padding="@dimen/space_md" />
+            </com.google.android.material.card.MaterialCardView>
 
-        <!-- Horário da reunião input -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/IBF.TextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ex: 19:30"
-            android:layout_marginBottom="@dimen/space_xl">
+            <!-- Horário da reunião label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Horário da reunião"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="@dimen/text_body_md"
+                android:layout_marginBottom="@dimen/space_sm" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_text_horario_reuniao"
+            <!-- Horário da reunião input -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/IBF.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="time"
-                android:maxLength="5"
-                android:textColor="?attr/colorOnSurface" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="Ex: 19:30"
+                android:layout_marginBottom="@dimen/space_xl">
 
-        <!-- Save button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_salvar_rede"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/btn_height_md"
-            android:text="@string/salvar_alteracoes"
-            style="@style/IBF.Button.Primary" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_horario_reuniao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="time"
+                    android:maxLength="5"
+                    android:textColor="?attr/colorOnSurface" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </LinearLayout>
+            <!-- Save button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_salvar_rede"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btn_height_md"
+                android:text="@string/salvar_alteracoes"
+                style="@style/IBF.Button.Primary" />
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

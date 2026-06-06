@@ -67,6 +67,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
 
         buscarDadosUsuario()
         carregarStatusDosRelatorios()
+        com.ibf.app.utils.UpdateChecker.verificar(this)
     }
 
     private fun buscarDadosUsuario() {
@@ -196,7 +197,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
         // --- CORREÇÃO APLICADA AQUI ---
         // 1. Definimos a nossa data de início
         val dataInicio = Calendar.getInstance().apply {
-            set(2026, Calendar.JANUARY, 1, 0, 0, 0)
+            set(2026, Calendar.JUNE, 1, 0, 0, 0)
         }.time
 
         firestore.collection("redes").whereEqualTo("nome", redeAtiva).get().addOnSuccessListener { redesDocs ->
@@ -302,6 +303,7 @@ class SecretarioDashboardActivity : AppCompatActivity(), RelatorioAdapter.OnItem
 
     private fun navegarParaTelaCorreta(rede: String, papel: String?) {
         val intent = when (papel) {
+            "admin" -> Intent(this, com.ibf.app.ui.admin.AdminDashboardActivity::class.java)
             "pastor" -> Intent(this, PastorDashboardActivity::class.java)
             "lider" -> Intent(this, LiderDashboardActivity::class.java)
             "secretario" -> Intent(this, SecretarioDashboardActivity::class.java)

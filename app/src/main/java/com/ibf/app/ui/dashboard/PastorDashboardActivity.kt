@@ -56,6 +56,7 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
         val id: String,
         val nome: String,
         val diaDaSemana: Int?,
+        val horarioReuniao: String? = null,
         var totalMembros: Int = 0,
         var ultimoRelatorio: String? = null,
         var relatorioEmDia: Boolean = false,
@@ -86,6 +87,7 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
         setupAcoes()
         carregarNomePastor()
         carregarDados()
+        com.ibf.app.utils.UpdateChecker.verificar(this)
     }
 
     private fun carregarNomePastor() {
@@ -105,7 +107,7 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
                     }
 
                     // Segurança: se não tiver o papel de pastor geral
-                    val papelGeral = funcoes["geral"]
+                    val papelGeral = funcoes["geral"]?.trim()?.lowercase()
                     if (papelGeral != "pastor" && papelGeral != "admin") {
                         Toast.makeText(this@PastorDashboardActivity, "Sua permissão de pastor foi revogada ou alterada.", Toast.LENGTH_LONG).show()
                         val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
@@ -134,7 +136,8 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
                     RedeInfo(
                         id = doc.id,
                         nome = doc.getString("nome") ?: "Sem nome",
-                        diaDaSemana = doc.getLong("diaDaSemana")?.toInt()
+                        diaDaSemana = doc.getLong("diaDaSemana")?.toInt(),
+                        horarioReuniao = doc.getString("horarioReuniao")
                     )
                 }
 
@@ -148,9 +151,9 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
                         }
 
                         // Passo 3: Carregar todos os usuários para métricas de membros
-                        firestore.collection("usuarios").get()
-                            .addOnSuccessListener { usuariosDocs ->
-                                processarDados(redes, todosRelatorios, usuariosDocs)
+                        firestore.collection("membros").get()
+                            .addOnSuccessListener { membrosDocs ->
+                                processarDados(redes, todosRelatorios, membrosDocs)
                                 swipeRefresh.isRefreshing = false
                             }
                             .addOnFailureListener {
@@ -174,7 +177,7 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
     private fun processarDados(
         redes: List<RedeInfo>,
         todosRelatorios: List<Relatorio>,
-        usuariosDocs: com.google.firebase.firestore.QuerySnapshot
+        membrosDocs: com.google.firebase.firestore.QuerySnapshot
     ) {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val currencyFormat = DecimalFormat("R$ #,##0.00")
@@ -210,7 +213,7 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
 
         // Contar quantos não são pastores
         var totalMembrosSemPastores = 0
-        for (userDoc in usuariosDocs) {
+        for (userDoc in membrosDocs) {
             val papelGeral = userDoc.getString("papel")
             val funcoesRaw = userDoc.get("funcoes") as? Map<*, *>
             val papelNoMapa = funcoesRaw?.get("geral")?.toString()
@@ -228,7 +231,7 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
 
         // Mapear usuários por rede para contagem eficiente
         val usuariosPorRede = mutableMapOf<String, Int>()
-        for (userDoc in usuariosDocs) {
+        for (userDoc in membrosDocs) {
             val funcoesRaw = userDoc.get("funcoes") as? Map<*, *>
             if (funcoesRaw != null) {
                 for (redeKey in funcoesRaw.keys) {
@@ -256,6 +259,25 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
             if (rede.diaDaSemana != null) {
                 val dataEsperadaCal = Calendar.getInstance()
                 dataEsperadaCal.set(Calendar.DAY_OF_WEEK, rede.diaDaSemana)
+
+                // Ajustar o horário da reunião, se houver, para não cobrar antes da hora
+                if (!rede.horarioReuniao.isNullOrEmpty()) {
+                    try {
+                        val parts = rede.horarioReuniao.split(":")
+                        if (parts.size == 2) {
+                            dataEsperadaCal.set(Calendar.HOUR_OF_DAY, parts[0].toInt())
+                            dataEsperadaCal.set(Calendar.MINUTE, parts[1].toInt())
+                            dataEsperadaCal.set(Calendar.SECOND, 0)
+                            dataEsperadaCal.set(Calendar.MILLISECOND, 0)
+                        }
+                    } catch (e: Exception) {}
+                } else {
+                    // Sem horário definido, só cobra no final do dia
+                    dataEsperadaCal.set(Calendar.HOUR_OF_DAY, 23)
+                    dataEsperadaCal.set(Calendar.MINUTE, 59)
+                    dataEsperadaCal.set(Calendar.SECOND, 59)
+                }
+
                 if (dataEsperadaCal.time.after(Date())) {
                     dataEsperadaCal.add(Calendar.WEEK_OF_YEAR, -1)
                 }
@@ -419,6 +441,77 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
             intent.putExtra("PAPEL_USUARIO_LOGADO", "pastor")
             startActivity(intent)
         }
+        
+        findViewById<MaterialCardView>(R.id.card_migrar_membros)?.setOnClickListener {
+            migrarUsuariosParaMembros()
+        }
+    }
+    
+    private fun migrarUsuariosParaMembros() {
+        val db = FirebaseFirestore.getInstance()
+        Toast.makeText(this, "Iniciando migração...", Toast.LENGTH_SHORT).show()
+        
+        db.collection("usuarios").get().addOnSuccessListener { usuariosDocs ->
+            var count = 0
+            val total = usuariosDocs.size()
+            
+            if (total == 0) {
+                Toast.makeText(this, "Nenhum usuário para migrar", Toast.LENGTH_SHORT).show()
+                return@addOnSuccessListener
+            }
+            
+            for (doc in usuariosDocs) {
+                val usuarioData = doc.data
+                val membroIdExistente = doc.getString("membroId")
+                
+                // Só migra se ainda não tiver membroId (ou se quiser forçar a re-migração)
+                if (membroIdExistente == null) {
+                    // Prepara os dados para a coleção 'membros'
+                    val membroData = HashMap<String, Any>()
+                    // Copiar campos relevantes
+                    val camposRelevantes = listOf(
+                        "nome", "email", "telefone", "dataNascimento", "sexo",
+                        "estadoCivil", "cep", "endereco", "numero", "complemento",
+                        "bairro", "cidade", "estado", "profissao", "dataDecisao",
+                        "dataBatismo", "funcoes", "dataUltimoDiscipulado", "cadastroCompleto"
+                    )
+                    
+                    for (campo in camposRelevantes) {
+                        if (usuarioData.containsKey(campo)) {
+                            membroData[campo] = usuarioData[campo]!!
+                        }
+                    }
+                    
+                    // Adiciona na coleção 'membros' com o mesmo ID do usuário (ou gera um novo)
+                    // Vamos manter o mesmo ID para facilitar (uid do usuário será o id do membro)
+                    val novoMembroId = doc.id
+                    db.collection("membros").document(novoMembroId).set(membroData)
+                        .addOnSuccessListener {
+                            // Atualiza o usuário com a referência
+                            db.collection("usuarios").document(doc.id).update("membroId", novoMembroId)
+                            count++
+                            if (count == total) {
+                                Toast.makeText(this, "Migração concluída!", Toast.LENGTH_LONG).show()
+                                carregarDados()
+                            }
+                        }
+                        .addOnFailureListener {
+                            count++
+                            if (count == total) {
+                                Toast.makeText(this, "Migração concluída com erros.", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                } else {
+                    count++
+                    if (count == total) {
+                        Toast.makeText(this, "Migração concluída (ou todos já migrados)!", Toast.LENGTH_LONG).show()
+                        carregarDados()
+                    }
+                }
+            }
+        }.addOnFailureListener { e ->
+            Toast.makeText(this, "Erro ao buscar usuários: ${e.message}", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun setupNavigation() {
@@ -491,9 +584,7 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
                 val funcoesExpandidas = HashMap<String, String>()
 
                 funcoesOriginais.forEach { (rede, papel) ->
-                    if (rede != "geral") {
-                        funcoesExpandidas[rede] = papel
-                    }
+                    funcoesExpandidas[rede] = papel
                 }
 
                 for (doc in redesDocs) {
@@ -532,6 +623,7 @@ class PastorDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfi
         }
 
         val intent = when (papel) {
+            "admin" -> Intent(this, com.ibf.app.ui.admin.AdminDashboardActivity::class.java)
             "pastor" -> Intent(this, PastorDashboardActivity::class.java)
             "lider" -> Intent(this, LiderDashboardActivity::class.java)
             "secretario" -> Intent(this, SecretarioDashboardActivity::class.java)

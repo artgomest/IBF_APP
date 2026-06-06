@@ -56,7 +56,8 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
         val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
         val redeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
 
-        redeSelecionada = redeInPrefs ?: intent.getStringExtra("REDE_SELECIONADA")
+        // Prioriza o intent, depois tenta o cache (para evitar o bug do Admin pegando rede "geral" em vez da específica)
+        redeSelecionada = intent.getStringExtra("REDE_SELECIONADA") ?: redeInPrefs
 
         if (redeSelecionada == null) {
             Toast.makeText(this, getString(R.string.erro_rede_nao_especificada), Toast.LENGTH_LONG).show()
@@ -72,17 +73,18 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
 
     override fun onResume() {
         super.onResume()
+        // Removido o update forçado pelo SharedPreferences no onResume para não sobrescrever o intent
         val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
         val currentRedeInPrefs = sharedPref.getString("REDE_SELECIONADA", null)
-
-        if (currentRedeInPrefs != null && currentRedeInPrefs != redeSelecionada) {
+        
+        // Se a rede no intent não existir, usamos o fallback do prefs
+        if (redeSelecionada == null && currentRedeInPrefs != null) {
             redeSelecionada = currentRedeInPrefs
             textPageTitle.text = getString(R.string.relatorios_rede_label, redeSelecionada)
-            carregarStatusDosRelatorios()
             Toast.makeText(this, getString(R.string.relatorios_atualizados_rede, redeSelecionada), Toast.LENGTH_SHORT).show()
-        } else {
-            carregarStatusDosRelatorios()
         }
+        
+        carregarStatusDosRelatorios()
     }
 
     private fun setupRecyclerView() {
@@ -104,6 +106,35 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
             set(2026, Calendar.JANUARY, 1, 0, 0, 0)
         }.time
 
+        if (redeAtiva == "geral" || redeAtiva == "TODAS") {
+            // Se for visão geral, busca todos os relatórios
+            firestore.collection("relatorios").get()
+                .addOnSuccessListener { relatoriosDocs ->
+                    val relatoriosEnviados = relatoriosDocs.mapNotNull { doc -> doc.toObject(Relatorio::class.java).apply { id = doc.id } }
+                    val statusFinal = relatoriosEnviados.map { StatusRelatorio.Enviado(it) }
+                    
+                    listaDeStatus.clear()
+                    val sortedList = statusFinal.sortedByDescending {
+                        try {
+                            when(it) {
+                                is StatusRelatorio.Enviado -> sdf.parse(it.relatorio.dataReuniao)
+                                is StatusRelatorio.Faltante -> sdf.parse(it.dataEsperada)
+                            }
+                        } catch (e: Exception) {
+                            Date(0)
+                        }
+                    }
+                    listaDeStatus.addAll(sortedList)
+                    relatorioAdapter.notifyDataSetChanged()
+                    swipeRefreshLayout.isRefreshing = false
+                }
+                .addOnFailureListener { e ->
+                    swipeRefreshLayout.isRefreshing = false
+                    Toast.makeText(this, "Erro ao carregar relatórios: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            return
+        }
+
         firestore.collection("redes").whereEqualTo("nome", redeAtiva).get()
             .addOnSuccessListener { redesDocs ->
                 if (redesDocs.isEmpty) {
@@ -112,6 +143,7 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
                     return@addOnSuccessListener
                 }
                 val diaDaSemana = redesDocs.documents.first().getLong("diaDaSemana")?.toInt()
+                val horarioReuniao = redesDocs.documents.first().getString("horarioReuniao")
                 if (diaDaSemana == null) {
                     swipeRefreshLayout.isRefreshing = false
                     Toast.makeText(this, "Dia da semana não configurado para a rede '$redeAtiva'. Acesse Configurações → Editar Rede.", Toast.LENGTH_LONG).show()
@@ -128,6 +160,24 @@ class LiderStatusRelatoriosActivity : AppCompatActivity(), RelatorioAdapter.OnIt
                         val calLoop = Calendar.getInstance()
                         // Ajustar para o dia da semana da rede
                         calLoop.set(Calendar.DAY_OF_WEEK, diaDaSemana)
+                        
+                        // Ajustar o horário da reunião, se houver, para não cobrar antes da hora
+                        if (!horarioReuniao.isNullOrEmpty()) {
+                            try {
+                                val parts = horarioReuniao.split(":")
+                                if (parts.size == 2) {
+                                    calLoop.set(Calendar.HOUR_OF_DAY, parts[0].toInt())
+                                    calLoop.set(Calendar.MINUTE, parts[1].toInt())
+                                    calLoop.set(Calendar.SECOND, 0)
+                                    calLoop.set(Calendar.MILLISECOND, 0)
+                                }
+                            } catch (e: Exception) {}
+                        } else {
+                            // Sem horário definido, só cobra no final do dia
+                            calLoop.set(Calendar.HOUR_OF_DAY, 23)
+                            calLoop.set(Calendar.MINUTE, 59)
+                            calLoop.set(Calendar.SECOND, 59)
+                        }
                         
                         // Se a data ajustada for no futuro, voltar uma semana
                         if (calLoop.time.after(Date())) {

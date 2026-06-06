@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Regular (400) — usado internamente pelo sistema quando necessário -->
+    <font
+        app:fontStyle="normal"
+        app:fontWeight="400"
+        app:font="@font/outfit_regular" />
+
+    <!-- Medium (500) — peso padrão do corpo do app -->
+    <font
+        app:fontStyle="normal"
+        app:fontWeight="500"
+        app:font="@font/outfit_medium" />
+
+    <!-- Bold (700) — títulos e destaques -->
+    <font
+        app:fontStyle="normal"
+        app:fontWeight="700"
+        app:font="@font/outfit_bold" />
+
+</font-family>

@@ -331,3 +331,63 @@ export const notificarCobrancaManual = onDocumentCreated(
     }
   }
 );
+
+// =================================================================================
+// GATILHO 6 — Processamento de Cadastro Manual por Admin
+// =================================================================================
+export const processarCadastroAdmin = onDocumentCreated(
+  "admin_cadastros_pendentes/{docId}",
+  async (event) => {
+    const snapshot = event.data;
+    if (!snapshot) return;
+
+    const dados = snapshot.data();
+    if (dados.status !== "pendente") return;
+
+    const nome = dados.nome;
+    const email = dados.email;
+    const senha = dados.senha;
+    const papel = dados.papel;
+    const rede = dados.rede;
+    const docId = event.params.docId;
+
+    try {
+      // 1. Criar o usuário no Firebase Auth
+      const userRecord = await admin.auth().createUser({
+        email: email,
+        password: senha,
+        displayName: nome,
+      });
+
+      // 2. Criar os dados iniciais do usuário no Firestore
+      const uid = userRecord.uid;
+      const chaveRede = rede === "geral" ? "geral" : rede;
+      
+      const funcoes = { [chaveRede]: papel };
+      
+      await db.collection("usuarios").doc(uid).set({
+        nome: nome,
+        email: email,
+        funcoes: funcoes,
+        fcmToken: "",
+        redesSelecionadas: [rede]
+      });
+
+      // 3. Atualizar status para concluído, remover a senha e adicionar UID
+      await db.collection("admin_cadastros_pendentes").doc(docId).update({
+        status: "concluido",
+        uidCriado: uid,
+        senha: admin.firestore.FieldValue.delete(),
+        dataConclusao: admin.firestore.FieldValue.serverTimestamp()
+      });
+
+      logger.info(`[CADASTRO ADMIN] Usuário ${email} criado com sucesso com UID ${uid}.`);
+    } catch (error: any) {
+      logger.error(`[CADASTRO ADMIN] Erro ao criar usuário ${email}:`, error);
+      await db.collection("admin_cadastros_pendentes").doc(docId).update({
+        status: "erro",
+        mensagemErro: error.message || "Erro desconhecido",
+      });
+    }
+  }
+);

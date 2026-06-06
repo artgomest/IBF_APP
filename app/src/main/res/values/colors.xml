@@ -82,10 +82,13 @@
     <color name="semantic_accent">@color/accent</color>
     <color name="semantic_divider">@color/ibf_divider</color>
 
+    <color name="text_on_accent">@color/white</color>
+    <color name="text_on_accent_secondary">#B3FFFFFF</color>
+
     <color name="status_green">@color/ibf_success</color>
     <color name="status_red">@color/ibf_error</color>
-    <color name="status_green_dark_theme">#81C784</color>
-    <color name="status_red_dark_theme">#FFB4AB</color>
+    <color name="status_green_dark_theme">#4CAF50</color>
+    <color name="status_red_dark_theme">#B71C1C</color>
 
     <color name="bottom_nav_selected">@color/accent</color>
     <color name="bottom_nav_unselected">@color/ibf_on_surface_variant</color>

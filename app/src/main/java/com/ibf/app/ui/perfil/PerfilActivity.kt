@@ -30,6 +30,7 @@ class PerfilActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecion
     private lateinit var editarSalvarButton: Button
 
     private var modoEdicao = false
+    private var membroIdAssociado: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,8 +140,21 @@ class PerfilActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecion
             firestore.collection("usuarios").document(user.uid).get()
                 .addOnSuccessListener { document ->
                     if (document.exists()) {
-                        nomeEditText.setText(document.getString("nome"))
-                        emailEditText.setText(document.getString("email"))
+                        membroIdAssociado = document.getString("membroId")
+                        if (membroIdAssociado != null) {
+                            // Buscar detalhes completos na coleção membros
+                            firestore.collection("membros").document(membroIdAssociado!!).get()
+                                .addOnSuccessListener { membroDoc ->
+                                    if (membroDoc.exists()) {
+                                        nomeEditText.setText(membroDoc.getString("nome"))
+                                        emailEditText.setText(membroDoc.getString("email") ?: document.getString("email"))
+                                    }
+                                }
+                        } else {
+                            // Fallback para os dados armazenados em usuarios
+                            nomeEditText.setText(document.getString("nome"))
+                            emailEditText.setText(document.getString("email"))
+                        }
                     }
                 }
         }
@@ -169,17 +183,35 @@ class PerfilActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecion
         val user = auth.currentUser
         if (user != null) {
             editarSalvarButton.isEnabled = false
-            firestore.collection("usuarios").document(user.uid)
-                .update("nome", novoNome)
-                .addOnSuccessListener {
-                    Toast.makeText(this, getString(R.string.perfil_info_atualizadas), Toast.LENGTH_SHORT).show()
-                    desativarModoEdicao()
-                    editarSalvarButton.isEnabled = true
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(this, "${getString(R.string.perfil_falha_atualizar)}: ${e.message}", Toast.LENGTH_LONG).show()
-                    editarSalvarButton.isEnabled = true
-                }
+            
+            // Atualizar usuarios
+            val taskUsuarios = firestore.collection("usuarios").document(user.uid).update("nome", novoNome)
+            
+            if (membroIdAssociado != null) {
+                // Atualizar membros
+                val taskMembros = firestore.collection("membros").document(membroIdAssociado!!).update("nome", novoNome)
+                com.google.android.gms.tasks.Tasks.whenAll(taskUsuarios, taskMembros)
+                    .addOnSuccessListener {
+                        sucessoAoSalvar()
+                    }
+                    .addOnFailureListener { e ->
+                        falhaAoSalvar(e)
+                    }
+            } else {
+                taskUsuarios.addOnSuccessListener { sucessoAoSalvar() }
+                    .addOnFailureListener { e -> falhaAoSalvar(e) }
+            }
         }
+    }
+
+    private fun sucessoAoSalvar() {
+        Toast.makeText(this, getString(R.string.perfil_info_atualizadas), Toast.LENGTH_SHORT).show()
+        desativarModoEdicao()
+        editarSalvarButton.isEnabled = true
+    }
+
+    private fun falhaAoSalvar(e: Exception) {
+        Toast.makeText(this, "${getString(R.string.perfil_falha_atualizar)}: ${e.message}", Toast.LENGTH_LONG).show()
+        editarSalvarButton.isEnabled = true
     }
 }

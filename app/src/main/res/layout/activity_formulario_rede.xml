@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     tools:context=".ui.relatorios.FormularioRedeActivity">
 
     <!-- Header -->
@@ -43,7 +44,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -91,6 +93,20 @@
                     android:focusable="false"
                     android:textColor="?attr/colorOnSurface" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/checkboxCancelada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rede Cancelada"
+                android:textColor="?attr/colorOnSurface"
+                android:layout_marginBottom="@dimen/space_md" />
+
+            <LinearLayout
+                android:id="@+id/containerCampos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/IBF.TextInputLayout"
@@ -165,6 +181,8 @@
                     android:gravity="top|start"
                     android:textColor="?attr/colorOnSurface" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonEnviar"

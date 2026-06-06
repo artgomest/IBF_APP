@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -24,11 +25,11 @@
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="12dp">
                     <com.google.android.material.card.MaterialCardView android:id="@+id/card_relatorios" android:layout_width="0dp" android:layout_height="110dp" android:layout_weight="1" android:layout_marginEnd="6dp" app:cardBackgroundColor="?attr/colorOnBackground" app:cardCornerRadius="16dp" app:cardElevation="0dp" app:strokeWidth="0dp">
                         <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="16dp" android:gravity="bottom">
-                            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_reports" app:tint="@color/white" android:layout_marginBottom="12dp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Relatórios" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/white"/>
+                            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_reports" app:tint="@color/black" android:layout_marginBottom="12dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Relatórios" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/black"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
-                    <com.google.android.material.card.MaterialCardView android:id="@+id/card_graficos" android:layout_width="0dp" android:layout_height="110dp" android:layout_weight="1" android:layout_marginStart="6dp" app:cardBackgroundColor="?attr/colorSurface" app:cardCornerRadius="16dp" app:cardElevation="0dp" app:strokeColor="?attr/colorOutlineVariant" app:strokeWidth="1dp">
+                    <com.google.android.material.card.MaterialCardView android:id="@+id/card_graficos" android:layout_width="0dp" android:layout_height="110dp" android:layout_weight="1" android:layout_marginStart="6dp" app:cardBackgroundColor="?attr/colorSurface" app:cardCornerRadius="16dp" app:cardElevation="2dp" app:strokeColor="?attr/colorOutlineVariant" app:strokeWidth="1dp">
                         <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="16dp" android:gravity="bottom">
                             <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_graficos" app:tint="?attr/colorOnSurface" android:layout_marginBottom="12dp"/>
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gráficos" android:textSize="15sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface"/>
@@ -37,13 +38,13 @@
                 </LinearLayout>
                 <!-- Row 2 -->
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="12dp">
-                    <com.google.android.material.card.MaterialCardView android:id="@+id/card_membros" android:layout_width="0dp" android:layout_height="110dp" android:layout_weight="1" android:layout_marginEnd="6dp" app:cardBackgroundColor="?attr/colorSurface" app:cardCornerRadius="16dp" app:cardElevation="0dp" app:strokeColor="?attr/colorOutlineVariant" app:strokeWidth="1dp">
+                    <com.google.android.material.card.MaterialCardView android:id="@+id/card_membros" android:layout_width="0dp" android:layout_height="110dp" android:layout_weight="1" android:layout_marginEnd="6dp" app:cardBackgroundColor="?attr/colorSurface" app:cardCornerRadius="16dp" app:cardElevation="2dp" app:strokeColor="?attr/colorOutlineVariant" app:strokeWidth="1dp">
                         <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="16dp" android:gravity="bottom">
                             <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_membros" app:tint="?attr/colorOnSurface" android:layout_marginBottom="12dp"/>
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Membros" android:textSize="15sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
-                    <com.google.android.material.card.MaterialCardView android:id="@+id/card_config" android:layout_width="0dp" android:layout_height="110dp" android:layout_weight="1" android:layout_marginStart="6dp" app:cardBackgroundColor="?attr/colorSurface" app:cardCornerRadius="16dp" app:cardElevation="0dp" app:strokeColor="?attr/colorOutlineVariant" app:strokeWidth="1dp">
+                    <com.google.android.material.card.MaterialCardView android:id="@+id/card_config" android:layout_width="0dp" android:layout_height="110dp" android:layout_weight="1" android:layout_marginStart="6dp" app:cardBackgroundColor="?attr/colorSurface" app:cardCornerRadius="16dp" app:cardElevation="2dp" app:strokeColor="?attr/colorOutlineVariant" app:strokeWidth="1dp">
                         <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="16dp" android:gravity="bottom">
                             <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_settings_gear" app:tint="?attr/colorOnSurface" android:layout_marginBottom="12dp"/>
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Config." android:textSize="15sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface"/>
@@ -51,10 +52,10 @@
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
                 <!-- Agenda Card -->
-                <com.google.android.material.card.MaterialCardView android:id="@+id/card_agenda" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="12dp" app:cardBackgroundColor="?attr/colorSurface" app:cardCornerRadius="16dp" app:cardElevation="0dp" app:strokeColor="?attr/colorOutlineVariant" app:strokeWidth="1dp">
+                <com.google.android.material.card.MaterialCardView android:id="@+id/card_agenda" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="12dp" app:cardBackgroundColor="?attr/colorSurface" app:cardCornerRadius="16dp" app:cardElevation="2dp" app:strokeColor="?attr/colorOutlineVariant" app:strokeWidth="1dp">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="20dp" android:gravity="center_vertical">
                         <LinearLayout android:layout_width="40dp" android:layout_height="40dp" android:background="@drawable/bg_icon_container_green" android:gravity="center">
-                            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_calendar" app:tint="?attr/colorOnSurface"/>
+                            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_calendar" app:tint="@color/accent_primary"/>
                         </LinearLayout>
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="16dp">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Agenda" android:textSize="16sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface"/>

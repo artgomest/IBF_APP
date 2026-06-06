@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -108,7 +109,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Redes"
                                     android:textSize="11sp"
-                                    android:textColor="@color/chumbo_faint"
+                                    android:textColor="@color/text_on_accent_secondary"
                                     android:textAllCaps="true"
                                     android:letterSpacing="0.05" />
 
@@ -119,7 +120,7 @@
                                     android:text="0"
                                     android:textSize="28sp"
                                     android:textStyle="bold"
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/text_on_accent"
                                     android:layout_marginTop="4dp" />
 
                                 <TextView
@@ -127,7 +128,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="ativas"
                                     android:textSize="12sp"
-                                    android:textColor="@color/chumbo_faint" />
+                                    android:textColor="@color/text_on_accent_secondary" />
 
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
@@ -140,7 +141,7 @@
                             android:layout_marginHorizontal="5dp"
                             app:cardBackgroundColor="?attr/colorSurface"
                             app:cardCornerRadius="14dp"
-                            app:cardElevation="0dp"
+                            app:cardElevation="2dp"
                             app:strokeColor="?attr/colorOutlineVariant"
                             app:strokeWidth="1dp">
 
@@ -187,7 +188,7 @@
                             android:layout_marginStart="5dp"
                             app:cardBackgroundColor="?attr/colorSurface"
                             app:cardCornerRadius="14dp"
-                            app:cardElevation="0dp"
+                            app:cardElevation="2dp"
                             app:strokeColor="?attr/colorOutlineVariant"
                             app:strokeWidth="1dp">
 
@@ -259,7 +260,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Ofertas (últimas 8 semanas)"
                                     android:textSize="12sp"
-                                    android:textColor="#B3FFFFFF" />
+                                    android:textColor="@color/text_on_accent_secondary" />
 
                                 <TextView
                                     android:id="@+id/text_total_ofertas"
@@ -268,7 +269,7 @@
                                     android:text="R$ 0,00"
                                     android:textSize="22sp"
                                     android:textStyle="bold"
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/text_on_accent"
                                     android:layout_marginTop="4dp" />
 
                             </LinearLayout>
@@ -284,7 +285,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Visitantes"
                                     android:textSize="12sp"
-                                    android:textColor="#B3FFFFFF" />
+                                    android:textColor="@color/text_on_accent_secondary" />
 
                                 <TextView
                                     android:id="@+id/text_total_visitantes"
@@ -293,7 +294,7 @@
                                     android:text="0"
                                     android:textSize="22sp"
                                     android:textStyle="bold"
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/text_on_accent"
                                     android:layout_marginTop="4dp" />
 
                             </LinearLayout>
@@ -343,7 +344,7 @@
                         android:layout_marginBottom="10dp"
                         app:cardBackgroundColor="?attr/colorSurface"
                         app:cardCornerRadius="14dp"
-                        app:cardElevation="0dp"
+                        app:cardElevation="2dp"
                         app:strokeColor="?attr/colorOutlineVariant"
                         app:strokeWidth="1dp">
 
@@ -364,7 +365,7 @@
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
                                     android:src="@drawable/ic_calendar"
-                                    app:tint="@color/accent" />
+                                    app:tint="?attr/colorOnSurface" />
 
                             </LinearLayout>
 
@@ -410,7 +411,7 @@
                         android:layout_marginBottom="10dp"
                         app:cardBackgroundColor="?attr/colorSurface"
                         app:cardCornerRadius="14dp"
-                        app:cardElevation="0dp"
+                        app:cardElevation="2dp"
                         app:strokeColor="?attr/colorOutlineVariant"
                         app:strokeWidth="1dp">
 
@@ -431,7 +432,7 @@
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
                                     android:src="@drawable/ic_user_group"
-                                    app:tint="@color/accent" />
+                                    app:tint="?attr/colorOnSurface" />
 
                             </LinearLayout>
 
@@ -465,6 +466,67 @@
                                 android:layout_height="18dp"
                                 android:src="@drawable/ic_arrow_right"
                                 app:tint="?attr/colorOnSurfaceVariant" />
+
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Botão Temporário de Migração -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/card_migrar_membros"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        app:cardBackgroundColor="?attr/colorErrorContainer"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="2dp"
+                        app:strokeColor="?attr/colorError"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="18dp"
+                            android:gravity="center_vertical">
+
+                            <LinearLayout
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="?attr/colorError"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/ic_change_account"
+                                    app:tint="?attr/colorOnError" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_marginStart="16dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Migrar Dados para Membros (Temp)"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:textColor="?attr/colorOnErrorContainer" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Copia usuarios para a coleção membros"
+                                    android:textSize="13sp"
+                                    android:textColor="?attr/colorOnErrorContainer"
+                                    android:layout_marginTop="2dp" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>

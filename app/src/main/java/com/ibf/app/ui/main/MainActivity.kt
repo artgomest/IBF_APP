@@ -20,7 +20,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.messaging.FirebaseMessaging
+import com.ibf.app.BuildConfig
 import com.ibf.app.R
+import android.net.Uri
+import androidx.appcompat.app.AlertDialog
 import com.ibf.app.ui.dashboard.LiderDashboardActivity
 import com.ibf.app.ui.dashboard.PastorDashboardActivity
 import com.ibf.app.ui.dashboard.SecretarioDashboardActivity
@@ -35,6 +38,8 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
     private lateinit var passwordInput: EditText
     private lateinit var loginButton: Button
     private lateinit var textCadastreSe: TextView
+    private lateinit var loadingProgressBar: android.widget.ProgressBar
+    private lateinit var loginContainer: android.widget.LinearLayout
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
@@ -45,19 +50,46 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
             }
         }
 
-    // Login Automático RESTAURADO
     override fun onStart() {
         super.onStart()
         val currentUser = firebaseAuth.currentUser
-        if (currentUser != null) {
-            salvarTokenDoDispositivo(currentUser.uid)
-            val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-            val redeSalva = sharedPref.getString("REDE_SELECIONADA", null)
-            val papelSalvo = sharedPref.getString("PAPEL_SELECIONADO", null)
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val savedEmail = sharedPref.getString("SAVED_EMAIL", null)
+        val savedPassword = sharedPref.getString("SAVED_PASSWORD", null)
 
-            if (redeSalva != null && papelSalvo != null) {
-                navegarParaTelaCorreta(redeSalva, papelSalvo)
-            }
+        if (currentUser != null) {
+            recuperarSessaoOuNavegar(currentUser.uid, sharedPref)
+        } else if (savedEmail != null && savedPassword != null) {
+            // FALLBACK IMEDIATO: Firebase perdeu o token, mas temos no cofre.
+            mostrarCarregando(true)
+            firebaseAuth.signInWithEmailAndPassword(savedEmail, savedPassword)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        task.result?.user?.uid?.let { uid ->
+                            recuperarSessaoOuNavegar(uid, sharedPref)
+                        } ?: run {
+                            mostrarCarregando(false)
+                            processarLogin()
+                        }
+                    } else {
+                        mostrarCarregando(false)
+                        sharedPref.edit().remove("SAVED_EMAIL").remove("SAVED_PASSWORD").apply()
+                    }
+                }
+        } else {
+            mostrarCarregando(false)
+        }
+    }
+
+    private fun recuperarSessaoOuNavegar(uid: String, sharedPref: android.content.SharedPreferences) {
+        salvarTokenDoDispositivo(uid)
+        val redeSalva = sharedPref.getString("REDE_SELECIONADA", null)
+        val papelSalvo = sharedPref.getString("PAPEL_SELECIONADO", null)
+
+        if (redeSalva != null && papelSalvo != null) {
+            navegarParaTelaCorreta(redeSalva, papelSalvo)
+        } else {
+            processarLogin()
         }
     }
 
@@ -68,12 +100,16 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
         firebaseAuth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
-        // O "Kill Switch" foi removido daqui. O app volta ao comportamento normal.
+        com.ibf.app.utils.UpdateChecker.verificar(this)
 
         emailInput = findViewById(R.id.editTextEmailAddress)
         passwordInput = findViewById(R.id.editTextPassword)
         loginButton = findViewById(R.id.buttonLogin)
         textCadastreSe = findViewById(R.id.text_cadastre_se)
+        
+        // Elementos de UI para Loading
+        loadingProgressBar = findViewById(R.id.loading_progress_bar)
+        loginContainer = findViewById(R.id.login_container)
 
         loginButton.setOnClickListener {
             val email = emailInput.text.toString().trim()
@@ -84,25 +120,45 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                 return@setOnClickListener
             }
 
+                mostrarCarregando(true)
             firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
+                        // Salvar credenciais para fallback (evita erro do Firebase Keystore)
+                        val sp = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                        sp.edit()
+                            .putString("SAVED_EMAIL", email)
+                            .putString("SAVED_PASSWORD", password)
+                            .apply()
+                            
                         task.result?.user?.uid?.let { uid ->
                             salvarTokenDoDispositivo(uid)
                         }
                         processarLogin()
                     } else {
+                        mostrarCarregando(false)
                         Toast.makeText(this, getString(R.string.falha_login_credenciais), Toast.LENGTH_SHORT).show()
                     }
                 }
         }
         textCadastreSe.setOnClickListener {
-            val intent = Intent(this, SolicitacaoCadastroActivity::class.java)
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = android.net.Uri.parse("https://ibfapp-c4078.web.app/acesso.html")
             startActivity(intent)
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             pedirPermissaoDeNotificacao()
+        }
+    }
+
+    private fun mostrarCarregando(mostrar: Boolean) {
+        if (mostrar) {
+            loadingProgressBar.visibility = android.view.View.VISIBLE
+            loginContainer.visibility = android.view.View.GONE
+        } else {
+            loadingProgressBar.visibility = android.view.View.GONE
+            loginContainer.visibility = android.view.View.VISIBLE
         }
     }
 
@@ -178,19 +234,25 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
                         }
                     }
 
-                    // Se é pastor com acesso geral, ir direto ao dashboard de visão geral
-                    if (funcoes.containsKey("geral") && funcoes["geral"] == "pastor") {
-                        Log.d("DEBUG_LOGIN", "Pastor geral detectado, indo para dashboard.")
-                        salvarPerfilSelecionado("geral", "pastor")
-                        navegarParaTelaCorreta("geral", "pastor")
-                        return@addOnSuccessListener
-                    } else if (funcoes.size > 1) {
+                    if (funcoes.size > 1) {
                         val bottomSheet = SelecionarPerfilSheet.newInstance(funcoes, nomeUsuario)
                         bottomSheet.show(supportFragmentManager, "SelecionarPerfilSheet")
                     } else {
                         val (rede, papel) = funcoes.entries.first()
-                        salvarPerfilSelecionado(rede, papel)
-                        navegarParaTelaCorreta(rede, papel)
+                        // Converter admin para administrador no bypass de segurança
+                        val papelSafe = papel.trim().lowercase()
+                        if (rede == "geral" && (papelSafe == "admin" || papelSafe == "administrador")) {
+                            Log.d("DEBUG_LOGIN", "Admin detectado, indo para dashboard.")
+                            salvarPerfilSelecionado("geral", "admin")
+                            navegarParaTelaCorreta("geral", "admin")
+                        } else if (rede == "geral" && papelSafe == "pastor") {
+                            Log.d("DEBUG_LOGIN", "Pastor geral detectado, indo para dashboard.")
+                            salvarPerfilSelecionado("geral", "pastor")
+                            navegarParaTelaCorreta("geral", "pastor")
+                        } else {
+                            salvarPerfilSelecionado(rede, papel)
+                            navegarParaTelaCorreta(rede, papel)
+                        }
                     }
                 } else {
                     Toast.makeText(this, getString(R.string.dados_usuario_nao_encontrados), Toast.LENGTH_LONG).show()
@@ -252,6 +314,8 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
         finish()
     }
 
+
+
     private fun salvarPerfilSelecionado(rede: String, papel: String) {
         val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         sharedPref.edit()
@@ -261,7 +325,9 @@ class MainActivity : AppCompatActivity(), SelecionarPerfilSheet.PerfilSelecionad
     }
 
     private fun navegarParaTelaCorreta(rede: String, papel: String?) {
-        val intent = when (papel) {
+        val papelSafe = papel?.trim()?.lowercase()
+        val intent = when (papelSafe) {
+            "admin", "administrador" -> Intent(this, com.ibf.app.ui.admin.AdminDashboardActivity::class.java)
             "pastor" -> Intent(this, PastorDashboardActivity::class.java)
             "lider" -> Intent(this, LiderDashboardActivity::class.java)
             "secretario" -> Intent(this, SecretarioDashboardActivity::class.java)

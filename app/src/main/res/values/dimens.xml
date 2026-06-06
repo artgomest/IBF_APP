@@ -32,7 +32,7 @@
     <dimen name="input_height">56dp</dimen>
 
     <!-- Card -->
-    <dimen name="card_elevation">0dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
     <dimen name="card_stroke_width">1dp</dimen>
     <dimen name="card_padding">24dp</dimen>
 

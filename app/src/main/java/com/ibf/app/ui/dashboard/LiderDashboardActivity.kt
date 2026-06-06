@@ -43,7 +43,7 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         textGreeting = findViewById(R.id.text_greeting)
 
         val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
-        redeSelecionada = sharedPref.getString("REDE_SELECIONADA", null) ?: intent.getStringExtra("REDE_SELECIONADA")
+        redeSelecionada = intent.getStringExtra("REDE_SELECIONADA") ?: sharedPref.getString("REDE_SELECIONADA", null)
 
         if (redeSelecionada == null) {
             Toast.makeText(this, getString(R.string.erro_rede_nao_especificada_logout), Toast.LENGTH_LONG).show()
@@ -56,6 +56,8 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         // Esta função agora busca os dados E configura os botões depois
         buscarDadosEConfigurarTela()
         setupNavigation()
+        
+        com.ibf.app.utils.UpdateChecker.verificar(this)
     }
 
     private fun buscarDadosEConfigurarTela() {
@@ -225,6 +227,7 @@ class LiderDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
 
     private fun navegarParaTelaCorreta(rede: String, papel: String?) {
         val intent = when (papel) {
+            "admin" -> Intent(this, com.ibf.app.ui.admin.AdminDashboardActivity::class.java)
             "pastor" -> Intent(this, PastorDashboardActivity::class.java)
             "lider" -> Intent(this, LiderDashboardActivity::class.java)
             "secretario" -> Intent(this, SecretarioDashboardActivity::class.java)

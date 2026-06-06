@@ -333,7 +333,7 @@ class RelatorioReuniaoActivity : AppCompatActivity() {
 
     private fun atualizarMembroComDataDiscipulado(membroUid: String) {
         val dataAtual = com.google.firebase.Timestamp.now()
-        firestore.collection("usuarios").document(membroUid)
+        firestore.collection("membros").document(membroUid)
             .update("dataUltimoDiscipulado", dataAtual)
             .addOnSuccessListener {
                 Log.d("RelatorioReuniao", "Data do último discipulado atualizada no membro.")
