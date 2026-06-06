@@ -94,6 +94,18 @@
                 app:icon="@drawable/ic_membros"
                 app:iconGravity="textStart"
                 app:cornerRadius="12dp"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_perfil"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="Meu Perfil"
+                android:textSize="16sp"
+                app:icon="@drawable/ic_profile"
+                app:iconGravity="textStart"
+                app:cornerRadius="12dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_marginBottom="32dp" />
 
             <!-- Seção de Usuários -->

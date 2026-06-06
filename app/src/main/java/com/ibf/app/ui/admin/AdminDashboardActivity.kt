@@ -18,6 +18,7 @@ class AdminDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
 
     private lateinit var btnModoPastor: Button
     private lateinit var btnSelecionarRede: Button
+    private lateinit var btnPerfil: Button
     private lateinit var btnAprovarUsuarios: Button
     private lateinit var btnCadastrarManual: Button
     private lateinit var btnGerenciarUsuarios: Button
@@ -29,6 +30,7 @@ class AdminDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
 
         btnModoPastor = findViewById(R.id.btn_modo_pastor)
         btnSelecionarRede = findViewById(R.id.btn_selecionar_rede)
+        btnPerfil = findViewById(R.id.btn_perfil)
         btnAprovarUsuarios = findViewById(R.id.btn_aprovar_usuarios)
         btnCadastrarManual = findViewById(R.id.btn_cadastrar_manual)
         btnGerenciarUsuarios = findViewById(R.id.btn_gerenciar_usuarios)
@@ -37,6 +39,13 @@ class AdminDashboardActivity : AppCompatActivity(), SelecionarPerfilSheet.Perfil
         btnModoPastor.setOnClickListener {
             // Entrar no modo pastor (visão geral) sem sobrescrever o login admin
             val intent = Intent(this, PastorDashboardActivity::class.java)
+            startActivity(intent)
+        }
+        
+        btnPerfil.setOnClickListener {
+            val intent = Intent(this, com.ibf.app.ui.perfil.PerfilActivity::class.java)
+            intent.putExtra("PAPEL_USUARIO_LOGADO", "admin")
+            intent.putExtra("REDE_SELECIONADA", "geral")
             startActivity(intent)
         }
 
